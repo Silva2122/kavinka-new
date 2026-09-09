@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>КАВИНКА — первый экран</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --cream:#F0EFE4;
+    --cream-warm:#E7E4D5;
+    --bog:#2C3320;
+    --moss:#4A5733;
+    --sage:#A9B58E;
+    --olive:#6B7A4A;
+    --ink:#232318;
+    --muted:#6E6D5E;
+    --disp:'Cormorant Garamond',Georgia,serif;
+    --body:'Manrope',system-ui,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  html{scroll-behavior:smooth}
+  body{background:var(--cream);color:var(--ink);font-family:var(--body);
+    font-weight:300;line-height:1.6;-webkit-font-smoothing:antialiased}
+  img,video{display:block;max-width:100%}
+
+  .mono{font-family:var(--mono);font-size:10.5px;letter-spacing:.24em;
+    text-transform:uppercase;font-weight:400}
+
+  /* ---------------- ШАПКА ---------------- */
+  .nav{position:absolute;top:0;left:0;right:0;z-index:20;
+    display:flex;align-items:center;justify-content:space-between;
+    gap:28px;padding:26px 40px;color:var(--cream)}
+  .nav__links{display:flex;gap:26px}
+  .nav__links a{color:rgba(240,239,228,.82);text-decoration:none;
+    font-size:12.5px;letter-spacing:.04em;transition:color .25s}
+  .nav__links a:hover{color:#fff}
+  .nav__right{display:flex;align-items:center;gap:22px}
+  .nav__phone{color:var(--cream);text-decoration:none;font-family:var(--mono);
+    font-size:11.5px;letter-spacing:.12em}
+  .nav__burger{width:26px;height:12px;border-top:1.5px solid var(--cream);
+    border-bottom:1.5px solid var(--cream);cursor:pointer}
+
+  /* ---------------- ГЕРОЙ ---------------- */
+  .hero{position:relative;min-height:100svh;display:flex;flex-direction:column;
+    justify-content:flex-end;overflow:hidden;padding:0 40px 0}
+  .hero__bg{position:absolute;inset:0;z-index:0}
+  .hero__bg img{width:100%;height:100%;object-fit:cover;object-position:center 42%}
+  .hero__veil{position:absolute;inset:0;z-index:1;
+    background:
+      linear-gradient(to bottom,rgba(20,24,14,.55) 0%,rgba(20,24,14,.12) 26%,
+        rgba(20,24,14,.20) 52%,rgba(20,24,14,.78) 100%)}
+
+  .hero__inner{position:relative;z-index:3;padding-bottom:52px}
+  .hero__eyebrow{color:rgba(240,239,228,.72);margin-bottom:20px;
+    display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .hero__eyebrow i{display:block;width:46px;height:1px;background:rgba(240,239,228,.4)}
+
+  .hero__name{font-family:var(--disp);font-weight:500;color:var(--cream);
+    font-size:clamp(70px,15.5vw,250px);line-height:.82;letter-spacing:.02em;
+    text-transform:uppercase;margin-bottom:18px}
+  .hero__sub{font-family:var(--disp);font-size:clamp(19px,2.3vw,30px);
+    color:rgba(240,239,228,.9);font-style:italic;font-weight:400;
+    letter-spacing:.01em;margin-bottom:34px}
+
+  .hero__badge{position:absolute;top:104px;right:40px;z-index:4;
+    width:clamp(88px,9vw,132px);opacity:.9}
+
+  /* карточка, парящая над фото — приём из «Золотого» */
+  .card{position:relative;z-index:3;display:flex;align-items:stretch;gap:0;
+    max-width:660px;background:rgba(240,239,228,.94);backdrop-filter:blur(3px);
+    border-radius:3px;overflow:hidden;margin-bottom:46px;
+    box-shadow:0 18px 50px rgba(20,24,14,.28)}
+  .card__ph{width:190px;flex:none;overflow:hidden}
+  .card__ph img{width:100%;height:100%;object-fit:cover}
+  .card__body{padding:24px 28px;display:flex;flex-direction:column;
+    justify-content:center;gap:16px}
+  .card__body p{font-size:14.5px;line-height:1.62;color:#3B3B2C;max-width:34ch}
+  .card__row{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+  .pill{display:inline-flex;align-items:center;justify-content:center;
+    padding:13px 28px;border-radius:100px;border:none;cursor:pointer;
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--cream);text-decoration:none;
+    background-image:linear-gradient(rgba(44,51,32,.80),rgba(44,51,32,.80)),
+      url("../public/photo/camo.jpg");
+    background-size:auto,300px;transition:background-image .3s,transform .25s}
+  .pill:hover{background-image:linear-gradient(rgba(44,51,32,.58),rgba(44,51,32,.58)),
+      url("../public/photo/camo.jpg")}
+  .card__price{font-family:var(--mono);font-size:11px;letter-spacing:.14em;
+    color:var(--muted);text-transform:uppercase}
+
+  /* ---------------- АРКА-ПЕРЕХОД ---------------- */
+  .arch{position:relative;background:var(--cream);
+    border-radius:50% 50% 0 0 / 90px 90px;margin-top:-92px;z-index:5;
+    padding:104px 40px 0}
+
+  .lede{max-width:56ch;margin:0 auto;text-align:center}
+  .lede .mono{color:var(--olive);margin-bottom:22px;display:block}
+  .lede p{font-size:15.5px;line-height:1.78;color:#4A4A3A}
+  .tilde{display:block;text-align:center;color:var(--sage);
+    font-family:var(--disp);font-size:26px;line-height:1;margin:20px 0}
+
+  /* ---------------- ЗАГОЛОВОК ---------------- */
+  .section{padding:104px 40px}
+  .h2{font-family:var(--disp);font-weight:500;text-transform:uppercase;
+    font-size:clamp(30px,4.6vw,62px);line-height:1.04;letter-spacing:.005em;
+    text-align:center;color:var(--ink)}
+  .h2 em{font-style:normal;color:var(--sage)}
+  .h2-note{text-align:center;color:var(--muted);margin-top:18px;
+    font-size:14.5px;max-width:50ch;margin-left:auto;margin-right:auto}
+
+  /* ---------------- КАРТОЧКИ РЫБ ---------------- */
+  .fish{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:52px}
+  .fish__item{position:relative;overflow:hidden;border-radius:3px;background:#1d2216}
+  .fish__media{aspect-ratio:3/4.1;overflow:hidden}
+  .fish__media video{width:100%;height:100%;object-fit:cover;
+    filter:saturate(.92) contrast(1.03)}
+  .fish__label{position:absolute;left:0;right:0;bottom:0;
+    background:rgba(74,87,51,.94);color:var(--cream);
+    padding:13px 12px 15px;text-align:center}
+  .fish__season{font-family:var(--mono);font-size:9px;letter-spacing:.2em;
+    text-transform:uppercase;color:rgba(240,239,228,.66);display:block;margin-bottom:5px}
+  .fish__name{font-family:var(--disp);font-size:19px;font-weight:600;
+    text-transform:uppercase;letter-spacing:.06em;line-height:1}
+
+  .center{text-align:center;margin-top:44px}
+  .pill--light{background-image:none;background:var(--sage);color:var(--bog)}
+  .pill--light:hover{background:var(--olive);color:var(--cream)}
+
+  /* ---------------- ТЁМНАЯ СЕКЦИЯ ---------------- */
+  .dark{background:var(--bog);color:var(--cream);padding:110px 40px 120px;
+    text-align:center;position:relative;overflow:hidden}
+  .dark .h2{color:var(--cream)}
+  .dark .h2 em{color:var(--sage)}
+  .dark p{color:rgba(240,239,228,.7);max-width:48ch;margin:20px auto 36px;font-size:15.5px}
+
+  .note{background:#FFFCEA;border-top:1px solid #E0D9A8;
+    padding:26px 40px 34px;font-size:13.5px;line-height:1.7;color:#4A4A3A}
+  .note h4{font-family:var(--body);font-weight:600;font-size:14px;
+    margin-bottom:10px;color:var(--ink)}
+  .note ul{padding-left:18px;margin-top:8px}
+  .note li{margin-bottom:6px}
+
+  @media(max-width:1000px){
+    .fish{grid-template-columns:repeat(3,1fr)}
+  }
+  @media(max-width:720px){
+    .nav__links{display:none}
+    .hero,.section,.dark,.arch{padding-left:22px;padding-right:22px}
+    .card{flex-direction:column;max-width:100%}
+    .card__ph{width:100%;height:150px}
+    .fish{grid-template-columns:repeat(2,1fr);gap:10px}
+    .hero__badge{top:80px;right:22px}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ ГЕРОЙ ============ -->
+<header class="hero">
+  <div class="hero__bg">
+    <img src="../public/photo/hero-desktop.jpg" alt="Рыболов с уловом на берегу реки Тауй">
+  </div>
+  <div class="hero__veil"></div>
+
+  <nav class="nav">
+    <div class="nav__links">
+      <a href="#">О туре</a>
+      <a href="#">Размещение</a>
+      <a href="#">Стоимость</a>
+      <a href="#">Программа</a>
+    </div>
+    <div class="nav__right">
+      <a class="nav__phone" href="tel:+79140000000">+7 914 000-00-00</a>
+      <div class="nav__burger" role="button" aria-label="Меню"></div>
+    </div>
+  </nav>
+
+  <img class="hero__badge" src="../public/photo/hero-badge.png"
+       alt="Экспедиционный центр Россия — лучшая рыболовная база, основано в 2015">
+
+  <div class="hero__inner">
+    <div class="hero__eyebrow mono">
+      <span>59°47′32.61″ / 148°16′24.23″</span><i></i><span>Магаданская область</span>
+    </div>
+    <h1 class="hero__name">Кавинка</h1>
+    <p class="hero__sub">Пароль в мир дикой природы</p>
+
+    <div class="card">
+      <div class="card__ph">
+        <img src="../public/photo/river-boat-hills.jpg" alt="Река Тауй">
+      </div>
+      <div class="card__body">
+        <p>
+          Рыболовная база в Кавинской долине, на берегу Тауя —
+          там, где заканчиваются дороги.
+        </p>
+        <div class="card__row">
+          <a class="pill" href="https://t.me/KAVINKA_bot">Оставить заявку</a>
+          <span class="card__price">от 150 000 ₽ / 7 дней</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ АРКА + ЛИД ============ -->
+<div class="arch">
+  <div class="lede">
+    <span class="tilde">~</span>
+    <span class="mono">Основано в 2015</span>
+    <p>
+      Кавинская долина — точка на слиянии двух рек, Чёломджи и Кавы.
+      Именно здесь они образуют Тауй, а за базой начинается
+      Магаданский государственный заповедник.
+    </p>
+    <span class="tilde">~</span>
+  </div>
+</div>
+
+<!-- ============ ВИДЫ РЫБ ============ -->
+<section class="section">
+  <h2 class="h2">Шесть видов лососёвых<br><em>в четырёх месяцах сезона</em></h2>
+  <p class="h2-note">
+    У каждой рыбы своё окно. Хариус, голец и кунджа держатся всё лето,
+    кета выходит только в августе.
+  </p>
+
+  <div class="fish">
+    <article class="fish__item">
+      <div class="fish__media">
+        <video src="../public/video/fish-grayling.mp4" autoplay muted loop playsinline></video>
+      </div>
+      <div class="fish__label">
+        <span class="fish__season">Июнь — Сентябрь</span>
+        <span class="fish__name">Хариус</span>
+      </div>
+    </article>
+    <article class="fish__item">
+      <div class="fish__media">
+        <video src="../public/video/fish-char.mp4" autoplay muted loop playsinline></video>
+      </div>
+      <div class="fish__label">
+        <span class="fish__season">Июнь — Сентябрь</span>
+        <span class="fish__name">Голец</span>
+      </div>
+    </article>
+    <article class="fish__item">
+      <div class="fish__media">
+        <video src="../public/video/fish-kundzha.mp4" autoplay muted loop playsinline></video>
+      </div>
+      <div class="fish__label">
+        <span class="fish__season">Июнь — Сентябрь</span>
+        <span class="fish__name">Кунджа</span>
+      </div>
+    </article>
+    <article class="fish__item">
+      <div class="fish__media">
+        <video src="../public/video/fish-pink-salmon.mp4" autoplay muted loop playsinline></video>
+      </div>
+      <div class="fish__label">
+        <span class="fish__season">Июнь — Июль</span>
+        <span class="fish__name">Горбуша</span>
+      </div>
+    </article>
+    <article class="fish__item">
+      <div class="fish__media">
+        <video src="../public/video/fish-chum.mp4" autoplay muted loop playsinline></video>
+      </div>
+      <div class="fish__label">
+        <span class="fish__season">Август</span>
+        <span class="fish__name">Кета</span>
+      </div>
+    </article>
+    <article class="fish__item">
+      <div class="fish__media">
+        <video src="../public/video/fish-coho.mp4" autoplay muted loop playsinline></video>
+      </div>
+      <div class="fish__label">
+        <span class="fish__season">Август — Сентябрь</span>
+        <span class="fish__name">Кижуч</span>
+      </div>
+    </article>
+  </div>
+
+  <div class="center">
+    <a class="pill pill--light" href="#">Расписание сезона</a>
+  </div>
+</section>
+
+<!-- ============ ТЁМНАЯ СЕКЦИЯ ============ -->
+<section class="dark">
+  <h2 class="h2">Дорога сюда —<br><em>уже приключение</em></h2>
+  <p>
+    200 километров от Магадана: автомобиль, речной паром и болотоход.
+    Или вертолёт, который заходит на посадку прямо с реки.
+  </p>
+  <a class="pill" href="https://t.me/KAVINKA_bot"
+     style="background-image:linear-gradient(rgba(240,239,228,.06),rgba(240,239,228,.06)),url('../public/photo/camo.jpg');border:1px solid rgba(240,239,228,.35)">
+    Как добраться
+  </a>
+</section>
+
+<div class="note">
+  <h4>Что тут показано и что я поменял по сравнению с прошлыми попытками</h4>
+  <ul>
+    <li><b>Тепло вместо схем.</b> Кремовый фон, крупное фото во весь экран, мягкие переходы,
+      арка между первым экраном и текстом — приём прямо из «Золотого».</li>
+    <li><b>Карточка, парящая над фото</b> — тоже из «Золотого». Она снимает необходимость
+      громоздить текст поверх снимка.</li>
+    <li><b>Карточки рыб с зелёной плашкой</b> — ровно тот же приём, что у «Золотого»
+      на сортах яблок. Видео настоящие, играют.</li>
+    <li><b>Камуфляж ушёл в деталь:</b> он только в заливке кнопки «Оставить заявку»
+      и мягко проступает на кнопке в тёмной секции. При наведении на кнопку он проявляется сильнее.</li>
+    <li><b>Шрифт:</b> Cormorant Garamond для заголовков, Manrope для текста,
+      JetBrains Mono для координат и цен. Это вариант C из шрифтовых проб —
+      при тёплом направлении он подходит лучше, чем тяжёлые.</li>
+    <li><b>Скругления вернул.</b> Раньше я их запретил под «брутальность» — это была ошибка,
+      в референсах они есть, и именно они дают мягкость.</li>
+  </ul>
+</div>
+
+</body>
+</html>

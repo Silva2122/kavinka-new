@@ -1,0 +1,589 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>КАВИНКА — макет «О туре»</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --cream:#F0EFE4;
+    --cream-warm:#E7E2CE;
+    --bog:#242B1B;
+    --sage:#B7C299;
+    --olive:#7C8C57;
+    --ink:#232318;
+    --muted:#6E6D5E;
+    --disp:'Cormorant Garamond',Georgia,serif;
+    --body:'Manrope',system-ui,sans-serif;
+    --meta-size:14px;
+    --meta-tracking:.12em;
+    --base-size:18px;
+    --size-h3:28px;
+    --size-h3-sm:22px;
+    --size-copy:14.5px;
+    --size-small:12.5px;
+    --grid-max:1440px;
+    --head-max:620px;
+  }
+  body{background:var(--cream);color:var(--ink);font-family:var(--body);
+    font-weight:300;line-height:1.6;-webkit-font-smoothing:antialiased}
+  img,video{display:block;max-width:100%}
+
+  /* ===================== ЗАКРЕПЛЁННЫЙ ХЕДЕР (утверждённый компонент, без изменений) ===================== */
+  .site-header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bog);
+    padding:13px 46px;transform:translateY(-100%);opacity:0;
+    transition:transform .4s ease,opacity .4s ease;
+    box-shadow:0 12px 30px rgba(0,0,0,.22)}
+  .site-header.is-visible{transform:translateY(0);opacity:1}
+  .site-header__inner{max-width:var(--grid-max);margin:0 auto;
+    display:flex;align-items:center;justify-content:space-between;gap:24px}
+  .site-header__logo{font-family:var(--body);font-weight:700;font-size:14px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--cream);text-decoration:none}
+  .site-header__links{display:flex;gap:19px}
+  .site-header__links a{color:rgba(240,239,228,.82);text-decoration:none;white-space:nowrap;
+    font-size:13px;letter-spacing:.02em;transition:color .25s}
+  .site-header__links a:hover,.site-header__links a.is-current{color:var(--cream)}
+  .glass-btn.site-header__cta{padding:9px 20px}
+  .site-header__cta span{font-size:11px}
+  @media(max-width:860px){ .site-header__links{display:none} }
+
+  /* ===================== АНИМАЦИЯ ПОЯВЛЕНИЯ (утверждённый компонент) ===================== */
+  .reveal{opacity:0;transform:translateY(26px);
+    transition:opacity .8s cubic-bezier(.16,.8,.24,1),transform .8s cubic-bezier(.16,.8,.24,1);
+    transition-delay:calc(var(--i,0) * 90ms)}
+  .reveal.is-visible{opacity:1;transform:translateY(0)}
+  @media(prefers-reduced-motion:reduce){ .reveal{opacity:1;transform:none;transition:none} }
+
+  /* ===================== БЕГУЩАЯ СТРОКА (утверждённый компонент) ===================== */
+  .ticker{background:var(--cream-warm);border-bottom:1px solid rgba(35,35,24,.1);
+    overflow:hidden;white-space:nowrap;position:relative}
+  .ticker__track{display:inline-flex;align-items:center;
+    animation:tickerMove 34s linear infinite;padding:11px 0}
+  .ticker:hover .ticker__track{animation-play-state:paused}
+  .ticker__item{display:inline-flex;align-items:center;
+    font-family:var(--body);font-weight:600;font-size:12px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--ink);padding:0 26px}
+  .ticker__dot{display:inline-block;font-size:15px;line-height:1;color:var(--olive);flex:none}
+  @keyframes tickerMove{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  @media(prefers-reduced-motion:reduce){.ticker__track{animation:none}}
+
+  /* ===================== ОБЩИЕ ЭЛЕМЕНТЫ (утверждённые компоненты) ===================== */
+  .eyebrow{display:flex;align-items:center;gap:10px;font-family:var(--body);
+    font-weight:600;font-size:var(--meta-size);letter-spacing:var(--meta-tracking);
+    text-transform:uppercase;margin-bottom:18px}
+  .eyebrow--center{justify-content:center;color:var(--olive)}
+  .eyebrow svg{width:12px;height:12px;flex:none;opacity:.85}
+  .eyebrow .sep{opacity:.5}
+
+  .h2{font-family:var(--disp);font-weight:600;text-transform:uppercase;
+    line-height:1.02;letter-spacing:.005em;font-size:clamp(32px,4vw,58px)}
+  .h2 em{font-style:normal}
+
+  .section-head{max-width:var(--head-max);margin:0 auto 70px;text-align:center}
+  .section-head__lead{font-size:var(--base-size);color:var(--muted);max-width:48ch;margin:0 auto}
+
+  .glass-btn{
+    position:relative;display:inline-flex;align-items:center;justify-content:center;
+    padding:17px 38px;border-radius:100px;text-decoration:none;
+    isolation:isolate;overflow:hidden;color:var(--cream);
+    border:1px solid rgba(240,239,228,.6);
+    background:rgba(20,26,14,.42);
+    backdrop-filter:blur(10px) saturate(140%);
+    -webkit-backdrop-filter:blur(10px) saturate(140%);
+    box-shadow:0 14px 34px rgba(10,14,6,.35),inset 0 1px 0 rgba(255,255,255,.16);
+    transition:box-shadow .3s,border-color .3s;
+  }
+  .glass-btn span{position:relative;z-index:2;font-family:var(--body);
+    font-weight:700;font-size:var(--meta-size);letter-spacing:var(--meta-tracking);
+    text-transform:uppercase;text-shadow:0 1px 4px rgba(0,0,0,.55)}
+  .glass-btn::before{content:"";position:absolute;inset:-6px;z-index:0;
+    background-image:url("../public/photo/camo.jpg");
+    background-size:210px;background-position:40% 35%;
+    opacity:.34;transition:opacity .35s,background-position 8s linear}
+  .glass-btn::after{content:"";position:absolute;inset:0;z-index:1;
+    background:linear-gradient(155deg,rgba(240,239,228,.46),rgba(240,239,228,.20) 55%)}
+  .glass-btn:hover{border-color:rgba(240,239,228,.95);
+    box-shadow:0 18px 40px rgba(10,14,6,.45),inset 0 1px 0 rgba(255,255,255,.22)}
+  .glass-btn:hover::before{opacity:.48;background-position:60% 55%}
+
+  .nav{display:flex;align-items:center;justify-content:space-between;gap:24px}
+  .nav__logo{font-family:var(--body);font-weight:700;font-size:15px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--cream);text-decoration:none}
+  .nav__links{display:flex;gap:19px}
+  .nav__links a{color:rgba(240,239,228,.82);text-decoration:none;white-space:nowrap;
+    font-size:14px;letter-spacing:.02em;transition:color .25s}
+  .nav__links a:hover,.nav__links a.is-current{color:var(--cream)}
+  .nav__burger{width:24px;height:11px;border-top:1.5px solid var(--cream);
+    border-bottom:1.5px solid var(--cream);cursor:pointer}
+  @media(max-width:860px){ .nav__links{display:none} }
+
+  /* ===================== ЗАГОЛОВОК СТРАНИЦЫ =====================
+     Компактная версия hero-панели: тот же болотный фон и камуфляж-текстура
+     под overlay, что в hero__panel на главной, но без фото/галереи —
+     просто нав + хлебная крошка + H1 + слоган. Пропорции взяты со шкалы. */
+  .page-hero{position:relative;background:var(--bog);overflow:hidden;
+    padding:30px 46px 64px;display:flex;flex-direction:column;justify-content:space-between;
+    min-height:42svh}
+  .page-hero::before{content:"";position:absolute;inset:0;z-index:0;
+    background-image:url("../public/photo/camo.jpg");
+    background-size:440px;background-repeat:repeat;
+    opacity:.085;mix-blend-mode:overlay;pointer-events:none}
+  .page-hero>*{position:relative;z-index:1}
+
+  .page-hero__mid{max-width:var(--grid-max);width:100%;margin:0 auto}
+  .page-hero__title{color:var(--cream);margin-bottom:18px}
+  .page-hero__title em{color:var(--sage);font-style:normal}
+  .page-hero__lede{font-family:var(--disp);font-style:italic;font-weight:500;
+    font-size:clamp(18px,1.6vw,22px);color:rgba(240,239,228,.72)}
+
+  @media(max-width:860px){
+    .page-hero{padding:24px 22px 60px}
+  }
+
+  /* ===================== РАСПОЛОЖЕНИЕ БАЗЫ =====================
+     Асимметричная сетка 50/50 — тот же приём, что панель/галерея в hero
+     (фото бликом до края, не мелкая рамка 4:5 — тот вариант уже
+     отклонён на «О базе» как шаблонный, см. DESIGN.md §6). */
+  .location{background:var(--cream);display:grid;grid-template-columns:1fr 1fr;min-height:74svh}
+  .location__photo{position:relative;overflow:hidden;min-height:360px}
+  .location__photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+
+  .location__panel{display:flex;flex-direction:column;justify-content:center;
+    padding:80px 64px}
+  .location__title{color:var(--ink);margin-bottom:26px}
+  .location__title em{color:var(--bog);font-style:normal}
+  .location__panel p{font-size:var(--base-size);line-height:1.7;color:var(--muted);
+    max-width:46ch;margin-bottom:20px}
+  .location__panel p:last-of-type{margin-bottom:0}
+
+  @media(max-width:1000px){
+    .location{grid-template-columns:1fr}
+    .location__photo{min-height:340px}
+    .location__panel{padding:56px 26px}
+  }
+
+  /* ===================== ЦИТАТА-ВРЕЗКА =====================
+     Тёмная сплошная полоса, тот же камуфляж-оверлей, что в page-hero —
+     не изобретаем новую текстуру, переиспользуем тот же приём. */
+  .quote-strip{position:relative;background:var(--bog);overflow:hidden;
+    padding:96px 46px;text-align:center}
+  .quote-strip::before{content:"";position:absolute;inset:0;z-index:0;
+    background-image:url("../public/photo/camo.jpg");
+    background-size:440px;background-repeat:repeat;
+    opacity:.06;mix-blend-mode:overlay;pointer-events:none}
+  .quote-strip__mark{position:relative;z-index:1;display:block;
+    font-family:var(--disp);font-size:52px;line-height:1;color:var(--olive);margin-bottom:18px}
+  .quote-strip blockquote{position:relative;z-index:1;font-family:var(--disp);font-weight:600;
+    font-style:italic;color:var(--cream);font-size:clamp(24px,2.8vw,40px);line-height:1.3;
+    max-width:840px;margin:0 auto}
+
+  @media(max-width:640px){ .quote-strip{padding:64px 24px} }
+
+  /* ===================== КАРТОЧКИ-ФАКТЫ =====================
+     Утверждённый компонент «Быстрые факты» с главной, переиспользован
+     как есть под «Как добраться» и «Что включено в тур» — только
+     контент и число колонок в сетке меняются. */
+  .facts{background:var(--cream);padding:130px 46px 150px}
+  .facts--alt{background:var(--cream-warm)}
+  .facts__grid{max-width:var(--grid-max);margin:0 auto;display:grid;
+    grid-template-columns:repeat(4,1fr);gap:28px}
+  .facts__grid--three{grid-template-columns:repeat(3,1fr)}
+
+  .fact-item{border:1px solid rgba(35,35,24,.12);border-radius:10px;
+    padding:48px 28px 40px;display:flex;flex-direction:column;align-items:center;
+    text-align:center;gap:20px;transition:border-color .25s;background:var(--cream)}
+  .fact-item:hover{border-color:rgba(124,140,87,.5)}
+
+  .fact-item__icon{width:60px;height:60px;border-radius:50%;flex:none;
+    border:1px solid rgba(35,35,24,.16);display:flex;align-items:center;justify-content:center}
+  .fact-item__icon svg{width:26px;height:26px;color:var(--olive)}
+
+  .fact-item h3{font-family:var(--disp);font-weight:600;font-size:var(--size-h3-sm);
+    text-transform:uppercase;letter-spacing:.01em;color:var(--ink)}
+  .fact-item p{font-size:var(--size-copy);color:var(--muted)}
+
+  @media(max-width:900px){
+    .facts{padding:90px 22px 100px}
+    .facts__grid{grid-template-columns:repeat(2,1fr);gap:20px}
+    .facts__grid--three{grid-template-columns:repeat(2,1fr)}
+    .fact-item{padding:36px 20px}
+  }
+  @media(max-width:520px){
+    .facts__grid,.facts__grid--three{grid-template-columns:1fr}
+  }
+
+  /* ===================== ГАЛЕРЕЯ (3 фото) =====================
+     Статичная витрина, не слайдер, как трофейная галерея в hero —
+     подписи снизу тем же градиентом, что у about__stage/pass. */
+  .gallery-grid{background:var(--cream);padding:130px 46px 150px}
+  .gallery-grid__row{max-width:var(--grid-max);margin:0 auto;display:grid;
+    grid-template-columns:repeat(3,1fr);gap:28px}
+  .gallery-grid__item{position:relative;border-radius:8px;overflow:hidden;
+    aspect-ratio:4/5;box-shadow:0 24px 48px rgba(35,35,24,.2)}
+  .gallery-grid__item img{width:100%;height:100%;object-fit:cover;display:block;
+    transition:transform .6s ease}
+  .gallery-grid__item:hover img{transform:scale(1.05)}
+  .gallery-grid__item::after{content:"";position:absolute;left:0;right:0;bottom:0;height:42%;
+    background:linear-gradient(to top,rgba(8,11,5,.72),transparent);pointer-events:none}
+  .gallery-grid__caption{position:absolute;left:0;right:0;bottom:0;z-index:1;padding:22px 22px;
+    font-family:var(--body);font-weight:700;font-size:var(--size-small);
+    letter-spacing:.1em;text-transform:uppercase;color:var(--cream)}
+
+  @media(max-width:900px){
+    .gallery-grid{padding:90px 22px 100px}
+    .gallery-grid__row{grid-template-columns:1fr;gap:20px}
+  }
+
+  /* ===================== CTA (утверждённый компонент, без изменений) ===================== */
+  .cta-section{position:relative;background:var(--bog);overflow:hidden;
+    min-height:56svh;display:flex;align-items:center;justify-content:center}
+  .cta-section__stage{position:absolute;inset:0;z-index:0}
+  .cta-section__stage video{position:absolute;inset:0;width:100%;height:100%;
+    object-fit:cover;display:block}
+  .cta-section__stage::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+    background:linear-gradient(180deg,rgba(8,11,5,.5),rgba(8,11,5,.62) 60%,rgba(8,11,5,.72))}
+  .cta-section__content{position:relative;z-index:2;max-width:var(--head-max);margin:0 auto;
+    padding:100px 46px;text-align:center}
+  .cta-section__title{color:var(--cream);margin-bottom:22px;text-shadow:0 3px 18px rgba(0,0,0,.5)}
+  .cta-section__lead{font-size:var(--base-size);color:rgba(240,239,228,.86);margin-bottom:38px;
+    text-shadow:0 2px 12px rgba(0,0,0,.45)}
+  @media(max-width:640px){ .cta-section__content{padding:70px 24px} }
+
+  /* ===================== ФУТЕР (утверждённый компонент, без изменений) ===================== */
+  .site-footer{background:var(--bog);color:rgba(240,239,228,.62);padding:86px 46px 34px}
+  .footer__top{max-width:var(--grid-max);margin:0 auto;display:grid;
+    grid-template-columns:1.1fr 1fr 1.5fr;gap:60px;padding-bottom:56px;
+    border-bottom:1px solid rgba(240,239,228,.14)}
+  .footer__logo{font-family:var(--body);font-weight:700;font-size:16px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--cream);margin-bottom:24px;display:block}
+  .footer__label{font-family:var(--body);font-weight:700;font-size:var(--size-small);letter-spacing:var(--meta-tracking);
+    text-transform:uppercase;color:rgba(240,239,228,.4);margin-bottom:20px}
+  .footer__col p,.footer__col a{font-size:var(--size-copy);line-height:1.8}
+  .footer__col a{color:rgba(240,239,228,.7);text-decoration:none;display:block;transition:color .2s}
+  .footer__col a:hover{color:var(--sage)}
+  .footer__col--about p{max-width:40ch;color:rgba(240,239,228,.6)}
+  .footer__bottom{max-width:var(--grid-max);margin:0 auto;padding-top:26px;
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
+    font-size:var(--size-small);color:rgba(240,239,228,.38)}
+  @media(max-width:900px){
+    .footer__top{grid-template-columns:1fr 1fr;gap:40px 30px}
+    .footer__col--about{grid-column:1/-1}
+  }
+  @media(max-width:640px){
+    .site-footer{padding:64px 22px 28px}
+    .footer__top{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header" id="siteHeader">
+  <div class="site-header__inner">
+    <a class="site-header__logo" href="page.html">Кавинка</a>
+    <nav class="site-header__links">
+      <a class="is-current" href="about.html">О туре</a><a href="#">Размещение</a>
+      <a href="pricing.html">Стоимость</a><a href="#">Программа</a>
+    </nav>
+    <a class="glass-btn site-header__cta" href="https://t.me/KAVINKA_bot"><span>Оставить заявку</span></a>
+  </div>
+</header>
+
+<div class="ticker">
+  <div class="ticker__track" id="tickerTrack"></div>
+</div>
+
+<!-- ===================== ЗАГОЛОВОК СТРАНИЦЫ ===================== -->
+<section class="page-hero">
+  <nav class="nav">
+    <a class="nav__logo" href="page.html">Кавинка</a>
+    <div class="nav__links">
+      <a class="is-current" href="about.html">О туре</a><a href="#">Размещение</a>
+      <a href="pricing.html">Стоимость</a><a href="#">Программа</a>
+    </div>
+    <div class="nav__burger" role="button" aria-label="Меню"></div>
+  </nav>
+
+  <div class="page-hero__mid">
+    <div class="eyebrow reveal" style="--i:0;color:rgba(240,239,228,.55)">
+      <span>Главная</span><span class="sep">•</span><span>О туре</span>
+    </div>
+    <h1 class="h2 page-hero__title reveal" style="--i:1">О <em>туре</em></h1>
+    <p class="page-hero__lede reveal" style="--i:2">«Пароль в мир дикой природы»</p>
+  </div>
+</section>
+
+<!-- ===================== РАСПОЛОЖЕНИЕ БАЗЫ ===================== -->
+<section class="location" id="location">
+  <div class="location__photo reveal">
+    <img src="../public/photo/nerpa-river.jpg" alt="Нерпа на бревне у реки Тауй">
+  </div>
+  <div class="location__panel">
+    <div class="eyebrow reveal" style="color:var(--olive)"><span>Кавинская долина</span></div>
+    <h2 class="h2 location__title reveal">Расположение <em>базы</em></h2>
+    <p class="reveal">База «КАВИНКА» находится прямо на границе с Магаданским государственным заповедником. За вами — дикая тайга, куда не ступает цивилизация. Здесь можно встретить медвежьи семьи, нерп, выглядывающих из воды, и бесчисленные стаи лососевых.</p>
+    <p class="reveal">Это уникальное место, где сочетается первозданная природа, богатая рыбой река и современная инфраструктура для комфортного отдыха.</p>
+  </div>
+</section>
+
+<!-- ===================== ЦИТАТА-ВРЕЗКА ===================== -->
+<section class="quote-strip">
+  <span class="quote-strip__mark reveal">”</span>
+  <blockquote class="reveal">Дорога сюда — уже приключение. И первая награда</blockquote>
+</section>
+
+<!-- ===================== КАК ДОБРАТЬСЯ ===================== -->
+<section class="facts" id="howto">
+  <div class="section-head reveal">
+    <div class="eyebrow eyebrow--center"><span>Дорога до базы</span></div>
+    <h2 class="h2">Как <em style="color:var(--bog)">добраться</em></h2>
+    <p class="section-head__lead">200 километров дикой тайги — на автомобиле, пароме, болотоходе или вертолётом прямо с реки.</p>
+  </div>
+
+  <div class="facts__grid">
+    <article class="fact-item reveal" style="--i:0">
+      <span class="fact-item__icon">
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 30 L11 20 Q12 17 16 17 H32 Q36 17 37 20 L40 30"/>
+          <rect x="6" y="30" width="36" height="8" rx="2"/>
+          <circle cx="14" cy="38" r="3"/><circle cx="34" cy="38" r="3"/>
+        </svg>
+      </span>
+      <h3>200 км от Магадана</h3>
+      <p>Авто + паром + болотоход</p>
+    </article>
+
+    <article class="fact-item reveal" style="--i:1">
+      <span class="fact-item__icon">
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 20 H42 M24 20 V10 M14 10 H34"/>
+          <path d="M12 20 V32 Q12 36 16 36 H30 Q34 36 34 32 V20"/>
+          <path d="M4 36 H44"/>
+        </svg>
+      </span>
+      <h3>Вертолёт</h3>
+      <p>Посадка прямо с реки</p>
+    </article>
+
+    <article class="fact-item reveal" style="--i:2">
+      <span class="fact-item__icon">
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M24 6 L34 22 H29 L37 34 H11 L19 22 H14 Z"/>
+          <path d="M24 34 V42"/>
+        </svg>
+      </span>
+      <h3>Заповедник</h3>
+      <p>На границе с заповедником</p>
+    </article>
+
+    <article class="fact-item reveal" style="--i:3">
+      <span class="fact-item__icon">
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 30 Q10 22 24 22 Q38 22 42 30"/>
+          <path d="M8 30 L6 36 H42 L40 30"/>
+          <path d="M20 22 V13 H30 L34 22"/>
+        </svg>
+      </span>
+      <h3>Водомёты</h3>
+      <p>Современные лодки</p>
+    </article>
+  </div>
+</section>
+
+<!-- ===================== ЧТО ВКЛЮЧЕНО В ТУР ===================== -->
+<section class="facts facts--alt" id="included">
+  <div class="section-head reveal">
+    <div class="eyebrow eyebrow--center"><span>Всё включено</span></div>
+    <h2 class="h2">Что включено <em style="color:var(--bog)">в тур</em></h2>
+    <p class="section-head__lead">От трансфера в аэропорту до бани после рыбалки — организуем весь тур целиком.</p>
+  </div>
+
+  <div class="facts__grid facts__grid--three">
+    <article class="fact-item reveal" style="--i:0">
+      <span class="fact-item__icon">
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 30 L11 20 Q12 17 16 17 H32 Q36 17 37 20 L40 30"/>
+          <rect x="6" y="30" width="36" height="8" rx="2"/>
+          <circle cx="14" cy="38" r="3"/><circle cx="34" cy="38" r="3"/>
+        </svg>
+      </span>
+      <h3>Трансфер</h3>
+      <p>Встреча в аэропорту, доставка до базы и обратно</p>
+    </article>
+
+    <article class="fact-item reveal" style="--i:1">
+      <span class="fact-item__icon">
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 30 Q10 22 24 22 Q38 22 42 30"/>
+          <path d="M8 30 L6 36 H42 L40 30"/>
+          <path d="M20 22 V13 H30 L34 22"/>
+        </svg>
+      </span>
+      <h3>Лодки</h3>
+      <p>Современные водомёты</p>
+    </article>
+
+    <article class="fact-item reveal" style="--i:2">
+      <span class="fact-item__icon">
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 23 L24 10 L40 23"/>
+          <path d="M12 21 V38 H36 V21"/>
+        </svg>
+      </span>
+      <h3>Проживание</h3>
+      <p>Комфортные коттеджи с удобствами</p>
+    </article>
+
+    <article class="fact-item reveal" style="--i:3">
+      <span class="fact-item__icon">
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="24" cy="24" r="15"/>
+          <path d="M24 9 V13 M24 35 V39 M9 24 H13 M35 24 H39"/>
+          <path d="M24 24 L29 16 L24 24 L19 32 Z" fill="currentColor" stroke="none"/>
+        </svg>
+      </span>
+      <h3>Гиды</h3>
+      <p>Профессиональные рыболовные гиды</p>
+    </article>
+
+    <article class="fact-item reveal" style="--i:4">
+      <span class="fact-item__icon">
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10 26 Q10 14 24 14 Q38 14 38 26 Z"/>
+          <path d="M6 26 H42 M6 26 Q6 36 16 36 H32 Q42 36 42 26"/>
+          <path d="M24 6 Q21 9 24 12 Q27 9 24 6Z"/>
+        </svg>
+      </span>
+      <h3>Баня</h3>
+      <p>Доступ к банному комплексу</p>
+    </article>
+
+    <article class="fact-item reveal" style="--i:5">
+      <span class="fact-item__icon">
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10 40 L14 20 Q24 10 34 20 L38 40"/>
+          <path d="M6 40 H42"/>
+          <path d="M18 40 V28 H30 V40"/>
+        </svg>
+      </span>
+      <h3>Беседка</h3>
+      <p>Мангал, BBQ</p>
+    </article>
+  </div>
+</section>
+
+<!-- ===================== ГАЛЕРЕЯ ===================== -->
+<section class="gallery-grid" id="gallery">
+  <div class="section-head reveal">
+    <div class="eyebrow eyebrow--center"><span>В дороге и на месте</span></div>
+    <h2 class="h2">Гал<em style="color:var(--bog)">ерея</em></h2>
+  </div>
+
+  <div class="gallery-grid__row">
+    <div class="gallery-grid__item reveal" style="--i:0">
+      <img src="../public/photo/swamp-buggy-rear.jpg" alt="Болотоход по дороге на базу">
+      <span class="gallery-grid__caption">Болотоход</span>
+    </div>
+    <div class="gallery-grid__item reveal" style="--i:1">
+      <img src="../public/photo/reserve-sign.jpg" alt="Лодка у границы Магаданского заповедника">
+      <span class="gallery-grid__caption">Лодка у границы заповедника</span>
+    </div>
+    <div class="gallery-grid__item reveal" style="--i:2">
+      <img src="../public/photo/gazebo-yellow.jpg" alt="Беседка на берегу реки Тауй">
+      <span class="gallery-grid__caption">Беседка на берегу</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CTA (утверждённый компонент) ===================== -->
+<section class="cta-section" id="cta">
+  <div class="cta-section__stage">
+    <video src="../public/video/cta-trout.mp4" autoplay muted loop playsinline></video>
+    <div class="cta-section__content reveal">
+      <h2 class="h2 cta-section__title">Готовы к незабываемому приключению?</h2>
+      <p class="cta-section__lead">Забронируйте тур прямо сейчас и получите консультацию в течение 15 минут</p>
+      <a class="glass-btn" href="https://t.me/KAVINKA_bot"><span>Оставить заявку</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ФУТЕР (утверждённый компонент) ===================== -->
+<footer class="site-footer">
+  <div class="footer__top reveal">
+    <div class="footer__col">
+      <span class="footer__logo">Кавинка</span>
+      <div class="footer__label">Контакты</div>
+      <p>г. Магадан</p>
+      <a href="tel:+79140000000">+7 914 000-00-00</a>
+    </div>
+
+    <div class="footer__col">
+      <div class="footer__label">Навигация</div>
+      <a href="about.html">О туре</a>
+      <a href="#">Размещение</a>
+      <a href="pricing.html">Стоимость</a>
+      <a href="#">Программа тура</a>
+    </div>
+
+    <div class="footer__col footer__col--about">
+      <div class="footer__label">О компании</div>
+      <p>Рыболовная база «КАВИНКА» расположена на границе с Магаданским государственным заповедником, на берегу реки Тауй.</p>
+    </div>
+  </div>
+
+  <div class="footer__bottom">
+    <span>© 2026 КАВИНКА. Все права защищены.</span>
+    <span>Сайт носит информационный характер и не является публичной офертой.</span>
+  </div>
+</footer>
+
+<script>
+  const tickerItems = [
+    { text: 'Пароль в мир дикой природы', quote: true },
+    { text: 'Комфортные коттеджи' },
+    { text: '5 видов лососевых' },
+    { text: 'Уникальная локация' },
+    { text: 'Профессиональное сопровождение' },
+    { text: 'Основано в 2015' },
+  ];
+  const track = document.getElementById('tickerTrack');
+  function renderTicker() {
+    const html = tickerItems.map(it =>
+      `<span class="ticker__item">${it.quote ? `«${it.text}»` : it.text}</span><span class="ticker__dot">•</span>`
+    ).join('');
+    track.innerHTML = html + html;
+  }
+  renderTicker();
+
+  const siteHeader = document.getElementById('siteHeader');
+  let headerTicking = false;
+  function updateHeader() {
+    siteHeader.classList.toggle('is-visible', window.scrollY > window.innerHeight * 0.35);
+    headerTicking = false;
+  }
+  window.addEventListener('scroll', () => {
+    if (!headerTicking) { requestAnimationFrame(updateHeader); headerTicking = true; }
+  });
+  updateHeader();
+
+  const revealEls = document.querySelectorAll('.reveal');
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    revealEls.forEach(el => el.classList.add('is-visible'));
+  } else {
+    const revealIO = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          revealIO.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+    revealEls.forEach(el => revealIO.observe(el));
+  }
+</script>
+
+</body>
+</html>

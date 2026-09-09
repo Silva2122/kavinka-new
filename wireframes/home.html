@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>КАВИНКА — вайрфрейм главной</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --line:#1a1a1a; --line2:#b4b4b4; --fill:#e8e8e8; --fill2:#f4f4f4;
+    --dark:#2a2a2a; --txt:#1a1a1a; --dim:#767676;
+    --mono:ui-monospace,'SF Mono',Menlo,monospace;
+  }
+  body{background:#fff;color:var(--txt);
+    font-family:system-ui,-apple-system,sans-serif;font-size:15px;line-height:1.5}
+
+  /* ---------- служебное ---------- */
+  .doc-head{border-bottom:3px solid var(--line);padding:28px 32px}
+  .doc-head h1{font-size:20px;letter-spacing:.02em}
+  .doc-head p{font-size:13px;color:var(--dim);margin-top:6px;max-width:80ch}
+  .legend{display:flex;gap:22px;flex-wrap:wrap;margin-top:14px;font:11px/1 var(--mono);color:var(--dim)}
+  .legend i{display:inline-block;width:22px;height:11px;vertical-align:-1px;margin-right:6px;border:1px solid var(--line2)}
+  .legend .l1{background:repeating-linear-gradient(45deg,#dcdcdc 0 4px,#f0f0f0 4px 8px)}
+  .legend .l2{background:var(--fill)}
+  .legend .l3{background:var(--dark)}
+
+  .sect-tag{position:sticky;top:0;z-index:5;
+    background:var(--line);color:#fff;font:500 11px/1 var(--mono);
+    letter-spacing:.16em;text-transform:uppercase;padding:9px 32px}
+  .note{background:#fffbe6;border-left:4px solid #d8c56a;
+    padding:12px 16px;margin:0 32px 0;font-size:13px;line-height:1.55}
+  .note b{font-weight:600}
+  .note--ask{background:#ffeeee;border-left-color:#d88}
+
+  .wrap{max-width:1280px;margin:0 auto;padding:0 32px}
+  .box{border:2px solid var(--line);position:relative}
+  .ph{background:repeating-linear-gradient(45deg,#dcdcdc 0 6px,#f0f0f0 6px 12px);
+    border:2px solid var(--line2);display:flex;align-items:center;justify-content:center;
+    text-align:center;padding:16px}
+  .ph span{font:11px/1.5 var(--mono);color:#5a5a5a;background:#fff;
+    padding:4px 8px;border:1px solid var(--line2);max-width:90%}
+  .lbl{font:500 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+  .mono{font:11px/1.4 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+  .btn{display:inline-flex;align-items:center;justify-content:center;
+    border:2px solid var(--line);padding:15px 26px;font:500 11px/1 var(--mono);
+    letter-spacing:.16em;text-transform:uppercase;background:var(--fill)}
+  .btn--camo{background:repeating-linear-gradient(135deg,#c9c9c9 0 7px,#e4e4e4 7px 14px);}
+  .btn--ghost{background:transparent}
+
+  /* ---------- шапка ---------- */
+  .hdr{border-bottom:2px solid var(--line);display:flex;align-items:center;
+    justify-content:space-between;gap:24px;padding:16px 0;flex-wrap:wrap}
+  .hdr__logo{font-weight:700;letter-spacing:.14em;font-size:17px}
+  .hdr__nav{display:flex;gap:16px;flex-wrap:wrap}
+  .hdr__nav span{font:11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#3a3a3a}
+
+  /* ---------- герой ---------- */
+  .hero{height:600px;position:relative;
+    background:repeating-linear-gradient(45deg,#d2d2d2 0 8px,#e6e6e6 8px 16px);
+    border:2px solid var(--line);display:flex;align-items:flex-end}
+  .hero__tag{position:absolute;top:16px;left:16px;font:11px/1 var(--mono);
+    background:#fff;border:1px solid var(--line2);padding:5px 9px;color:#5a5a5a}
+  .hero__badge{position:absolute;top:36px;right:36px;width:130px;height:130px;
+    border:2px dashed #6a6a6a;border-radius:50%;display:flex;align-items:center;
+    justify-content:center;text-align:center;font:10px/1.4 var(--mono);
+    color:#4a4a4a;background:rgba(255,255,255,.75)}
+  .hero__body{padding:40px;width:100%;background:linear-gradient(transparent,rgba(255,255,255,.9) 55%)}
+  .hero__h1{font-size:56px;line-height:1.02;text-transform:uppercase;
+    font-weight:700;letter-spacing:-.01em;margin:12px 0 14px;max-width:16ch}
+  .hero__slogan{font-size:19px;font-style:italic;color:#4a4a4a;margin-bottom:26px}
+  .hero__cta{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+
+  /* ---------- общие секции ---------- */
+  .sec{padding:76px 0;border-bottom:2px solid var(--line2)}
+  .sec--dark{background:var(--dark);color:#f0f0f0;border-bottom:none}
+  .sec--dark .lbl,.sec--dark .mono{color:#b0b0b0}
+  .sec--dark .btn{border-color:#f0f0f0;color:#f0f0f0;background:transparent}
+  .h2{font-size:36px;line-height:1.08;text-transform:uppercase;font-weight:700;
+    letter-spacing:-.005em;margin-bottom:10px}
+  .h2 em{font-style:normal;color:#8f8f8f}
+  .sec__head{margin-bottom:40px;max-width:60ch}
+
+  .facts{display:grid;grid-template-columns:repeat(4,1fr);border-top:2px solid var(--line)}
+  .facts>div{border-right:2px solid var(--line);border-bottom:2px solid var(--line);padding:28px 22px}
+  .facts>div:last-child{border-right:none}
+  .facts h3{font-size:21px;text-transform:uppercase;font-weight:700;margin:14px 0 6px}
+  .facts p{font-size:14px;color:#5a5a5a}
+
+  .about{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+  .about .ph{height:430px}
+  .about p{margin-bottom:16px;color:#3a3a3a;max-width:52ch}
+
+  .fish{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--line);
+    border:2px solid var(--line)}
+  .fish>div{background:#fff;padding:0}
+  .fish .ph{height:250px;border:none;border-bottom:2px solid var(--line)}
+  .fish__meta{padding:16px 18px;display:flex;justify-content:space-between;
+    align-items:baseline;gap:10px}
+  .fish__meta h3{font-size:19px;text-transform:uppercase;font-weight:700}
+
+  .cta{text-align:center;max-width:60ch;margin:0 auto}
+  .cta .h2{margin-bottom:14px}
+  .cta p{color:#c4c4c4;margin-bottom:30px}
+
+  .ftr{background:var(--dark);color:#f0f0f0;padding:64px 0 28px}
+  .ftr__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;
+    padding-bottom:36px;border-bottom:2px solid #4a4a4a}
+  .ftr h4{font:500 11px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;
+    color:#a0a0a0;margin-bottom:16px}
+  .ftr li{list-style:none;font-size:14px;color:#d4d4d4;margin-bottom:8px}
+  .ftr__logo{font-size:74px;font-weight:700;letter-spacing:.1em;
+    text-align:center;color:#4a4a4a;padding:34px 0 10px;text-transform:uppercase}
+  .ftr__legal{font-size:12px;color:#9a9a9a;text-align:center}
+
+  @media(max-width:900px){
+    .facts{grid-template-columns:repeat(2,1fr)}
+    .about,.fish{grid-template-columns:1fr}
+    .hero__h1{font-size:36px}
+  }
+</style>
+</head>
+<body>
+
+<div class="doc-head">
+  <h1>КАВИНКА — вайрфрейм главной страницы</h1>
+  <p>
+    Только компоновка и иерархия. Ни цвета, ни шрифтов, ни фотографий — они обсуждаются отдельно.
+    Тексты настоящие, из docs/STRUCTURE.md. В плашках указано, какое фото туда встанет по docs/MEDIA.md.
+    Жёлтым — пояснения, красным — вопросы, на которые нужен твой ответ.
+  </p>
+  <div class="legend">
+    <span><i class="l1"></i>фото или видео</span>
+    <span><i class="l2"></i>кнопка / блок</span>
+    <span><i class="l3"></i>тёмная секция</span>
+  </div>
+</div>
+
+<!-- ШАПКА -->
+<div class="sect-tag">00 — Шапка</div>
+<div class="wrap">
+  <div class="hdr">
+    <div class="hdr__logo">КАВИНКА</div>
+    <div class="hdr__nav">
+      <span>О туре</span><span>Размещение</span><span>Стоимость</span><span>Расписание</span>
+      <span>Программа тура</span><span>Индивидуальный тур</span><span>Экскурсии</span><span>Контакты</span>
+    </div>
+    <div class="mono">+7 914 000-00-00</div>
+  </div>
+</div>
+<div class="note note--ask">
+  <b>Вопрос.</b> Восемь пунктов в меню — это много, в одну строку на десктопе они еле влезают,
+  а на ноутбуке начнут переноситься. Варианты: (1) оставить все восемь мелким шрифтом,
+  (2) вынести 4–5 главных, остальное спрятать в бургер, (3) бургер всегда, как в референсе «Золотое».
+  Я за третий — он же даёт больше воздуха в hero.
+</div>
+
+<!-- ГЕРОЙ -->
+<div class="sect-tag">01 — Первый экран</div>
+<div class="wrap" style="padding-top:24px;padding-bottom:24px">
+  <div class="hero">
+    <div class="hero__tag">фото на весь экран: hero-desktop.jpg / на мобильном hero-mobile.jpg</div>
+    <div class="hero__badge">бейдж<br>hero-badge.png</div>
+    <div class="hero__body">
+      <div class="mono">59°47′32.61″ &nbsp;●&nbsp; 148°16′24.23″</div>
+      <h2 class="hero__h1">Рыболовная база КАВИНКА</h2>
+      <p class="hero__slogan">«Пароль в мир дикой природы»</p>
+      <div class="hero__cta">
+        <span class="btn btn--camo">Оставить заявку</span>
+        <span class="mono">от 150 000 ₽ / 7 дней</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="note">
+  <b>Текст прижат к левому низу</b>, как было в старом прототипе — приём рабочий, оставляю.
+  Кнопка «Оставить заявку» — с камуфляжной заливкой, та самая фишка.
+  Координаты моноширинным сверху задают экспедиционный тон с первой секунды.
+</div>
+<div class="note note--ask">
+  <b>Вопрос.</b> Бейдж-печать зелёная и довольно «стоковая». Оставляем как есть,
+  перекрашиваем под палитру или убираем совсем? На вайрфрейме он показан кружком.
+</div>
+
+<!-- БЫСТРЫЕ ФАКТЫ -->
+<div class="sect-tag">02 — Быстрые факты</div>
+<div class="wrap">
+  <div class="sec">
+    <div class="facts">
+      <div><span class="lbl">4 коттеджа</span><h3>Проживание</h3><p>Комфортные коттеджи</p></div>
+      <div><span class="lbl">6 видов</span><h3>Рыбалка</h3><p>5 видов лососевых</p></div>
+      <div><span class="lbl">200 км от Магадана</span><h3>Река Тауй</h3><p>Уникальная локация</p></div>
+      <div><span class="lbl">4–5 чел. на гида</span><h3>Гиды</h3><p>Профессиональное сопровождение</p></div>
+    </div>
+  </div>
+</div>
+<div class="note">
+  <b>Без иконок.</b> В старом прототипе тут были иконки lucide — они дают «шаблонный лендинг».
+  Вместо них — толстые линии сетки и надстрочная подпись с настоящей цифрой.
+  Сначала я поставил туда нумерацию 01–04, но это неправда: четыре факта не последовательность,
+  а порядок ничего не значит. Цифра должна нести информацию, поэтому вместо номеров —
+  «4 коттеджа», «6 видов», «200 км от Магадана», «4–5 чел. на гида».
+  Нумерацию оставим там, где она честная — на странице «Программа тура», где дни идут по порядку.
+</div>
+
+<!-- О БАЗЕ -->
+<div class="sect-tag">03 — О базе</div>
+<div class="wrap">
+  <div class="sec">
+    <div class="about">
+      <div class="ph"><span>hotel-kavinka-front.jpg<br>главный корпус, зелёная крыша</span></div>
+      <div>
+        <div class="mono" style="margin-bottom:14px">Основано в 2015</div>
+        <h2 class="h2">О базе</h2>
+        <p>
+          Туристическая база «Кавинка» расположена в Кавинской долине на берегу реки Тауй —
+          в глухой тайге. Это место, где природа остаётся по-настоящему дикой,
+          а человек становится гостем, а не хозяином.
+        </p>
+        <p>
+          Кавинская долина — уникальная точка на слиянии двух легендарных рек: Чёломджи и Кавы.
+          Именно здесь они образуют могучую реку Тауй — богатую рыбными ресурсами
+          водную артерию Магаданской области.
+        </p>
+        <span class="btn btn--ghost" style="margin-top:12px">Подробнее</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="note">
+  <b>Добавил «Основано в 2015»</b> — факт нашёлся на бейдже, на старом сайте его нигде не было.
+  Для базы в такой глуши десять лет работы — сильный аргумент, грех не показать.
+</div>
+
+<!-- ВИДЫ РЫБ -->
+<div class="sect-tag">04 — Виды рыб</div>
+<div class="wrap">
+  <div class="sec">
+    <div class="sec__head">
+      <h2 class="h2">Виды рыб <em>и сезоны</em></h2>
+    </div>
+    <div class="fish">
+      <div><div class="ph"><span>video/fish-grayling.mp4</span></div>
+        <div class="fish__meta"><h3>Хариус</h3><span class="mono">VI–IX</span></div></div>
+      <div><div class="ph"><span>video/fish-char.mp4</span></div>
+        <div class="fish__meta"><h3>Голец</h3><span class="mono">VI–IX</span></div></div>
+      <div><div class="ph"><span>video/fish-kundzha.mp4</span></div>
+        <div class="fish__meta"><h3>Кунджа</h3><span class="mono">VI–IX</span></div></div>
+      <div><div class="ph"><span>video/fish-pink-salmon.mp4</span></div>
+        <div class="fish__meta"><h3>Горбуша</h3><span class="mono">VI–VII</span></div></div>
+      <div><div class="ph"><span>video/fish-chum.mp4</span></div>
+        <div class="fish__meta"><h3>Кета</h3><span class="mono">VIII</span></div></div>
+      <div><div class="ph"><span>video/fish-coho.mp4</span></div>
+        <div class="fish__meta"><h3>Кижуч</h3><span class="mono">VIII–IX</span></div></div>
+    </div>
+  </div>
+</div>
+<div class="note">
+  <b>Сетка 3×2, а не 6 в ряд.</b> В старом прототипе было шесть колонок — карточки выходили
+  крошечные, видео в них не рассмотреть. Сезоны римскими цифрами моноширинным: короче,
+  и колонка не разъезжается от «Август — Сентябрь».
+</div>
+<div class="note note--ask">
+  <b>Вопрос.</b> Видео автоматом играют все шесть сразу — это шесть файлов и заметная нагрузка.
+  Предлагаю: показывать статичный кадр, а видео запускать при наведении. На мобильном —
+  только кадры. Согласен?
+</div>
+
+<!-- CTA -->
+<div class="sect-tag">05 — Призыв к действию</div>
+<div class="sec sec--dark" style="padding:88px 0">
+  <div class="wrap">
+    <div class="cta">
+      <h2 class="h2">Готовы к незабываемому приключению?</h2>
+      <p>Забронируйте тур прямо сейчас и получите консультацию в течение 15 минут</p>
+      <span class="btn btn--camo" style="border-color:#f0f0f0">Оставить заявку</span>
+    </div>
+  </div>
+</div>
+<div class="note">
+  <b>Тёмная болотная секция</b> — тот самый ритм из «Золотого»: кремовая → тёмная → кремовая.
+  На всю ширину экрана, без полей.
+</div>
+
+<!-- ПОДВАЛ -->
+<div class="sect-tag">06 — Подвал</div>
+<div class="ftr">
+  <div class="wrap">
+    <div class="ftr__grid">
+      <div>
+        <h4>Контакты</h4>
+        <ul>
+          <li>г. Магадан</li>
+          <li>+7 914 000-00-00</li>
+          <li>Сезон: с июня по октябрь</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Навигация</h4>
+        <ul><li>О туре</li><li>Размещение</li><li>Стоимость</li><li>Программа тура</li></ul>
+      </div>
+      <div>
+        <h4>О компании</h4>
+        <ul><li style="line-height:1.6">Рыболовная база «КАВИНКА» расположена на границе
+          с Магаданским государственным заповедником, на берегу реки Тауй.</li></ul>
+      </div>
+    </div>
+    <div class="ftr__logo">КАВИНКА</div>
+    <div class="ftr__legal">
+      © 2026 КАВИНКА. Все права защищены.<br>
+      Сайт носит информационный характер и не является публичной офертой
+    </div>
+  </div>
+</div>
+<div class="note">
+  <b>Огромный логотип в подвале</b> — приём прямо из «Золотого», закрывает то,
+  что у нас нет знака: крупная надпись сама работает как логотип.
+</div>
+
+<div class="note note--ask" style="margin:32px;">
+  <b>Главный вопрос по странице.</b> Пять секций для главной — маловато, она проскакивается
+  за один скролл. Из уже имеющегося контента и фото можно добавить, ничего не выдумывая:
+  <br>— <b>«Как добраться»</b>: 200 км, авто → паром → болотоход → вертолёт.
+  Фото под это есть все, и это самая сильная история базы.
+  <br>— <b>«Инфраструктура»</b>: баня, беседка, барбекю, пирс — фото отличные, сейчас они
+  видны только на внутренней странице.
+  <br>— <b>«Пакеты»</b>: три карточки с ценой со страницы «Стоимость».
+  <br>Добавляем что-то из этого на главную или держим её короткой?
+</div>
+
+</body>
+</html>

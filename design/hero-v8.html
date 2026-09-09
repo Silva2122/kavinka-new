@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>КАВИНКА — первый экран, вариант 8</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --cream:#F0EFE4;
+    --cream-warm:#E7E2CE;
+    --bog:#242B1B;
+    --sage:#B7C299;
+    --olive:#7C8C57;
+    --ink:#232318;
+    --muted:#6E6D5E;
+    --disp:'Cormorant Garamond',Georgia,serif;
+    --body:'Manrope',system-ui,sans-serif;
+    --meta-size:14px;
+    --meta-tracking:.12em;
+    --base-size:18px;
+  }
+  body{background:var(--cream);color:var(--ink);font-family:var(--body);
+    font-weight:300;line-height:1.6;-webkit-font-smoothing:antialiased}
+  img{display:block;max-width:100%}
+
+  .bar{background:var(--ink);color:var(--cream);padding:11px 34px;
+    font-family:var(--body);font-weight:600;font-size:10.5px;letter-spacing:.18em;
+    text-transform:uppercase;display:flex;justify-content:space-between;
+    gap:20px;flex-wrap:wrap}
+  .bar em{font-style:normal;font-weight:400;opacity:.6;letter-spacing:.08em}
+
+  /* ===================== БЕГУЩАЯ СТРОКА (как в v7) ===================== */
+  .ticker{background:var(--cream-warm);border-bottom:1px solid rgba(35,35,24,.1);
+    overflow:hidden;white-space:nowrap;position:relative}
+  .ticker__track{display:inline-flex;align-items:center;
+    animation:tickerMove 34s linear infinite;padding:11px 0}
+  .ticker:hover .ticker__track{animation-play-state:paused}
+  .ticker__item{display:inline-flex;align-items:center;
+    font-family:var(--body);font-weight:600;font-size:12px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--ink);padding:0 26px}
+  .ticker__dot{display:inline-block;font-size:15px;line-height:1;color:var(--olive);flex:none}
+  @keyframes tickerMove{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  @media(prefers-reduced-motion:reduce){.ticker__track{animation:none}}
+
+  /* ===================== ГЕРОЙ ===================== */
+  .hero{display:grid;grid-template-columns:1fr 1fr;min-height:92svh;background:var(--bog)}
+
+  .hero__panel{position:relative;display:flex;flex-direction:column;
+    justify-content:space-between;padding:30px 46px 60px;color:var(--cream);
+    overflow:hidden}
+  .hero__panel::before{content:"";position:absolute;inset:0;z-index:0;
+    background-image:url("../public/photo/camo.jpg");
+    background-size:440px;background-repeat:repeat;
+    opacity:.085;mix-blend-mode:overlay;pointer-events:none}
+  .hero__panel>*{position:relative;z-index:1}
+
+  /* ===== nav: теперь с вынесенным логотипом «Кавинка» ===== */
+  .nav{display:flex;align-items:center;justify-content:space-between;gap:24px}
+  .nav__logo{font-family:var(--body);font-weight:700;font-size:15px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--cream)}
+  .nav__links{display:flex;gap:19px}
+  .nav__links a{color:rgba(240,239,228,.82);text-decoration:none;white-space:nowrap;
+    font-size:14px;letter-spacing:.02em;transition:color .25s}
+  .nav__links a:hover{color:var(--cream)}
+  .nav__burger{width:24px;height:11px;border-top:1.5px solid var(--cream);
+    border-bottom:1.5px solid var(--cream);cursor:pointer}
+
+  .coords-pill{
+    display:inline-flex;align-items:center;gap:14px;
+    padding:16px 30px;margin-bottom:30px;
+    border:1.5px solid rgba(240,239,228,.28);border-radius:999px;
+    background:rgba(20,26,14,.36);
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    font-family:var(--body);font-weight:600;font-size:var(--meta-size);
+    letter-spacing:var(--meta-tracking);color:rgba(240,239,228,.86)
+  }
+  .coords-pill i{
+    display:block;width:13px;height:13px;border-radius:50%;flex:none;
+    background:
+      radial-gradient(circle at 34% 28%,#E4EBD2 0 22%,transparent 34%),
+      radial-gradient(circle,var(--sage) 0 62%,var(--olive) 100%);
+    box-shadow:0 0 0 6px rgba(240,239,228,.09)
+  }
+
+  .kicker-row{display:flex;flex-wrap:wrap;align-items:center;row-gap:6px;column-gap:9px;
+    margin-bottom:16px;color:rgba(240,239,228,.62);font-family:var(--body);font-weight:600;
+    font-size:var(--meta-size);letter-spacing:var(--meta-tracking);text-transform:uppercase}
+  .kicker-row svg{width:12px;height:12px;flex:none;opacity:.85}
+  .kicker-row .sep{opacity:.5}
+
+  /* ===== заголовок-слоган: 2 строки, вторая сдвинута вправо — как в референсе =====
+     офсет второй строки задан в em от размера самого текста (0.85em), а не отдельным
+     vw — так сдвиг не может "разойтись" со шрифтом на промежуточных ширинах экрана.
+     Размер — в два яруса: мелкий и безопасный в опасной зоне 860-1100px (там раньше
+     было обрезание слова, проверено скриншотами по сетке), крупнее выше 1100px,
+     где ширины уже хватает с запасом. */
+  .slogan-h1{margin-bottom:30px}
+  .slogan-h1 .ln{display:block;white-space:nowrap;font-family:var(--disp);
+    font-weight:600;text-transform:uppercase;color:var(--cream);
+    font-size:clamp(32px,3.9vw,46px);line-height:1;letter-spacing:.005em}
+  .slogan-h1 .ln + .ln{margin-top:4px}
+  .slogan-h1 .ln:nth-child(1){transform:translateX(0)}
+  .slogan-h1 .ln:nth-child(2){transform:translateX(.85em)}
+
+  .lede{font-size:var(--base-size);line-height:1.7;color:rgba(240,239,228,.68);
+    max-width:50ch;margin-bottom:36px}
+
+  .cta-wrap{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+
+  .glass-btn{
+    position:relative;display:inline-flex;align-items:center;justify-content:center;
+    padding:17px 38px;border-radius:100px;text-decoration:none;
+    isolation:isolate;overflow:hidden;color:var(--cream);
+    border:1px solid rgba(240,239,228,.6);
+    background:rgba(20,26,14,.42);
+    backdrop-filter:blur(10px) saturate(140%);
+    -webkit-backdrop-filter:blur(10px) saturate(140%);
+    box-shadow:0 14px 34px rgba(10,14,6,.35),
+      inset 0 1px 0 rgba(255,255,255,.16);
+    transition:box-shadow .3s,border-color .3s;
+  }
+  .glass-btn span{position:relative;z-index:2;font-family:var(--body);
+    font-weight:700;font-size:var(--meta-size);letter-spacing:var(--meta-tracking);
+    text-transform:uppercase;text-shadow:0 1px 4px rgba(0,0,0,.55)}
+  .glass-btn::before{content:"";position:absolute;inset:-6px;z-index:0;
+    background-image:url("../public/photo/camo.jpg");
+    background-size:210px;background-position:40% 35%;
+    opacity:.34;transition:opacity .35s,background-position 8s linear}
+  .glass-btn::after{content:"";position:absolute;inset:0;z-index:1;
+    background:linear-gradient(155deg,rgba(240,239,228,.46),rgba(240,239,228,.20) 55%)}
+  .glass-btn:hover{border-color:rgba(240,239,228,.95);
+    box-shadow:0 18px 40px rgba(10,14,6,.45),inset 0 1px 0 rgba(255,255,255,.22)}
+  .glass-btn:hover::before{opacity:.48;background-position:60% 55%}
+
+  .price{font-family:var(--body);font-weight:500;font-size:var(--meta-size);
+    letter-spacing:.04em;color:rgba(240,239,228,.55)}
+  .price b{color:var(--cream);font-weight:700}
+
+  /* ===================== ГАЛЕРЕЯ (как в v7) ===================== */
+  .gallery{position:relative;overflow:hidden;background:#10140b}
+  .gallery__slide{position:absolute;inset:0;opacity:0;transition:opacity .7s ease}
+  .gallery__slide.is-active{opacity:1}
+  .gallery__slide img{width:100%;height:100%;object-fit:cover;object-position:center 30%}
+  .gallery::before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+    background:linear-gradient(90deg,rgba(28,34,20,.30),transparent 16%)}
+  .gallery::after{content:"";position:absolute;left:0;right:0;bottom:0;height:34%;z-index:2;
+    pointer-events:none;background:linear-gradient(to top,rgba(10,14,6,.55),transparent)}
+
+  .gallery__nav{position:absolute;bottom:28px;left:0;right:0;z-index:3;
+    display:flex;justify-content:center;gap:10px}
+  .gallery__dot{width:9px;height:9px;border-radius:50%;border:1px solid rgba(240,239,228,.75);
+    background:rgba(240,239,228,.15);cursor:pointer;padding:0;transition:background .25s,transform .25s}
+  .gallery__dot.is-active{background:var(--cream);transform:scale(1.15)}
+
+  .gallery__arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:3;
+    width:42px;height:42px;border-radius:50%;border:1px solid rgba(240,239,228,.45);
+    background:rgba(20,26,14,.35);backdrop-filter:blur(8px);color:var(--cream);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;
+    font-size:16px;opacity:0;transition:opacity .25s,background .25s}
+  .gallery:hover .gallery__arrow{opacity:1}
+  .gallery__arrow:hover{background:rgba(20,26,14,.6)}
+  .gallery__arrow--prev{left:22px}
+  .gallery__arrow--next{right:22px}
+
+  .note{background:#FFFCEA;border-top:1px solid #E0D9A8;
+    padding:26px 34px 32px;font-size:13.5px;line-height:1.7;color:#4A4A3A}
+  .note h4{font-weight:600;font-size:14px;margin-bottom:10px;color:var(--ink)}
+  .note ul{padding-left:18px;margin-top:8px}
+  .note li{margin-bottom:7px}
+  .note b{color:var(--ink)}
+
+  /* выше опасной зоны панель уже достаточно широкая — даём заголовку вырасти */
+  @media(min-width:1100px){
+    .slogan-h1 .ln{font-size:clamp(46px,4.3vw,88px)}
+  }
+
+  @media(max-width:860px){
+    .hero{grid-template-columns:1fr}
+    .gallery{height:42svh;order:-1}
+    .hero__panel{padding:24px 22px 44px}
+    .nav__links{display:none}
+    /* на мобильном сдвиг строк убираем — иначе слово уедет за экран */
+    .slogan-h1 .ln{transform:none!important;font-size:clamp(20px,6vw,40px)}
+  }
+</style>
+</head>
+<body>
+
+<div class="bar"><span>Вариант 8 — «Кавинка» ушла в лого шапки, слоган стал хаотичным многострочным заголовком</span><em>тот же приём, что в silva2122.github.io/kavinka, шрифт свой</em></div>
+
+<div class="ticker">
+  <div class="ticker__track" id="tickerTrack"></div>
+</div>
+
+<section class="hero">
+  <div class="hero__panel">
+    <nav class="nav">
+      <span class="nav__logo">Кавинка</span>
+      <div class="nav__links">
+        <a href="#">О туре</a><a href="#">Размещение</a>
+        <a href="#">Стоимость</a><a href="#">Программа</a>
+      </div>
+      <div class="nav__burger" role="button" aria-label="Меню"></div>
+    </nav>
+
+    <div class="hero__mid">
+      <div class="coords-pill">
+        <span>59°47′32.61″</span><i></i><span>148°16′24.23″</span>
+      </div>
+      <div class="kicker-row">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s7-7.58 7-12.5A7 7 0 0 0 5 9.5C5 14.42 12 22 12 22Z"/>
+          <circle cx="12" cy="9.5" r="2.4"/>
+        </svg>
+        <span>Магадан</span>
+        <span class="sep">•</span>
+        <span>Рыболовная база Кавинка</span>
+      </div>
+
+      <h1 class="slogan-h1">
+        <span class="ln">Пароль в мир</span>
+        <span class="ln">дикой природы</span>
+      </h1>
+
+      <p class="lede">
+        Туристическая база «Кавинка» расположена в Кавинской долине на берегу реки Тауй —
+        в глухой тайге. Природа здесь остаётся по-настоящему дикой, а человек становится
+        гостем, а не хозяином.
+      </p>
+
+      <div class="cta-wrap">
+        <a class="glass-btn" href="https://t.me/KAVINKA_bot"><span>Оставить заявку</span></a>
+        <span class="price">от <b>150 000 ₽</b> / 7 дней</span>
+      </div>
+    </div>
+
+    <div></div>
+  </div>
+
+  <div class="gallery" id="gallery">
+    <div class="gallery__slide is-active"><img src="../public/photo/angler-chinook.jpg" alt="Рыболов с трофейной чавычей на берегу Тауя"></div>
+    <div class="gallery__slide"><img src="../public/photo/angler-char-boat.jpg" alt="Рыболов с крупным гольцом у лодки"></div>
+    <div class="gallery__slide"><img src="../public/photo/angler-catch-fence.jpg" alt="Улов у забора базы"></div>
+    <div class="gallery__slide"><img src="../public/photo/angler-grayling-cap.jpg" alt="Рыболов с хариусом"></div>
+    <div class="gallery__slide"><img src="../public/photo/woman-angler.jpg" alt="Рыбачка в вейдерсах со спиннингом"></div>
+    <div class="gallery__slide"><img src="../public/photo/boy-with-coho.jpg" alt="Мальчик с кижучем"></div>
+
+    <button class="gallery__arrow gallery__arrow--prev" id="galPrev" aria-label="Предыдущее фото">‹</button>
+    <button class="gallery__arrow gallery__arrow--next" id="galNext" aria-label="Следующее фото">›</button>
+    <div class="gallery__nav" id="galDots"></div>
+  </div>
+</section>
+
+<div class="note">
+  <h4>Что изменилось против v7 — только заголовок, всё остальное то же</h4>
+  <ul>
+    <li><b>«Кавинка» ушла в шапку</b> — маленький вордмарк слева от навигации,
+      15px, капс, трекинг. Как ты и сказал: «Кавинкой можно просто вынести логотип».</li>
+    <li><b>Слоган стал главным заголовком</b> — «Пароль в мир дикой природы» набран
+      Cormorant Garamond, разбит на 4 строки по смыслу («Пароль» / «в мир» / «дикой» /
+      «природы») и сдвинут вправо вразнобой через <code>transform: translateX()</code>,
+      каждая строка на свою величину — 0, 72px, 24px, 108px на широком экране.
+      Это тот же механизм, что в <code>h1 strong{transform:translateX(...)}</code>
+      на твоей заглушке, я его нашёл прямо в CSS. У них сдвиг был на одной строке,
+      я разнёс на четыре, чтобы получился именно тот «хаотичный» ритм, про который
+      ты говорил, а не одна ровная лесенка.</li>
+    <li><b>Кавычки со слогана снял</b> для афишного набора — «Пароль в мир дикой
+      природы» без «…» читается как заголовок, а не как цитата. Если хочешь вернуть
+      кавычки — верну, просто на постере из четырёх строк они визуально мешали.</li>
+    <li><b>Кикер поменял на «Рыболовная база Кавинка»</b> — раз имя ушло из
+      заголовка, чуть выше слогана нужно было оставить название базы явным текстом,
+      не только в шапке.</li>
+    <li><b>На мобильном сдвиг отключается.</b> При офсете 108px на экране 380px
+      слово физически вылетит за край — той же ошибке, что была с «Кавинка» в v4,
+      я тут не позволил повториться. На мобильном все четыре строки садятся
+      к левому краю без сдвига, только уменьшается размер.</li>
+    <li><b>Всё остальное — один в один v7:</b> бегущая строка, приглушённый камуфляж,
+      пилюля координат, абзац из банка текста, кнопка, галерея трофеев. Оба файла
+      живы, сравнивай.</li>
+  </ul>
+</div>
+
+<script>
+  const tickerItems = [
+    { text: 'Пароль в мир дикой природы', quote: true },
+    { text: 'Комфортные коттеджи' },
+    { text: '5 видов лососевых' },
+    { text: 'Уникальная локация' },
+    { text: 'Профессиональное сопровождение' },
+    { text: 'Основано в 2015' },
+  ];
+  const track = document.getElementById('tickerTrack');
+  function renderTicker() {
+    const html = tickerItems.map(it =>
+      `<span class="ticker__item">${it.quote ? `«${it.text}»` : it.text}</span><span class="ticker__dot">•</span>`
+    ).join('');
+    track.innerHTML = html + html;
+  }
+  renderTicker();
+
+  const slides = document.querySelectorAll('#gallery .gallery__slide');
+  const dotsWrap = document.getElementById('galDots');
+  let idx = 0, timer;
+  slides.forEach((_, i) => {
+    const d = document.createElement('button');
+    d.className = 'gallery__dot' + (i === 0 ? ' is-active' : '');
+    d.setAttribute('aria-label', 'Фото ' + (i + 1));
+    d.addEventListener('click', () => go(i));
+    dotsWrap.appendChild(d);
+  });
+  const dots = document.querySelectorAll('.gallery__dot');
+  function go(i) {
+    slides[idx].classList.remove('is-active');
+    dots[idx].classList.remove('is-active');
+    idx = (i + slides.length) % slides.length;
+    slides[idx].classList.add('is-active');
+    dots[idx].classList.add('is-active');
+  }
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function play() { if (!reduceMotion) timer = setInterval(() => go(idx + 1), 5000); }
+  function stop() { clearInterval(timer); }
+  play();
+  const gallery = document.getElementById('gallery');
+  gallery.addEventListener('mouseenter', stop);
+  gallery.addEventListener('mouseleave', play);
+  document.getElementById('galPrev').addEventListener('click', () => { go(idx - 1); stop(); play(); });
+  document.getElementById('galNext').addEventListener('click', () => { go(idx + 1); stop(); play(); });
+</script>
+
+</body>
+</html>

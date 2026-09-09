@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+/*
+  КАВИНКА — дизайн-токены.
+  Палитра собрана из референсов (болотная зелень + кремовый)
+  и из камуфляжа (песок, кора, камень). Подробнее — docs/DESIGN.md
+*/
+
+@theme {
+  /* Фоны */
+  --color-cream: #efefe5;
+  --color-sand: #ded8c6;
+  --color-bog: #232a15;
+  --color-moss: #3c4528;
+
+  /* Акценты */
+  --color-olive: #4a612c;
+  --color-olive-light: #677941;
+  --color-bark: #393028;
+  --color-stone: #4e5151;
+
+  /* Текст */
+  --color-ink: #1b1a14;
+  --color-muted: #6b6a5c;
+
+  /* Шрифты */
+  --font-display: var(--font-playfair), Georgia, serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+
+  /* Жёсткая сетка: никаких скруглений */
+  --radius-none: 0px;
+}
+
+body {
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+/* Технический слой: координаты, даты, цены, нумерация */
+@utility tech {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.6875rem;
+  line-height: 1.4;
+}
+
+/* Заголовки — антиква капсом */
+@utility display {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+}
+
+/*
+  Камуфляжная заливка — фирменный приём.
+  Тёмная вуаль поверх паттерна, чтобы белый текст читался.
+*/
+@utility camo {
+  background-image:
+    linear-gradient(rgba(27, 26, 20, 0.62), rgba(27, 26, 20, 0.62)),
+    url("/photo/camo.jpg");
+  background-size: auto, 420px;
+}
+
+@utility camo-text {
+  background-image: url("/photo/camo.jpg");
+  background-size: 380px;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}

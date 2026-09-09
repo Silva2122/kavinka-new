@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>КАВИНКА — первый экран, вариант 6</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --cream:#F0EFE4;
+    --bog:#242B1B;
+    --sage:#B7C299;
+    --olive:#7C8C57;
+    --ink:#232318;
+    --muted:#6E6D5E;
+    --disp:'Cormorant Garamond',Georgia,serif;
+    --body:'Manrope',system-ui,sans-serif;
+  }
+  body{background:var(--cream);color:var(--ink);font-family:var(--body);
+    font-weight:300;line-height:1.6;-webkit-font-smoothing:antialiased}
+  img{display:block;max-width:100%}
+
+  .bar{background:var(--ink);color:var(--cream);padding:11px 34px;
+    font-family:var(--body);font-weight:600;font-size:10.5px;letter-spacing:.18em;
+    text-transform:uppercase;display:flex;justify-content:space-between;
+    gap:20px;flex-wrap:wrap}
+  .bar em{font-style:normal;font-weight:400;opacity:.6;letter-spacing:.08em}
+
+  .tech{font-family:var(--body);font-weight:600;font-size:11px;
+    letter-spacing:.18em;text-transform:uppercase}
+
+  .hero{display:grid;grid-template-columns:1fr 1fr;min-height:100svh;background:var(--bog)}
+
+  .hero__panel{position:relative;display:flex;flex-direction:column;
+    justify-content:space-between;padding:34px 46px 64px;color:var(--cream);
+    overflow:hidden}
+  .hero__panel::before{content:"";position:absolute;inset:0;z-index:0;
+    background-image:url("../public/photo/camo.jpg");
+    background-size:440px;background-repeat:repeat;
+    opacity:.16;mix-blend-mode:overlay;pointer-events:none}
+  .hero__panel>*{position:relative;z-index:1}
+
+  .hero__photo{position:relative;overflow:hidden}
+  .hero__photo img{width:100%;height:100%;object-fit:cover;object-position:center 40%}
+  .hero__photo::before{content:"";position:absolute;inset:0;
+    background:linear-gradient(90deg,rgba(28,34,20,.30),transparent 16%)}
+
+  .nav{display:flex;align-items:center;justify-content:space-between;gap:24px}
+  .nav__links{display:flex;gap:22px}
+  .nav__links a{color:rgba(240,239,228,.82);text-decoration:none;
+    font-size:12.5px;letter-spacing:.02em;transition:color .25s}
+  .nav__links a:hover{color:var(--cream)}
+  .nav__burger{width:24px;height:11px;border-top:1.5px solid var(--cream);
+    border-bottom:1.5px solid var(--cream);cursor:pointer}
+
+  /* ===== координаты — стеклянная пилюля, как в заглушке, в нашей палитре ===== */
+  .coords-pill{
+    display:inline-flex;align-items:center;gap:14px;
+    padding:11px 22px;margin-bottom:30px;
+    border:1px solid rgba(240,239,228,.22);border-radius:999px;
+    background:rgba(20,26,14,.36);
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    font-family:var(--body);font-weight:600;font-size:11.5px;
+    letter-spacing:.1em;color:rgba(240,239,228,.82)
+  }
+  .coords-pill i{
+    display:block;width:9px;height:9px;border-radius:50%;flex:none;
+    background:
+      radial-gradient(circle at 34% 28%,#E4EBD2 0 22%,transparent 34%),
+      radial-gradient(circle,var(--sage) 0 62%,var(--olive) 100%);
+    box-shadow:0 0 0 5px rgba(240,239,228,.08)
+  }
+
+  .kicker{display:block;color:rgba(240,239,228,.6);font-family:var(--body);
+    font-weight:500;font-size:14px;letter-spacing:.08em;text-transform:uppercase;
+    margin-bottom:10px}
+
+  .name{font-family:var(--disp);font-weight:600;text-transform:uppercase;
+    color:var(--cream);font-size:clamp(52px,7.6vw,132px);line-height:.9;
+    letter-spacing:.005em;margin-bottom:26px;white-space:nowrap}
+
+  .slogan{font-family:var(--disp);font-weight:500;font-style:italic;
+    font-size:clamp(20px,2vw,27px);line-height:1.3;color:rgba(240,239,228,.92);
+    margin-bottom:44px}
+
+  .cta-wrap{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+
+  .glass-btn{
+    position:relative;display:inline-flex;align-items:center;justify-content:center;
+    padding:17px 38px;border-radius:100px;text-decoration:none;
+    isolation:isolate;overflow:hidden;color:var(--cream);
+    border:1px solid rgba(240,239,228,.6);
+    background:rgba(20,26,14,.30);
+    backdrop-filter:blur(10px) saturate(140%);
+    -webkit-backdrop-filter:blur(10px) saturate(140%);
+    box-shadow:0 14px 34px rgba(10,14,6,.35),
+      inset 0 1px 0 rgba(255,255,255,.16);
+    transition:box-shadow .3s,border-color .3s;
+  }
+  .glass-btn span{position:relative;z-index:2;font-family:var(--body);
+    font-weight:700;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;
+    text-shadow:0 1px 3px rgba(0,0,0,.35)}
+  .glass-btn::before{content:"";position:absolute;inset:-6px;z-index:0;
+    background-image:url("../public/photo/camo.jpg");
+    background-size:210px;background-position:40% 35%;
+    opacity:.62;transition:background-position 8s linear}
+  .glass-btn::after{content:"";position:absolute;inset:0;z-index:1;
+    background:linear-gradient(155deg,rgba(240,239,228,.30),rgba(240,239,228,.08) 55%)}
+  .glass-btn:hover{border-color:rgba(240,239,228,.95);
+    box-shadow:0 18px 40px rgba(10,14,6,.45),inset 0 1px 0 rgba(255,255,255,.22)}
+  .glass-btn:hover::before{background-position:60% 55%}
+
+  .price{font-family:var(--body);font-weight:500;font-size:12px;
+    letter-spacing:.06em;color:rgba(240,239,228,.55)}
+  .price b{color:var(--cream);font-weight:700}
+
+  .note{background:#FFFCEA;border-top:1px solid #E0D9A8;
+    padding:26px 34px 32px;font-size:13.5px;line-height:1.7;color:#4A4A3A}
+  .note h4{font-weight:600;font-size:14px;margin-bottom:10px;color:var(--ink)}
+  .note ul{padding-left:18px;margin-top:8px}
+  .note li{margin-bottom:7px}
+  .note b{color:var(--ink)}
+  .note code{background:#efe9c4;padding:1px 5px;font-size:12.5px}
+
+  @media(max-width:860px){
+    .hero{grid-template-columns:1fr}
+    .hero__photo{height:42svh;order:-1}
+    .hero__panel{padding:26px 22px 46px}
+    .nav__links{display:none}
+    .name{font-size:clamp(44px,15vw,80px)}
+  }
+</style>
+</head>
+<body>
+
+<div class="bar"><span>Вариант 6 — координаты пилюлей как в заглушке, панель разгружена до реального текста</span><em>только то, что есть в STRUCTURE.md</em></div>
+
+<section class="hero">
+  <div class="hero__panel">
+    <nav class="nav">
+      <div class="nav__links">
+        <a href="#">О туре</a><a href="#">Размещение</a>
+        <a href="#">Стоимость</a><a href="#">Программа</a>
+      </div>
+      <div class="nav__burger" role="button" aria-label="Меню"></div>
+    </nav>
+
+    <div class="hero__mid">
+      <div class="coords-pill">
+        <span>59°47′32.61″</span><i></i><span>148°16′24.23″</span>
+      </div>
+      <span class="kicker">Рыболовная база</span>
+      <h1 class="name">Кавинка</h1>
+      <p class="slogan">«Пароль в мир дикой природы»</p>
+
+      <div class="cta-wrap">
+        <a class="glass-btn" href="https://t.me/KAVINKA_bot"><span>Оставить заявку</span></a>
+        <span class="price">от <b>150 000 ₽</b> / 7 дней</span>
+      </div>
+    </div>
+
+    <div></div>
+  </div>
+
+  <div class="hero__photo">
+    <img src="../public/photo/angler-chinook.jpg" alt="Рыболов с трофейной рыбой на берегу Тауя">
+  </div>
+</section>
+
+<div class="note">
+  <h4>Что поменял</h4>
+  <ul>
+    <li><b>Координаты — стеклянная пилюля,</b> как на твоей заглушке: <code>blur(12px)</code>,
+      тонкая рамка, тёмное полупрозрачное дно. Точку-разделитель между широтой и долготой
+      перекрасил из янтарной в зелёную — радиальный градиент sage → olive с мягким
+      кремовым кольцом вокруг, вместо солнечного оранжевого блика.</li>
+    <li><b>Убрал два блока, которых нет в реальном тексте.</b> Проверил себя по
+      docs/STRUCTURE.md — в hero всего четыре смысловых части: координаты, заголовок
+      «Рыболовная база КАВИНКА», слоган и кнопка с ценой. Абзац-лид про Кавинскую долину
+      и нижняя строка с сезоном и телефоном — это я сам сочинил в прошлой версии,
+      в структуре их нет. Убрал оба, панель стала короче на две трети контента.</li>
+    <li><b>«Рыболовная база» + «Кавинка» — это не два текста, а один.</b> В структуре
+      заголовок целиком звучит как «Рыболовная база КАВИНКА» — я разбил его на мелкую
+      надпись и крупное слово только ради типографской иерархии, текст тот же самый,
+      ничего нового не добавлено.</li>
+  </ul>
+  <h4 style="margin-top:16px">Если честно отвечать на вопрос «не перегружен ли слева»</h4>
+  <ul>
+    <li>Было — да, перегружен, и виноват был не дизайн, а лишний текст.
+      Теперь блоков четыре вместо семи, и все четыре — из реальной структуры сайта,
+      ничего лишнего я больше не досочинял.</li>
+  </ul>
+</div>
+
+</body>
+</html>

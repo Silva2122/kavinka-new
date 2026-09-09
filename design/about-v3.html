@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>КАВИНКА — О базе, вариант 3 (пропуска)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --cream:#F0EFE4;
+    --cream-warm:#E7E2CE;
+    --bog:#242B1B;
+    --sage:#B7C299;
+    --olive:#7C8C57;
+    --ink:#232318;
+    --muted:#6E6D5E;
+    --disp:'Cormorant Garamond',Georgia,serif;
+    --body:'Manrope',system-ui,sans-serif;
+    --meta-size:14px;
+    --meta-tracking:.12em;
+    --base-size:18px;
+  }
+  body{background:var(--cream);color:var(--ink);font-family:var(--body);
+    font-weight:300;line-height:1.6;-webkit-font-smoothing:antialiased}
+  img{display:block;max-width:100%}
+
+  .h2{font-family:var(--disp);font-weight:600;text-transform:uppercase;
+    line-height:1.02;letter-spacing:.005em;font-size:clamp(32px,4vw,58px)}
+  .h2 em{font-style:normal;color:var(--sage)}
+
+  /* кнопка на тёмном — стекло с камуфляжем под вуалью, копия с hero */
+  .glass-btn{
+    position:relative;display:inline-flex;align-items:center;justify-content:center;
+    padding:17px 38px;border-radius:100px;text-decoration:none;
+    isolation:isolate;overflow:hidden;color:var(--cream);
+    border:1px solid rgba(240,239,228,.6);
+    background:rgba(20,26,14,.42);
+    backdrop-filter:blur(10px) saturate(140%);
+    -webkit-backdrop-filter:blur(10px) saturate(140%);
+    box-shadow:0 14px 34px rgba(10,14,6,.35),
+      inset 0 1px 0 rgba(255,255,255,.16);
+    transition:box-shadow .3s,border-color .3s;
+  }
+  .glass-btn span{position:relative;z-index:2;font-family:var(--body);
+    font-weight:700;font-size:var(--meta-size);letter-spacing:var(--meta-tracking);
+    text-transform:uppercase;text-shadow:0 1px 4px rgba(0,0,0,.55)}
+  .glass-btn::before{content:"";position:absolute;inset:-6px;z-index:0;
+    background-image:url("../public/photo/camo.jpg");
+    background-size:210px;background-position:40% 35%;
+    opacity:.34;transition:opacity .35s,background-position 8s linear}
+  .glass-btn::after{content:"";position:absolute;inset:0;z-index:1;
+    background:linear-gradient(155deg,rgba(240,239,228,.46),rgba(240,239,228,.20) 55%)}
+  .glass-btn:hover{border-color:rgba(240,239,228,.95);
+    box-shadow:0 18px 40px rgba(10,14,6,.45),inset 0 1px 0 rgba(255,255,255,.22)}
+  .glass-btn:hover::before{opacity:.48;background-position:60% 55%}
+
+  /* ===================== О БАЗЕ — v3, пропуска ===================== */
+  .about{background:var(--cream);padding:70px 46px}
+
+  /* --- фото во весь экран --- */
+  .about__stage{position:relative;width:calc(100% + 92px);margin:0 -46px;overflow:hidden}
+  .about__stage img{position:absolute;inset:0;z-index:0;width:100%;height:100%;object-fit:cover;display:block}
+  .about__stage::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+    background:linear-gradient(100deg,rgba(8,11,5,.8) 0%,rgba(8,11,5,.55) 24%,rgba(8,11,5,.16) 52%,rgba(8,11,5,.3) 100%)}
+
+  /* --- содержимое поверх фото: текст слева-сверху, пропуска справа --- */
+  .about__content{position:relative;z-index:2;display:flex;align-items:flex-start;
+    justify-content:space-between;gap:48px;padding:80px 64px}
+
+  .about__text{flex:0 1 420px;padding-top:6px}
+  .about__title{color:var(--cream);margin-bottom:22px;text-shadow:0 3px 18px rgba(0,0,0,.6)}
+  .about__title em{color:var(--cream)}
+  .about__lead{font-size:var(--base-size);color:rgba(240,239,228,.86);margin-bottom:36px;
+    text-shadow:0 2px 12px rgba(0,0,0,.55)}
+
+  /* --- пропуска, ровно друг под другом у правого края --- */
+  .passes{flex:0 0 460px;position:relative;z-index:2;display:flex;flex-direction:column;
+    gap:6px;filter:drop-shadow(0 26px 50px rgba(6,9,4,.45))}
+
+  .pass{position:relative;background:var(--bog);color:var(--cream);
+    width:100%;padding:28px 34px;isolation:isolate;
+    display:flex;flex-direction:column;align-items:flex-start;gap:10px;
+
+    /* перфорация — настоящий вырез маской сверху/снизу, видно фото сквозь тонкий шов */
+    --notch:5px;--pitch:18px;
+    -webkit-mask-image:
+      radial-gradient(circle var(--notch) at calc(var(--pitch)/2) 0, transparent 99%, #000 100%),
+      radial-gradient(circle var(--notch) at calc(var(--pitch)/2) 100%, transparent 99%, #000 100%);
+    -webkit-mask-size:var(--pitch) 100%,var(--pitch) 100%;
+    -webkit-mask-repeat:repeat-x,repeat-x;
+    -webkit-mask-position:top left,bottom left;
+    -webkit-mask-composite:source-in,source-in;
+    mask-image:
+      radial-gradient(circle var(--notch) at calc(var(--pitch)/2) 0, transparent 99%, #000 100%),
+      radial-gradient(circle var(--notch) at calc(var(--pitch)/2) 100%, transparent 99%, #000 100%);
+    mask-size:var(--pitch) 100%,var(--pitch) 100%;
+    mask-repeat:repeat-x,repeat-x;
+    mask-position:top left,bottom left;
+    mask-composite:intersect;
+  }
+  .pass::before{content:"";position:absolute;inset:0;z-index:0;
+    background-image:url("../public/photo/camo.jpg");
+    background-size:260px;background-repeat:repeat;
+    opacity:.07;mix-blend-mode:overlay;pointer-events:none}
+  .pass>*{position:relative;z-index:1}
+
+  .pass__top{display:flex;flex-direction:column;gap:10px}
+  .pass__kicker{display:flex;align-items:center;gap:12px}
+  .pass__kicker span{font-family:var(--body);font-weight:700;font-size:12px;
+    letter-spacing:.16em;text-transform:uppercase;color:rgba(240,239,228,.55)}
+  .pass__kicker i{display:block;width:34px;height:1.5px;flex:none;background:var(--sage);opacity:.5}
+
+  .pass h3{font-family:var(--disp);font-weight:600;font-size:25px;line-height:1.05;
+    text-transform:uppercase;letter-spacing:.005em;color:var(--cream)}
+  .pass p{font-size:13.5px;line-height:1.55;color:rgba(240,239,228,.62);max-width:38ch}
+
+  @media(max-width:1100px){
+    .about__content{flex-direction:column;align-items:stretch}
+    .about__text{flex:none;max-width:520px}
+    .passes{flex:none}
+  }
+  @media(max-width:640px){
+    .about{padding:50px 22px}
+    .about__stage{width:calc(100% + 44px);margin:0 -22px}
+    .about__content{padding:56px 24px;gap:36px}
+  }
+</style>
+</head>
+<body>
+
+<section class="about" id="about">
+  <div class="about__stage">
+    <img src="../public/photo/base-from-water.jpg" alt="Турбаза «Кавинка» с воды">
+
+    <div class="about__content">
+      <div class="about__text">
+        <h2 class="h2 about__title">О <em>базе</em></h2>
+        <p class="about__lead">Туристическая база «Кавинка» расположена в Кавинской долине на берегу реки Тауй — в глухой тайге. Природа здесь остаётся по-настоящему дикой, а человек становится гостем, а не хозяином.</p>
+        <a class="glass-btn" href="#"><span>Подробнее</span></a>
+      </div>
+
+      <div class="passes">
+        <article class="pass">
+          <div class="pass__top">
+            <div class="pass__kicker"><i></i><span>Пропуск · 01</span></div>
+            <h3>Слияние рек</h3>
+          </div>
+          <p>Чёломджи и Кава образуют Тауй — прямо у границы базы.</p>
+        </article>
+
+        <article class="pass">
+          <div class="pass__top">
+            <div class="pass__kicker"><i></i><span>Пропуск · 02</span></div>
+            <h3>Граница заповедника</h3>
+          </div>
+          <p>База стоит на границе с Магаданским государственным заповедником.</p>
+        </article>
+
+        <article class="pass">
+          <div class="pass__top">
+            <div class="pass__kicker"><i></i><span>Пропуск · 03</span></div>
+            <h3>2015</h3>
+          </div>
+          <p>Год основания. Работаем в Кавинской долине больше десяти лет.</p>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

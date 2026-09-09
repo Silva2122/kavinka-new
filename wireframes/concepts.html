@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>КАВИНКА — концепции компоновки</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --ink:#141410; --dark:#232320; --mid:#7d7d75; --dim:#9a9a92;
+    --pale:#e6e6df; --paler:#f2f2ec; --line:#141410;
+    --mono:ui-monospace,'SF Mono',Menlo,monospace;
+    --photo:repeating-linear-gradient(45deg,#d4d4cd 0 7px,#e4e4dd 7px 14px);
+    --photo-dk:repeating-linear-gradient(45deg,#4a4a44 0 7px,#585851 7px 14px);
+    --camo:repeating-linear-gradient(118deg,#a8a8a0 0 9px,#c4c4bb 9px 17px,#8e8e86 17px 24px);
+  }
+  body{background:#fbfbf7;color:var(--ink);font-family:system-ui,-apple-system,sans-serif;
+    font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+
+  .doc{padding:34px 36px 30px;border-bottom:3px solid var(--line)}
+  .doc h1{font-size:21px;letter-spacing:.01em;margin-bottom:8px}
+  .doc p{font-size:13.5px;line-height:1.65;color:#54544c;max-width:88ch}
+  .doc p+p{margin-top:9px}
+  .doc b{color:var(--ink)}
+
+  .tag{background:var(--line);color:#f2f2ec;padding:11px 36px;
+    font:500 11px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;
+    display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+  .tag em{font-style:normal;opacity:.62;letter-spacing:.1em}
+  .why{padding:16px 36px 22px;font-size:13.5px;line-height:1.65;color:#54544c;
+    border-bottom:1px solid #dcdcd4}
+  .why b{color:var(--ink)}
+  .why .risk{color:#8a5a2a}
+
+  .mono{font-family:var(--mono);letter-spacing:.16em;text-transform:uppercase;font-size:11px}
+  .phlabel{font:10px/1.4 var(--mono);color:#3c3c36;background:#fbfbf7;
+    border:1px solid #a8a8a0;padding:3px 7px;display:inline-block}
+
+  /* ============ A — ДОСЬЕ ============ */
+  .a{display:grid;grid-template-columns:38fr 62fr;height:660px;border-bottom:3px solid var(--line)}
+  .a-left{background:var(--dark);color:var(--pale);padding:44px 40px;
+    display:flex;flex-direction:column;position:relative}
+  .a-coord{color:var(--dim);margin-bottom:auto}
+  .a-name{font-size:clamp(38px,4.6vw,72px);line-height:.94;font-weight:800;
+    text-transform:uppercase;letter-spacing:-.02em;margin-bottom:14px}
+  .a-slogan{font-size:16px;font-style:italic;color:#b6b6ac;margin-bottom:34px;max-width:26ch}
+  .a-spec{border-top:2px solid #52524a;margin-bottom:28px}
+  .a-spec div{display:flex;justify-content:space-between;gap:14px;
+    padding:9px 0;border-bottom:1px solid #3c3c36}
+  .a-spec span:first-child{font:11px/1.4 var(--mono);letter-spacing:.16em;color:var(--dim)}
+  .a-spec span:last-child{font:500 12px/1.4 var(--mono);letter-spacing:.1em;color:var(--pale)}
+  .a-cta{background:var(--camo);color:#141410;border:2px solid var(--pale);
+    padding:16px;text-align:center;font:600 11px/1 var(--mono);letter-spacing:.2em;
+    text-transform:uppercase}
+  .a-right{background:var(--photo);position:relative;display:flex;
+    align-items:flex-end;justify-content:flex-end;padding:20px}
+  .a-badge{position:absolute;left:-62px;top:78px;width:124px;height:124px;border-radius:50%;
+    border:2px dashed #6a6a62;background:#fbfbf7;display:flex;align-items:center;
+    justify-content:center;text-align:center;font:10px/1.35 var(--mono);color:#3c3c36}
+
+  /* ============ B — ТИТУЛ ============ */
+  .b{border-bottom:3px solid var(--line);position:relative;overflow:hidden}
+  .b-photo{height:440px;background:var(--photo);position:relative;
+    display:flex;align-items:center;justify-content:center}
+  .b-rot{position:absolute;left:16px;top:50%;transform:translateY(-50%) rotate(180deg);
+    writing-mode:vertical-rl;font:11px/1 var(--mono);letter-spacing:.3em;color:#3c3c36}
+  .b-type{margin-top:-72px;position:relative;z-index:2;padding:0 40px}
+  .b-h1{font-size:clamp(44px,8.4vw,124px);line-height:.86;font-weight:800;
+    text-transform:uppercase;letter-spacing:-.035em;color:var(--ink)}
+  .b-h1 i{font-style:normal;display:block;font-size:.34em;letter-spacing:-.01em;
+    margin-bottom:.14em;color:#54544c}
+  .b-strip{margin-top:30px;background:var(--camo);border-top:2px solid var(--line);
+    border-bottom:2px solid var(--line);padding:19px 40px;display:flex;
+    justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
+  .b-strip .mono{color:#141410}
+  .b-btn{border:2px solid var(--ink);background:#fbfbf7;padding:13px 26px;
+    font:600 11px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase}
+
+  /* ============ C — МАРШРУТ ============ */
+  .c{height:660px;background:var(--photo-dk);color:var(--pale);
+    display:flex;flex-direction:column;justify-content:space-between;
+    padding:44px 40px 0;border-bottom:3px solid var(--line);position:relative}
+  .c-top{max-width:20ch}
+  .c-coord{color:#c6c6bc;margin-bottom:16px}
+  .c-h1{font-size:clamp(38px,5.2vw,80px);line-height:.94;font-weight:800;
+    text-transform:uppercase;letter-spacing:-.02em;margin-bottom:12px}
+  .c-slogan{font-size:16px;font-style:italic;color:#c6c6bc}
+  .c-route{border-top:2px solid var(--pale);padding:22px 0 26px;
+    display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+  .c-stop{position:relative;padding-left:20px}
+  .c-stop::before{content:"";position:absolute;left:0;top:-31px;width:11px;height:11px;
+    background:var(--pale);border-radius:50%}
+  .c-stop::after{content:"";position:absolute;left:11px;top:-27px;right:0;height:2px;
+    background:#8e8e86}
+  .c-stop:last-child::after{display:none}
+  .c-stop b{display:block;font:600 13px/1.3 var(--mono);letter-spacing:.14em;
+    text-transform:uppercase;margin-bottom:5px}
+  .c-stop span{font:11px/1.4 var(--mono);letter-spacing:.1em;color:#b6b6ac}
+  .c-cta{position:absolute;right:40px;bottom:150px;display:flex;align-items:center;
+    gap:18px;flex-wrap:wrap}
+  .c-btn{background:var(--camo);color:#141410;padding:16px 30px;border:2px solid var(--pale);
+    font:600 11px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase}
+
+  /* ============ СИГНАТУРА — КАЛЕНДАРЬ ============ */
+  .sig{padding:74px 40px 84px;background:var(--paler);border-bottom:3px solid var(--line)}
+  .sig-head{display:flex;justify-content:space-between;align-items:flex-end;
+    gap:28px;flex-wrap:wrap;margin-bottom:38px}
+  .sig-h2{font-size:clamp(30px,4vw,52px);line-height:1;font-weight:800;
+    text-transform:uppercase;letter-spacing:-.02em}
+  .sig-h2 em{font-style:normal;color:#9a9a92}
+  .sig-note{font-size:13.5px;color:#54544c;max-width:34ch;line-height:1.6}
+
+  .cal{border-top:2px solid var(--line)}
+  .cal-months{display:grid;grid-template-columns:190px repeat(5,1fr);
+    border-bottom:2px solid var(--line)}
+  .cal-months div{padding:10px 12px;font:500 11px/1 var(--mono);letter-spacing:.16em;
+    color:#54544c;border-left:1px solid #cdcdc5}
+  .cal-months div:first-child{border-left:none}
+  .cal-row{display:grid;grid-template-columns:190px repeat(5,1fr);
+    border-bottom:1px solid #cdcdc5;align-items:stretch}
+  .cal-row:hover{background:#e9e9e2}
+  .cal-name{padding:17px 12px 17px 0;font-size:23px;font-weight:800;
+    text-transform:uppercase;letter-spacing:-.01em;display:flex;align-items:center;
+    justify-content:space-between;gap:10px}
+  .cal-name small{font:400 10px/1 var(--mono);letter-spacing:.14em;color:#9a9a92}
+  .cal-cell{border-left:1px solid #cdcdc5;position:relative}
+  .cal-bar{position:absolute;top:9px;bottom:9px;left:0;background:var(--camo);
+    border:1px solid #6a6a62}
+  .cal-legend{margin-top:20px;display:flex;gap:26px;flex-wrap:wrap;
+    font:11px/1 var(--mono);letter-spacing:.14em;color:#7d7d75}
+
+  /* ============ футер документа ============ */
+  .ask{padding:30px 36px 70px}
+  .ask h3{font-size:16px;margin-bottom:14px}
+  .ask ol{padding-left:20px}
+  .ask li{font-size:14px;line-height:1.7;margin-bottom:11px;color:#3c3c36}
+  .ask b{color:var(--ink)}
+
+  @media(max-width:880px){
+    .a{grid-template-columns:1fr;height:auto}
+    .a-badge{display:none}
+    .a-right{height:280px}
+    .c-route{grid-template-columns:1fr 1fr;gap:22px 0}
+    .c-cta{position:static;margin-top:26px}
+    .c{height:auto;padding-bottom:30px}
+    .cal-months,.cal-row{grid-template-columns:110px repeat(5,1fr)}
+    .cal-name{font-size:15px}
+  }
+</style>
+</head>
+<body>
+
+<div class="doc">
+  <h1>КАВИНКА — три концепции первого экрана и сигнатура</h1>
+  <p>
+    Предыдущий вайрфрейм был честно дефолтным: фото на весь экран, текст слева внизу,
+    четыре колонки фактов, сетка 3×2. Так выглядит любой сайт турбазы. Здесь — попытка исходить
+    не из «красивой природы», а из того, что у этой базы <b>действительно своё</b>.
+  </p>
+  <p>
+    А своё вот что: <b>туда трудно попасть и окно всего четыре месяца.</b>
+    200 километров, автомобиль → речной паром → болотоход. Или вертолёт с посадкой прямо с реки.
+    Шесть видов рыбы, у каждого свой месяц. Это факты, которых нет ни у одного конкурента,
+    и первый экран должен говорить именно их, а не «Готовы к незабываемому приключению».
+  </p>
+  <p>
+    Всё серое — цвета и шрифты обсуждаются отдельно. Штриховкой показан камуфляж.
+  </p>
+</div>
+
+<!-- ================= A ================= -->
+<div class="tag"><span>Концепция A — «Досье»</span><em>точка с характеристиками, а не курорт</em></div>
+<div class="a">
+  <div class="a-left">
+    <div class="a-coord mono">59°47′32.61″ &nbsp;/&nbsp; 148°16′24.23″</div>
+    <div class="a-name">Рыболовная<br>база<br>Кавинка</div>
+    <div class="a-slogan">«Пароль в мир дикой природы»</div>
+    <div class="a-spec">
+      <div><span>Расстояние</span><span>200 км</span></div>
+      <div><span>Как добраться</span><span>Паром + болотоход</span></div>
+      <div><span>Сезон</span><span>VI — X</span></div>
+      <div><span>Видов рыбы</span><span>6</span></div>
+      <div><span>Работаем с</span><span>2015</span></div>
+    </div>
+    <div class="a-cta">Оставить заявку</div>
+  </div>
+  <div class="a-right">
+    <div class="a-badge">бейдж<br>печать</div>
+    <span class="phlabel">hero-desktop.jpg — в край экрана, без полей</span>
+  </div>
+</div>
+<div class="why">
+  <b>Почему так.</b> Экран расколот не пополам, а 38 / 62 — асимметрия сразу уводит от шаблона.
+  Слева не «продающий блок», а спецификация: расстояние, способ заброски, сезон, виды, год.
+  Читается как паспорт объекта, и это честно — человек, который ищет такую рыбалку,
+  первым делом хочет знать именно эти цифры. Печать сидит на стыке панелей и перекрывает обе.
+  <span class="risk">Риск: панель с моно-таблицей на тёмном встречается в техно-лендингах —
+  спасает то, что для турбазы это неожиданно, там всегда эмоция вместо данных.</span>
+</div>
+
+<!-- ================= B ================= -->
+<div class="tag"><span>Концепция B — «Титул»</span><em>имя крупнее картинки</em></div>
+<div class="b">
+  <div class="b-photo">
+    <div class="b-rot">59°47′32.61″ / 148°16′24.23″</div>
+    <span class="phlabel">hero-desktop.jpg — в оба края</span>
+  </div>
+  <div class="b-type">
+    <h2 class="b-h1"><i>Рыболовная база</i>Кавинка</h2>
+  </div>
+  <div class="b-strip">
+    <span class="mono">от 150 000 ₽ / 7 дней &nbsp;●&nbsp; сезон VI—X</span>
+    <span class="b-btn">Оставить заявку</span>
+  </div>
+</div>
+<div class="why">
+  <b>Почему так.</b> Инверсия привычного: текст <b>не лежит на фото</b>. Фото обрывается,
+  и гигантское имя наезжает на него снизу, перекрывая нижний край — типографика становится
+  главным объектом, а не подписью к картинке. Координаты идут вертикально по левому краю.
+  Камуфляжная полоса во всю ширину отбивает первый экран от остального и работает как
+  фирменный элемент, а не как декор.
+</div>
+
+<!-- ================= C ================= -->
+<div class="tag"><span>Концепция C — «Маршрут»</span><em>дорога как часть продукта</em></div>
+<div class="c">
+  <div class="c-top">
+    <div class="c-coord mono">59°47′32.61″ &nbsp;/&nbsp; 148°16′24.23″</div>
+    <h2 class="c-h1">Рыболовная база Кавинка</h2>
+    <p class="c-slogan">«Дорога сюда — уже приключение. И первая награда»</p>
+  </div>
+  <div class="c-cta">
+    <span class="mono" style="color:#c6c6bc">от 150 000 ₽ / 7 дней</span>
+    <span class="c-btn">Оставить заявку</span>
+  </div>
+  <div class="c-route">
+    <div class="c-stop"><b>Магадан</b><span>аэропорт, встреча</span></div>
+    <div class="c-stop"><b>Паром</b><span>переправа через залив</span></div>
+    <div class="c-stop"><b>Болотоход</b><span>там, где кончаются дороги</span></div>
+    <div class="c-stop"><b>Кавинка</b><span>200 км от города</span></div>
+  </div>
+</div>
+<div class="why">
+  <b>Почему так.</b> Низ первого экрана занимает схема заброски во всю ширину.
+  Здесь нумерация была бы честной — это настоящая последовательность, — но точки на линии
+  говорят то же самое без цифр. Слоган взят не рекламный, а тот, что уже есть в текстах:
+  «Дорога сюда — уже приключение». Дальше эта полоса живёт как разделитель между секциями,
+  то есть приём не разовый. Самая «своя» из трёх концепций: ни у кого больше нет болотохода
+  в первом экране.
+</div>
+
+<!-- ================= СИГНАТУРА ================= -->
+<div class="tag"><span>Сигнатура — календарь сезона</span><em>подходит к любой из трёх концепций</em></div>
+<div class="sig">
+  <div class="sig-head">
+    <h2 class="sig-h2">Когда за чем <em>ехать</em></h2>
+    <p class="sig-note">
+      Наведи на строку — пойдёт видео этой рыбы. Те же шесть роликов,
+      что были в сетке 3×2, но теперь они отвечают на вопрос, а не просто крутятся.
+    </p>
+  </div>
+
+  <div class="cal">
+    <div class="cal-months">
+      <div></div><div>Июнь</div><div>Июль</div><div>Август</div><div>Сентябрь</div><div>Октябрь</div>
+    </div>
+
+    <div class="cal-row">
+      <div class="cal-name">Хариус <small>VI—IX</small></div>
+      <div class="cal-cell"><div class="cal-bar" style="right:0"></div></div>
+      <div class="cal-cell"><div class="cal-bar" style="right:0"></div></div>
+      <div class="cal-cell"><div class="cal-bar" style="right:0"></div></div>
+      <div class="cal-cell"><div class="cal-bar" style="right:0"></div></div>
+      <div class="cal-cell"></div>
+    </div>
+    <div class="cal-row">
+      <div class="cal-name">Голец <small>VI—IX</small></div>
+      <div class="cal-cell"><div class="cal-bar" style="right:0"></div></div>
+      <div class="cal-cell"><div class="cal-bar" style="right:0"></div></div>
+      <div class="cal-cell"><div class="cal-bar" style="right:0"></div></div>
+      <div class="cal-cell"><div class="cal-bar" style="right:0"></div></div>
+      <div class="cal-cell"></div>
+    </div>
+    <div class="cal-row">
+      <div class="cal-name">Кунджа <small>VI—IX</small></div>
+      <div class="cal-cell"><div class="cal-bar" style="right:0"></div></div>
+      <div class="cal-cell"><div class="cal-bar" style="right:0"></div></div>
+      <div class="cal-cell"><div class="cal-bar" style="right:0"></div></div>
+      <div class="cal-cell"><div class="cal-bar" style="right:0"></div></div>
+      <div class="cal-cell"></div>
+    </div>
+    <div class="cal-row">
+      <div class="cal-name">Горбуша <small>VI—VII</small></div>
+      <div class="cal-cell"><div class="cal-bar" style="right:0"></div></div>
+      <div class="cal-cell"><div class="cal-bar" style="right:0"></div></div>
+      <div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div>
+    </div>
+    <div class="cal-row">
+      <div class="cal-name">Кета <small>VIII</small></div>
+      <div class="cal-cell"></div><div class="cal-cell"></div>
+      <div class="cal-cell"><div class="cal-bar" style="right:0"></div></div>
+      <div class="cal-cell"></div><div class="cal-cell"></div>
+    </div>
+    <div class="cal-row">
+      <div class="cal-name">Кижуч <small>VIII—IX</small></div>
+      <div class="cal-cell"></div><div class="cal-cell"></div>
+      <div class="cal-cell"><div class="cal-bar" style="right:0"></div></div>
+      <div class="cal-cell"><div class="cal-bar" style="right:0"></div></div>
+      <div class="cal-cell"></div>
+    </div>
+  </div>
+
+  <div class="cal-legend">
+    <span>■ окно лова</span>
+    <span>наведение → видео</span>
+    <span>полосы залиты камуфляжем</span>
+  </div>
+</div>
+<div class="why">
+  <b>Почему это сигнатура.</b> Это единственный элемент, который физически не может появиться
+  ни на каком другом сайте — он состоит из данных именно этой базы. Он полезен: рыбак выбирает
+  даты под трофей, и календарь отвечает ему прямо. Он заменяет самый скучный блок старого макета —
+  шесть одинаковых карточек с видео. И выглядит технически, а не декоративно, то есть попадает
+  ровно в «природа + сдержанная брутальность».
+  <br><br>
+  <b>Побочный эффект — вскрылась нестыковка.</b> Октябрь в календаре пустой: по главной странице
+  ни одна рыба до октября не ловится, а в прайсе пакет «Рыбалка на кижуча» продаётся
+  как «Август — Октябрь», и в контактах сезон заявлен «с июня по октябрь».
+  На диаграмме такое видно сразу, в списке — нет.
+</div>
+
+<div class="ask">
+  <h3>Что мне нужно от тебя</h3>
+  <ol>
+    <li><b>Концепция первого экрана: A, B или C?</b> Можно и гибрид — например,
+      досье из A с маршрутной полосой из C внизу. Скажи, что цепляет, что отталкивает.</li>
+    <li><b>Календарь как сигнатура — берём?</b> Если да, я вешаю на него всю «смелость»,
+      а остальные секции держу нарочито тихими. Скилл прямо говорит: яркой должна быть одна вещь.</li>
+    <li><b>Шрифты</b> — файл <code>fonts.html</code> открыт рядом, там четыре пары. Мой голос за B (Literata + Onest).</li>
+    <li>Старые вопросы в силе: меню из 8 пунктов, судьба зелёного бейджа,
+      и добавляем ли на главную «Как добраться» и «Инфраструктуру».</li>
+  </ol>
+</div>
+
+</body>
+</html>

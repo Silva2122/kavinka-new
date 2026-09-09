@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>КАВИНКА — первый экран, вариант 5</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --cream:#F0EFE4;
+    --bog:#242B1B;
+    --sage:#B7C299;
+    --ink:#232318;
+    --muted:#6E6D5E;
+    --disp:'Cormorant Garamond',Georgia,serif;
+    --body:'Manrope',system-ui,sans-serif;
+  }
+  body{background:var(--cream);color:var(--ink);font-family:var(--body);
+    font-weight:300;line-height:1.6;-webkit-font-smoothing:antialiased}
+  img{display:block;max-width:100%}
+
+  .bar{background:var(--ink);color:var(--cream);padding:11px 34px;
+    font-family:var(--body);font-weight:600;font-size:10.5px;letter-spacing:.18em;
+    text-transform:uppercase;display:flex;justify-content:space-between;
+    gap:20px;flex-wrap:wrap}
+  .bar em{font-style:normal;font-weight:400;opacity:.6;letter-spacing:.08em}
+
+  .tech{font-family:var(--body);font-weight:600;font-size:11px;
+    letter-spacing:.18em;text-transform:uppercase}
+
+  /* ===== ровно 50/50 ===== */
+  .hero{display:grid;grid-template-columns:1fr 1fr;min-height:100svh;background:var(--bog)}
+
+  .hero__panel{position:relative;display:flex;flex-direction:column;
+    justify-content:space-between;padding:34px 46px 44px;color:var(--cream);
+    overflow:hidden}
+
+  /* камуфляж на весь зелёный, не полоской у края */
+  .hero__panel::before{content:"";position:absolute;inset:0;z-index:0;
+    background-image:url("../public/photo/camo.jpg");
+    background-size:440px;background-repeat:repeat;
+    opacity:.16;mix-blend-mode:overlay;pointer-events:none}
+  .hero__panel>*{position:relative;z-index:1}
+
+  .hero__photo{position:relative;overflow:hidden}
+  .hero__photo img{width:100%;height:100%;object-fit:cover;object-position:center 40%}
+  .hero__photo::before{content:"";position:absolute;inset:0;
+    background:linear-gradient(90deg,rgba(28,34,20,.30),transparent 16%)}
+
+  .nav{display:flex;align-items:center;justify-content:space-between;gap:24px}
+  .nav__links{display:flex;gap:22px}
+  .nav__links a{color:rgba(240,239,228,.82);text-decoration:none;
+    font-size:12.5px;letter-spacing:.02em;transition:color .25s}
+  .nav__links a:hover{color:var(--cream)}
+  .nav__burger{width:24px;height:11px;border-top:1.5px solid var(--cream);
+    border-bottom:1.5px solid var(--cream);cursor:pointer}
+
+  .eyebrow{color:var(--sage);margin-bottom:16px;display:flex;align-items:center;
+    gap:12px;white-space:nowrap}
+  .eyebrow i{display:block;width:30px;height:1px;background:rgba(183,194,153,.5);flex:none}
+
+  .kicker{display:block;color:rgba(240,239,228,.6);font-family:var(--body);
+    font-weight:500;font-size:14px;letter-spacing:.08em;text-transform:uppercase;
+    margin-bottom:10px}
+
+  /* размер выверен так, чтобы гарантированно влезать в половину экрана */
+  .name{font-family:var(--disp);font-weight:600;text-transform:uppercase;
+    color:var(--cream);font-size:clamp(52px,7.6vw,132px);line-height:.9;
+    letter-spacing:.005em;margin-bottom:22px;white-space:nowrap}
+
+  .slogan{font-family:var(--disp);font-weight:500;font-style:italic;
+    font-size:clamp(19px,1.9vw,25px);line-height:1.3;color:rgba(240,239,228,.92);
+    margin-bottom:22px}
+
+  .lede{font-size:14.5px;line-height:1.68;color:rgba(240,239,228,.6);
+    max-width:46ch;margin-bottom:36px}
+
+  .foot-row{display:flex;justify-content:space-between;align-items:center;
+    gap:20px;flex-wrap:wrap}
+  .foot-row .tech{color:rgba(240,239,228,.4);font-weight:500}
+
+  .cta-wrap{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+
+  /* ===== стеклянная кнопка: камуфляж теперь реально виден сквозь стекло ===== */
+  .glass-btn{
+    position:relative;display:inline-flex;align-items:center;justify-content:center;
+    padding:17px 38px;border-radius:100px;text-decoration:none;
+    isolation:isolate;overflow:hidden;color:var(--cream);
+    border:1px solid rgba(240,239,228,.6);
+    background:rgba(20,26,14,.30);
+    backdrop-filter:blur(10px) saturate(140%);
+    -webkit-backdrop-filter:blur(10px) saturate(140%);
+    box-shadow:0 14px 34px rgba(10,14,6,.35),
+      inset 0 1px 0 rgba(255,255,255,.16);
+    transition:box-shadow .3s,border-color .3s;
+  }
+  .glass-btn span{position:relative;z-index:2;font-family:var(--body);
+    font-weight:700;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;
+    text-shadow:0 1px 3px rgba(0,0,0,.35)}
+  /* сам камуфляж — видимый слой под стеклянной вуалью */
+  .glass-btn::before{content:"";position:absolute;inset:-6px;z-index:0;
+    background-image:url("../public/photo/camo.jpg");
+    background-size:210px;background-position:40% 35%;
+    opacity:.62;
+    transition:background-position 8s linear}
+  /* лёгкая кремовая вуаль поверх камуфляжа — эффект "сквозь стекло" */
+  .glass-btn::after{content:"";position:absolute;inset:0;z-index:1;
+    background:linear-gradient(155deg,rgba(240,239,228,.30),rgba(240,239,228,.08) 55%)}
+  .glass-btn:hover{border-color:rgba(240,239,228,.95);
+    box-shadow:0 18px 40px rgba(10,14,6,.45),inset 0 1px 0 rgba(255,255,255,.22)}
+  .glass-btn:hover::before{background-position:60% 55%}
+
+  .price{font-family:var(--body);font-weight:500;font-size:12px;
+    letter-spacing:.06em;color:rgba(240,239,228,.55)}
+  .price b{color:var(--cream);font-weight:700}
+
+  .note{background:#FFFCEA;border-top:1px solid #E0D9A8;
+    padding:26px 34px 32px;font-size:13.5px;line-height:1.7;color:#4A4A3A}
+  .note h4{font-weight:600;font-size:14px;margin-bottom:10px;color:var(--ink)}
+  .note ul{padding-left:18px;margin-top:8px}
+  .note li{margin-bottom:7px}
+  .note b{color:var(--ink)}
+
+  @media(max-width:860px){
+    .hero{grid-template-columns:1fr}
+    .hero__photo{height:42svh;order:-1}
+    .hero__panel{padding:26px 22px 38px}
+    .nav__links{display:none}
+    .name{font-size:clamp(44px,15vw,80px)}
+  }
+</style>
+</head>
+<body>
+
+<div class="bar"><span>Вариант 5 — 50/50, камуфляж по всей панели, кнопка видимо камуфляжная</span><em>проверено скриншотом на 1600px</em></div>
+
+<section class="hero">
+  <div class="hero__panel">
+    <nav class="nav">
+      <div class="nav__links">
+        <a href="#">О туре</a><a href="#">Размещение</a>
+        <a href="#">Стоимость</a><a href="#">Программа</a>
+      </div>
+      <div class="nav__burger" role="button" aria-label="Меню"></div>
+    </nav>
+
+    <div class="hero__mid">
+      <div class="eyebrow tech"><span>59°47′32.61″</span><i></i><span>148°16′24.23″</span></div>
+      <span class="kicker">Рыболовная база</span>
+      <h1 class="name">Кавинка</h1>
+      <p class="slogan">«Пароль в мир дикой природы»</p>
+      <p class="lede">
+        Кавинская долина на берегу Тауя, 200 км от Магадана —
+        там, где заканчиваются дороги и начинается заповедник.
+      </p>
+
+      <div class="cta-wrap">
+        <a class="glass-btn" href="https://t.me/KAVINKA_bot"><span>Оставить заявку</span></a>
+        <span class="price">от <b>150 000 ₽</b> / 7 дней</span>
+      </div>
+    </div>
+
+    <div class="foot-row">
+      <span class="tech">Сезон VI—X</span>
+      <span class="tech">+7 914 000-00-00</span>
+    </div>
+  </div>
+
+  <div class="hero__photo">
+    <img src="../public/photo/angler-chinook.jpg" alt="Рыболов с трофейной рыбой на берегу Тауя">
+  </div>
+</section>
+
+<div class="note">
+  <h4>Что исправлено по твоим замечаниям</h4>
+  <ul>
+    <li><b>Экран делится ровно 50/50</b> — было 44/56.</li>
+    <li><b>«Кавинка» больше не обрезается.</b> Раньше размер считался от ширины всего окна,
+      а панель занимала меньше половины — при 44% ширины и той формуле буквы упирались
+      в край раньше, чем текст заканчивался. Пересчитал размер под фактическую половину
+      экрана и добавил <code>white-space: nowrap</code>, чтобы слово физически не могло
+      перенестись криво.</li>
+    <li><b>Камуфляж теперь на всей зелёной панели</b>, не полоской 110px у края —
+      той было физически не видно. Сейчас это фон всей левой половины, opacity 16%,
+      наложение overlay поверх зелёного — заметная текстура, а не намёк на неё.</li>
+    <li><b>Камуфляж в кнопке стал видимым.</b> Раньше он лежал под полупрозрачным
+      стеклом почти незаметно (soft-light на тёмном фоне гасил его почти до нуля).
+      Теперь слой камуфляжа отдельно — на 62% непрозрачности, а сверху лёгкая кремовая
+      вуаль имитирует стекло. Камуфляж виден сразу, при этом ощущение стекла остаётся.</li>
+  </ul>
+</div>
+
+</body>
+</html>

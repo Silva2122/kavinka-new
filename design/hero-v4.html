@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>КАВИНКА — первый экран, вариант 4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --cream:#F0EFE4;
+    --bog:#242B1B;
+    --sage:#B7C299;
+    --olive:#7C8C57;
+    --ink:#232318;
+    --muted:#6E6D5E;
+    --disp:'Cormorant Garamond',Georgia,serif;
+    --body:'Manrope',system-ui,sans-serif;
+  }
+  body{background:var(--cream);color:var(--ink);font-family:var(--body);
+    font-weight:300;line-height:1.6;-webkit-font-smoothing:antialiased}
+  img{display:block;max-width:100%}
+
+  .bar{background:var(--ink);color:var(--cream);padding:11px 34px;
+    font-family:var(--body);font-weight:600;font-size:10.5px;letter-spacing:.18em;
+    text-transform:uppercase;display:flex;justify-content:space-between;
+    gap:20px;flex-wrap:wrap}
+  .bar em{font-style:normal;font-weight:400;opacity:.6;letter-spacing:.08em}
+
+  /* технический стиль теперь = Manrope, капс, разрядка. Не отдельный шрифт */
+  .tech{font-family:var(--body);font-weight:600;font-size:11px;
+    letter-spacing:.18em;text-transform:uppercase}
+
+  .hero{display:grid;grid-template-columns:44fr 56fr;min-height:100svh;
+    background:var(--bog)}
+  .hero__panel{position:relative;display:flex;flex-direction:column;
+    justify-content:space-between;padding:34px 0 44px 46px;color:var(--cream);
+    overflow:hidden}
+  .hero__panel::after{content:"";position:absolute;inset:0 0 0 auto;width:110px;
+    background-image:url("../public/photo/camo.jpg");background-size:300px;
+    opacity:.06;mix-blend-mode:overlay;pointer-events:none}
+
+  .hero__photo{position:relative;overflow:hidden}
+  .hero__photo img{width:100%;height:100%;object-fit:cover;object-position:center 40%}
+  .hero__photo::before{content:"";position:absolute;inset:0;
+    background:linear-gradient(90deg,rgba(28,34,20,.32),transparent 18%)}
+
+  .nav{display:flex;align-items:center;justify-content:space-between;
+    gap:24px;padding-right:46px}
+  .nav__links{display:flex;gap:22px}
+  .nav__links a{color:rgba(240,239,228,.82);text-decoration:none;
+    font-size:12.5px;letter-spacing:.02em;transition:color .25s}
+  .nav__links a:hover{color:var(--cream)}
+  .nav__burger{width:24px;height:11px;border-top:1.5px solid var(--cream);
+    border-bottom:1.5px solid var(--cream);cursor:pointer}
+
+  .hero__mid{padding-right:46px}
+
+  .eyebrow{color:var(--sage);margin-bottom:16px;display:flex;align-items:center;
+    gap:12px;white-space:nowrap}
+  .eyebrow i{display:block;width:30px;height:1px;background:rgba(183,194,153,.5);flex:none}
+
+  .kicker{display:block;color:rgba(240,239,228,.6);font-family:var(--body);
+    font-weight:500;font-size:14px;letter-spacing:.08em;text-transform:uppercase;
+    margin-bottom:10px}
+
+  .name{font-family:var(--disp);font-weight:600;text-transform:uppercase;
+    color:var(--cream);font-size:clamp(76px,9.2vw,150px);line-height:.86;
+    letter-spacing:.01em;margin-bottom:22px}
+
+  .slogan{font-family:var(--disp);font-weight:500;font-style:italic;
+    font-size:clamp(20px,2vw,27px);line-height:1.3;color:rgba(240,239,228,.92);
+    margin-bottom:24px}
+
+  .lede{font-size:15px;line-height:1.68;color:rgba(240,239,228,.6);
+    max-width:44ch;margin-bottom:38px}
+
+  .foot-row{display:flex;justify-content:space-between;align-items:center;
+    gap:20px;padding-right:46px;flex-wrap:wrap}
+  .foot-row .tech{color:rgba(240,239,228,.4);font-weight:500}
+
+  .cta-wrap{position:relative;display:flex;align-items:center;gap:22px;
+    flex-wrap:wrap;margin-right:-92px;z-index:5}
+
+  .glass-btn{
+    position:relative;display:inline-flex;align-items:center;justify-content:center;
+    padding:17px 38px;border-radius:100px;text-decoration:none;
+    isolation:isolate;overflow:hidden;color:var(--cream);
+    border:1px solid rgba(240,239,228,.55);
+    background:rgba(240,239,228,.08);
+    backdrop-filter:blur(16px) saturate(140%);
+    -webkit-backdrop-filter:blur(16px) saturate(140%);
+    box-shadow:0 14px 34px rgba(10,14,6,.32),
+      inset 0 1px 0 rgba(255,255,255,.18);
+    transition:border-color .3s,box-shadow .3s;
+  }
+  .glass-btn span{position:relative;z-index:1;font-family:var(--body);
+    font-weight:600;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase}
+  .glass-btn::before{content:"";position:absolute;inset:0;z-index:-1;
+    background-image:url("../public/photo/camo.jpg");
+    background-size:220px;background-position:38% 30%;
+    opacity:.22;mix-blend-mode:soft-light;
+    transition:opacity .35s,background-position 6s linear}
+  .glass-btn::after{content:"";position:absolute;inset:0;z-index:-1;
+    background:linear-gradient(155deg,rgba(255,255,255,.22),transparent 40%)}
+  .glass-btn:hover{border-color:rgba(240,239,228,.9);
+    box-shadow:0 18px 40px rgba(10,14,6,.4),inset 0 1px 0 rgba(255,255,255,.24)}
+  .glass-btn:hover::before{opacity:.4;background-position:52% 44%}
+
+  .price{font-family:var(--body);font-weight:500;font-size:12px;
+    letter-spacing:.06em;color:rgba(240,239,228,.55)}
+  .price b{color:var(--cream);font-weight:700}
+
+  .note{background:#FFFCEA;border-top:1px solid #E0D9A8;
+    padding:26px 34px 32px;font-size:13.5px;line-height:1.7;color:#4A4A3A}
+  .note h4{font-weight:600;font-size:14px;margin-bottom:10px;color:var(--ink)}
+  .note ul{padding-left:18px;margin-top:8px}
+  .note li{margin-bottom:7px}
+  .note b{color:var(--ink)}
+
+  @media(max-width:860px){
+    .hero{grid-template-columns:1fr}
+    .hero__photo{height:42svh;order:-1}
+    .hero__panel{padding:26px 22px 38px}
+    .nav__links{display:none}
+    .nav{padding-right:0}
+    .hero__mid{padding-right:0}
+    .foot-row{padding-right:0}
+    .cta-wrap{margin-right:0}
+    .name{font-size:clamp(52px,16vw,90px)}
+  }
+</style>
+</head>
+<body>
+
+<div class="bar"><span>Вариант 4 — тот же зелёный, типографика приведена к двум шрифтам</span><em>Cormorant Garamond + Manrope, без третьего</em></div>
+
+<section class="hero">
+  <div class="hero__panel">
+    <nav class="nav">
+      <div class="nav__links">
+        <a href="#">О туре</a><a href="#">Размещение</a>
+        <a href="#">Стоимость</a><a href="#">Программа</a>
+      </div>
+      <div class="nav__burger" role="button" aria-label="Меню"></div>
+    </nav>
+
+    <div class="hero__mid">
+      <div class="eyebrow tech"><span>59°47′32.61″</span><i></i><span>148°16′24.23″</span></div>
+      <span class="kicker">Рыболовная база</span>
+      <h1 class="name">Кавинка</h1>
+      <p class="slogan">«Пароль в мир дикой природы»</p>
+      <p class="lede">
+        Кавинская долина на берегу Тауя, 200 км от Магадана —
+        там, где заканчиваются дороги и начинается заповедник.
+      </p>
+
+      <div class="cta-wrap">
+        <a class="glass-btn" href="https://t.me/KAVINKA_bot"><span>Оставить заявку</span></a>
+        <span class="price">от <b>150 000 ₽</b> / 7 дней</span>
+      </div>
+    </div>
+
+    <div class="foot-row">
+      <span class="tech">Сезон VI—X</span>
+      <span class="tech">+7 914 000-00-00</span>
+    </div>
+  </div>
+
+  <div class="hero__photo">
+    <img src="../public/photo/angler-chinook.jpg" alt="Рыболов с трофейной рыбой на берегу Тауя">
+  </div>
+</section>
+
+<div class="note">
+  <h4>Что исправлено</h4>
+  <ul>
+    <li><b>Ровно два шрифта.</b> JetBrains Mono убрал — «технический» вид теперь даёт
+      не третья гарнитура, а Manrope капсом с разрядкой <code>letter-spacing:.18em</code>.
+      Координаты, сезон, телефон выглядят так же собранно, но это тот же второй шрифт,
+      а не новый.</li>
+    <li><b>«Кавинка» увеличена почти вдвое</b> — с ~74px до 150px на десктопе. Это теперь
+      главный объект панели, а не одна из строк.</li>
+    <li><b>«Рыболовная база» переехала выше имени</b> отдельной мелкой строкой
+      (14px, капс, приглушённый цвет) — раньше она была вложена в <code>&lt;small&gt;</code>
+      внутри заголовка и переносилась на два слова. Теперь одна строка, никогда не переносится.</li>
+    <li><b>Слоган и лид разведены по ролям.</b> Слоган — курсивом Cormorant, это цитата.
+      Лид — Manrope, это описание. Раньше оба были близкого начертания и сливались.
+      Ширина лида увеличена до 44 символов в строке — укладывается в две строки, не в три.</li>
+    <li><b>Вертикальный ритм пересчитан</b> — между кикером, именем, слоганом и лидом
+      теперь чёткие интервалы, а не близкое сбитое расстояние.</li>
+  </ul>
+</div>
+
+</body>
+</html>
