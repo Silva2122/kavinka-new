@@ -19,26 +19,76 @@
     --disp:'Cormorant Garamond',Georgia,serif;
     --body:'Manrope',system-ui,sans-serif;
     --meta-size:14px; --meta-tracking:.12em; --base-size:18px;
-    --size-h3:28px; --size-h3-sm:22px; --size-copy:14.5px; --size-small:12.5px;
+    --size-h3:24px; --size-h3-sm:20px; --size-copy:14.5px; --size-small:12.5px;
     --grid-max:1440px; --head-max:620px;
+    --section-y:120px; --head-gap:64px; --title-gap:24px;
   }
   body{background:var(--sand);color:var(--ink);font-family:var(--body);
     font-weight:300;line-height:1.6;-webkit-font-smoothing:antialiased}
   img,video{display:block;max-width:100%}
 
+  /* ===================== БЕГУЩАЯ СТРОКА =====================
+     Сразу под первым экраном, на всех страницах одинаковая. */
+  .ticker{background:var(--cream-warm,#E7E2CE);border-bottom:1px solid rgba(35,35,24,.1);
+    overflow:hidden;white-space:nowrap;position:relative}
+  .ticker__track{display:inline-flex;align-items:center;
+    animation:tickerMove 34s linear infinite;padding:11px 0}
+  .ticker:hover .ticker__track{animation-play-state:paused}
+  .ticker__item{display:inline-flex;align-items:center;
+    font-family:var(--body);font-weight:600;font-size:12px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--ink);padding:0 26px}
+  .ticker__dot{display:inline-block;font-size:15px;line-height:1;color:var(--olive);flex:none}
+  @keyframes tickerMove{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  @media(prefers-reduced-motion:reduce){.ticker__track{animation:none}}
+
+  /* ===================== ЕДИНАЯ ШАПКА САЙТА =====================
+     Одна на все страницы: CSS и разметка совпадают дословно в page / about /
+     accommodation / pricing. Пункты меню — как на главной, см. lib/site.ts.
+     .site-nav        — меню первого экрана (на главной поверх видео: --overlay)
+     .site-header     — та же шапка, закреплённая: выезжает, когда первый экран прокручен.
+     Фон закреплённой — болотный, не камуфляж (DESIGN.md, решение про хедер). */
+  .site-nav{position:relative;display:grid;grid-template-columns:1fr auto 1fr;
+    align-items:center;gap:24px;padding:26px 46px}
+  .site-nav--overlay{position:absolute;top:0;left:0;right:0;z-index:3}
+  .site-nav__logo{justify-self:start;font-family:var(--body);font-weight:700;font-size:15px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--cream);text-decoration:none;
+    white-space:nowrap;text-shadow:0 1px 8px rgba(0,0,0,.35)}
+  .site-nav__links{justify-self:center;display:flex;gap:28px}
+  .site-nav__links a{position:relative;color:rgba(240,239,228,.84);text-decoration:none;white-space:nowrap;
+    font-family:var(--body);font-weight:500;font-size:14.5px;letter-spacing:.015em;
+    transition:color .25s;text-shadow:0 1px 6px rgba(0,0,0,.35)}
+  .site-nav__links a:hover,.site-nav__links a.is-current{color:var(--cream)}
+  /* текущий раздел — оранжевая икринка под пунктом */
+  .site-nav__links a.is-current::after{content:"";position:absolute;left:50%;bottom:-11px;
+    width:7px;height:7px;margin-left:-3.5px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%,#FFE2B8 0 16%,var(--roe-lite,#F7A13A) 40%,var(--roe,#E86A12) 78%);
+    box-shadow:0 0 0 3px rgba(232,106,18,.16)}
+  .site-nav__right{justify-self:end;display:flex;align-items:center;gap:26px}
+  .site-nav__burger{width:26px;height:12px;border-top:1.5px solid var(--cream);
+    border-bottom:1.5px solid var(--cream);cursor:pointer;flex:none}
+  /* бургер только на узких экранах, где пункты меню спрятаны — на ПК не нужен (Босс 14.09) */
+  .site-nav__burger{display:none}
+
   .site-header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bog);
-    padding:13px 46px;transform:translateY(-100%);opacity:0;
-    transition:transform .4s ease,opacity .4s ease;box-shadow:0 12px 30px rgba(0,0,0,.22)}
+    transform:translateY(-100%);opacity:0;transition:transform .4s ease,opacity .4s ease;
+    box-shadow:0 12px 30px rgba(0,0,0,.22)}
   .site-header.is-visible{transform:translateY(0);opacity:1}
-  .site-header__inner{max-width:var(--grid-max);margin:0 auto;
-    display:flex;align-items:center;justify-content:space-between;gap:24px}
-  .site-header__logo{font-family:var(--body);font-weight:700;font-size:14px;
-    letter-spacing:.14em;text-transform:uppercase;color:var(--cream);text-decoration:none}
-  .site-header__links{display:flex;gap:19px}
-  .site-header__links a{color:rgba(240,239,228,.82);text-decoration:none;white-space:nowrap;
-    font-size:13px;letter-spacing:.02em;transition:color .25s}
-  .site-header__links a:hover,.site-header__links a.is-current{color:var(--cream)}
-  @media(max-width:980px){.site-header__links{display:none}}
+  .site-header .site-nav{padding:12px 46px}
+  .site-header .site-nav__links a.is-current::after{bottom:-8px}
+
+  .site-nav__right .btn span{white-space:nowrap}
+
+  /* пять пунктов не помещаются рядом с логотипом и кнопкой уже на ~1100 px —
+     прячем меню в бургер раньше, чем сужаем отступы */
+  @media(max-width:1120px){
+    .site-nav__burger{display:block}
+    .site-nav{grid-template-columns:1fr auto}
+    .site-nav__links{display:none}
+  }
+  @media(max-width:980px){
+    .site-nav{padding:20px 22px}
+    .site-header .site-nav{padding:10px 22px}
+  }
 
   .reveal{opacity:0;transform:translateY(26px);
     transition:opacity .8s cubic-bezier(.16,.8,.24,1),transform .8s cubic-bezier(.16,.8,.24,1);
@@ -66,8 +116,26 @@
   .btn--sm{padding:11px 24px}
   .btn--sm span{font-size:12px;letter-spacing:.1em}
 
+  /* эйбрау (мелкий зелёный заголовок над H2): капсом, межбуквенный интервал
+     СТРОГО 0 — не разряжать. Правило Босса 14.09, DESIGN.md §4 */
   .eyebrow{display:flex;align-items:center;gap:10px;font-family:var(--body);font-weight:600;
-    font-size:var(--meta-size);letter-spacing:var(--meta-tracking);text-transform:uppercase;margin-bottom:18px}
+    font-size:var(--meta-size);letter-spacing:0;text-transform:uppercase;margin-bottom:18px}
+  /* Поплавок перед эйбрау — рыбацкая деталь (Босс 14.09). Силуэт маской, цвета
+     только из палитры: тело — цвет эйбрау (currentColor), шапка — тот же цвет
+     светлее (color-mix), без оранжевого. Медленно качается; под ним рябь воды
+     (span::before). Работает на светлом и тёмном фоне. Плашку-пилюлю пробовали — убрана. */
+  .eyebrow::before{content:"";flex:none;width:10px;height:18px;margin-right:4px;
+    background:linear-gradient(180deg,currentColor 0 25%,color-mix(in srgb,currentColor 42%,transparent) 25% 55%,currentColor 55%);
+    -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 10 18%27%3E%3Crect x=%274.4%27 y=%270%27 width=%271.2%27 height=%274.6%27 rx=%27.6%27/%3E%3Cellipse cx=%275%27 cy=%2710%27 rx=%273.3%27 ry=%275%27/%3E%3Crect x=%274.5%27 y=%2714.4%27 width=%271%27 height=%273.6%27 rx=%27.5%27/%3E%3C/svg%3E") center/contain no-repeat;
+            mask:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 10 18%27%3E%3Crect x=%274.4%27 y=%270%27 width=%271.2%27 height=%274.6%27 rx=%27.6%27/%3E%3Cellipse cx=%275%27 cy=%2710%27 rx=%273.3%27 ry=%275%27/%3E%3Crect x=%274.5%27 y=%2714.4%27 width=%271%27 height=%273.6%27 rx=%27.5%27/%3E%3C/svg%3E") center/contain no-repeat;
+    transform-origin:50% 70%;animation:eyebrowFloat 3.8s ease-in-out infinite}
+  .eyebrow>span{position:relative}
+  .eyebrow>span::before{content:"";position:absolute;left:-30px;top:calc(50% + 2px);width:24px;height:6px;
+    background:currentColor;opacity:.5;pointer-events:none;
+    -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 6%27%3E%3Cpath d=%27M1 3q2.75-2.2 5.5 0t5.5 0 5.5 0 5.5 0%27 fill=%27none%27 stroke=%27black%27 stroke-width=%271.1%27 stroke-linecap=%27round%27/%3E%3C/svg%3E") center/contain no-repeat;
+            mask:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 6%27%3E%3Cpath d=%27M1 3q2.75-2.2 5.5 0t5.5 0 5.5 0 5.5 0%27 fill=%27none%27 stroke=%27black%27 stroke-width=%271.1%27 stroke-linecap=%27round%27/%3E%3C/svg%3E") center/contain no-repeat}
+  @keyframes eyebrowFloat{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(1.6px) rotate(-5deg)}}
+  @media(prefers-reduced-motion:reduce){ .eyebrow::before{animation:none} }
   .h2{font-family:var(--disp);font-weight:600;text-transform:uppercase;line-height:1.02;
     letter-spacing:.005em;font-size:clamp(32px,4vw,58px)}
   .h2 em{font-style:normal}
@@ -78,161 +146,306 @@
     opacity:.055;mix-blend-mode:multiply;filter:saturate(.28) contrast(.5)}
   .soft>*{position:relative;z-index:1}
 
-  .section-head{max-width:var(--head-max);margin:0 auto 74px;text-align:center}
+  .section-head{max-width:var(--head-max);margin:0 auto var(--head-gap);text-align:center}
   .section-head .eyebrow{justify-content:center;color:var(--olive)}
-  .section-head h2{color:var(--ink);margin-bottom:20px}
+  .section-head h2{color:var(--ink);margin-bottom:var(--title-gap)}
   .section-head p{font-size:var(--base-size);color:var(--muted);max-width:48ch;margin:0 auto}
 
-  /* ===================== ШАПКА СТРАНИЦЫ =====================
-     Внутренняя, не полноэкранная: болотная панель с камуфляжем слева, фото справа. */
-  .page-hero{display:grid;grid-template-columns:1fr 1fr;min-height:62svh;background:var(--bog)}
-  .page-hero__panel{position:relative;display:flex;flex-direction:column;justify-content:space-between;
-    padding:30px 46px 56px;color:var(--cream);overflow:hidden}
-  .page-hero__panel::before{content:"";position:absolute;inset:0;z-index:0;
+  /* ===================== ШАПКА ВНУТРЕННЕЙ СТРАНИЦЫ =====================
+     Компактная, одна на все внутренние страницы. Меню как на главной (лого слева,
+     пункты по центру, кнопка справа), текущий раздел — оранжевая икринка под пунктом.
+     Справа — резной артефакт с базы режимом screen: снят на чёрном, фон уходит сам.
+     Раньше тут была пустая болотная плашка на ~42–62% экрана с одной строкой, см. CALLS.md.
+     Важно: у .page-head__body и текста НЕ ставить z-index — иначе screen смешается
+     с прозрачным слоем, и вместо резьбы будет чёрный прямоугольник. */
+  .page-head{position:relative;background:var(--bog);color:var(--cream);overflow:hidden;isolation:isolate}
+  .page-head::before{content:"";position:absolute;inset:0;pointer-events:none;
     background-image:url("../public/photo/camo.jpg");background-size:440px;background-repeat:repeat;
-    opacity:.085;mix-blend-mode:overlay;pointer-events:none}
-  .page-hero__panel>*{position:relative;z-index:1}
+    opacity:.085;mix-blend-mode:overlay}
+  /* мягкий свет за артефактом — чтобы он не висел в пустоте */
+  .page-head::after{content:"";position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(ellipse 38% 70% at 80% 62%,rgba(183,194,153,.09),transparent 70%)}
 
-  .nav{display:flex;align-items:center;justify-content:space-between;gap:24px}
-  .nav__logo{font-family:var(--body);font-weight:700;font-size:15px;letter-spacing:.14em;
-    text-transform:uppercase;color:var(--cream);text-decoration:none}
-  .nav__links{display:flex;gap:19px}
-  .nav__links a{color:rgba(240,239,228,.82);text-decoration:none;white-space:nowrap;
-    font-size:14px;letter-spacing:.02em;transition:color .25s}
-  .nav__links a:hover,.nav__links a.is-current{color:var(--cream)}
-  .nav__burger{width:24px;height:11px;border-top:1.5px solid var(--cream);
-    border-bottom:1.5px solid var(--cream);cursor:pointer}
+  .page-head__body{position:relative;max-width:calc(var(--grid-max) + 92px);margin:0 auto;
+    padding:30px 46px 58px;min-height:228px;display:flex;flex-direction:column;justify-content:center}
+  .page-head__crumbs{display:flex;align-items:center;gap:10px;margin-bottom:14px;
+    font-family:var(--body);font-weight:500;font-size:13.5px;color:rgba(240,239,228,.5)}
+  .page-head__crumbs a{color:inherit;text-decoration:none;transition:color .25s}
+  .page-head__crumbs a:hover{color:var(--cream)}
+  .page-head__crumbs i{display:block;width:4px;height:4px;border-radius:50%;background:rgba(240,239,228,.32)}
+  .page-head__crumbs span{color:rgba(240,239,228,.82)}
+  .page-head h1{font-family:var(--disp);font-weight:600;text-transform:uppercase;color:var(--cream);
+    font-size:clamp(38px,4.1vw,60px);line-height:1;letter-spacing:.012em;margin-bottom:14px;max-width:18ch}
+  .page-head__sub{font-family:var(--body);font-size:16.5px;line-height:1.65;
+    color:rgba(240,239,228,.7);max-width:46ch}
 
-  .page-hero__eyebrow{color:rgba(240,239,228,.62)}
-  .page-hero h1{font-family:var(--disp);font-weight:700;text-transform:uppercase;color:var(--cream);
-    font-size:clamp(44px,5.4vw,88px);line-height:.94;letter-spacing:.012em;margin-bottom:22px}
-  .page-hero__lead{font-size:var(--base-size);line-height:1.7;color:rgba(240,239,228,.7);
-    max-width:34ch;margin-bottom:34px}
+  .page-head__art{position:absolute;right:46px;top:50%;mix-blend-mode:screen;pointer-events:none;opacity:.92}
+  /* у орла в исходнике по краю видна граница подсветки — растворяем края маской.
+     Нерке и медведю маска не нужна: у них шва нет, а голову и хвост она съедает */
+  .page-head__art--eagle{width:min(420px,29vw);transform:translateY(-40%);
+    -webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 62%,transparent 100%);
+            mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 62%,transparent 100%)}
+  .page-head__art--sockeye{width:min(560px,38vw);transform:translateY(-46%) rotate(-5deg)}
+  .page-head__art--bear{top:auto;bottom:-26px;height:calc(100% + 6px);width:auto}
 
-  .page-hero__shot{position:relative;overflow:hidden;background:#10140b}
-  .page-hero__shot img{width:100%;height:100%;object-fit:cover}
-  .page-hero__shot::after{content:"";position:absolute;inset:0;
-    background:linear-gradient(90deg,rgba(28,34,20,.34),transparent 18%)}
-
-  @media(max-width:900px){
-    .page-hero{grid-template-columns:1fr}
-    .page-hero__shot{height:38svh;order:-1}
-    .page-hero__panel{padding:24px 22px 44px}
-    .nav__links{display:none}
+  @media(max-width:980px){
+    .page-head__body{padding:22px 22px 44px;min-height:200px}
+    .page-head__art{right:-18px;opacity:.38}
+    .page-head__art--eagle{width:260px}
+    .page-head__art--sockeye{width:300px}
+    .page-head__art--bear{height:78%}
   }
 
-  /* ===================== ДОМИКИ =====================
-     Каждый домик — широкая строка: крупный кадр и текстовая колонка,
-     стороны чередуются. Под текстом — лента маленьких кадров интерьера. */
-  .cottages{padding:130px 46px 140px}
-  .cottage{max-width:var(--grid-max);margin:0 auto;display:grid;
-    grid-template-columns:1.15fr .85fr;gap:56px;align-items:center}
-  .cottage + .cottage{margin-top:120px}
-  .cottage:nth-of-type(even) .cottage__shot{order:2}
-
-  .cottage__shot{position:relative;border-radius:12px;overflow:hidden;aspect-ratio:4/3;
-    box-shadow:0 30px 64px rgba(36,43,27,.22)}
-  .cottage__shot img{width:100%;height:100%;object-fit:cover}
-  .cottage__no{position:absolute;top:18px;left:18px;z-index:2;
-    font-family:var(--body);font-weight:700;font-size:var(--size-small);letter-spacing:.14em;
-    color:var(--cream);background:rgba(26,33,18,.62);backdrop-filter:blur(10px);
-    padding:7px 13px;border-radius:100px;border:1px solid rgba(240,239,228,.3)}
-
-  .cottage__cap{display:flex;align-items:baseline;gap:10px;margin-bottom:6px;
-    font-family:var(--disp);font-weight:600;line-height:.9;color:var(--bog);
-    font-size:clamp(44px,4.2vw,64px);letter-spacing:-.01em}
-  .cottage__cap u{text-decoration:none;font-family:var(--body);font-weight:700;font-size:13px;
-    letter-spacing:.12em;text-transform:uppercase;color:var(--olive)}
-  .cottage__name{font-family:var(--disp);font-weight:600;font-size:var(--size-h3);line-height:1.05;
-    text-transform:uppercase;letter-spacing:.005em;color:var(--ink);margin-bottom:18px}
-
-  .amenities{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
-  .amenities li{list-style:none;font-size:var(--size-copy);color:var(--muted);
-    border:1px solid var(--sand-line);border-radius:100px;padding:6px 14px}
-
-  .cottage__price{display:flex;align-items:baseline;gap:8px;padding-top:20px;
-    border-top:1px solid var(--sand-line);
-    font-family:var(--body);font-size:var(--size-copy);color:var(--muted)}
-  .cottage__price b{font-family:var(--disp);font-weight:600;font-size:26px;color:var(--ink)}
-
-  .thumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:24px}
-  .thumbs img{aspect-ratio:1/1;object-fit:cover;border-radius:7px;width:100%;
-    filter:saturate(.94);transition:filter .3s,transform .3s}
-  .thumbs img:hover{filter:saturate(1.05);transform:translateY(-2px)}
-
-  @media(max-width:960px){
-    .cottages{padding:80px 22px 90px}
-    .cottage{grid-template-columns:1fr;gap:28px}
-    .cottage:nth-of-type(even) .cottage__shot{order:0}
-    .cottage + .cottage{margin-top:72px}
+  /* ===== Единый формат шапки внутренних страниц (Босс 14.09, по образцу «О туре») =====
+     Одинаково на «О туре», «Размещении», «Выбрать тур» (и будущих «Программа тура»,
+     «Контакты»): крошки и H1 по левому краю ровно по логотипу, без подзаголовка;
+     шапка ~270 px; камуфляж тот же; резной артефакт справа, крупный, заезжает
+     вверх под меню, подрезан снизу, приглушён (.6). Артефакты не повторять:
+     «О туре» — орёл, «Размещение» — медведь, «Выбрать тур» — нерка,
+     «Программа тура» — лось. */
+  .page-head--inner::after{background:radial-gradient(ellipse 34% 90% at 82% 80%,rgba(183,194,153,.10),transparent 70%)}
+  .page-head--inner .page-head__body{max-width:none;padding:14px 46px 44px;min-height:176px}
+  .page-head--inner h1{margin-bottom:0;margin-left:-.035em;max-width:none}
+  .page-head--inner .page-head__sub{display:none}
+  /* меню над артефактом (z-index на .site-nav безопасен: он не предок артефакта, screen не ломается) */
+  .page-head--inner .site-nav{z-index:2}
+  .page-head--inner .page-head__art{top:auto;transform:none;opacity:.6}
+  /* Босс 15.09: образец — орёл. Крупный, заезжает вверх под меню, подрезан снизу,
+     приглушён; остальных подогнать под него, а не ужимать в зону под меню */
+  .page-head--inner .page-head__art--eagle{bottom:-78px;right:36px;width:min(640px,46vw);height:auto;
+    -webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 58%,transparent 100%);
+            mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 58%,transparent 100%)}
+  /* медведь почти квадратный — у́же орла, чтобы по высоте был как он; левее кнопки */
+  .page-head--inner .page-head__art--bear{bottom:-104px;right:250px;width:min(370px,27vw);height:auto;
+    -webkit-mask-image:radial-gradient(ellipse 60% 58% at 50% 46%,#000 70%,transparent 100%);
+            mask-image:radial-gradient(ellipse 60% 58% at 50% 46%,#000 70%,transparent 100%)}
+  /* нерка вытянутая и низкая — по ширине как орёл, без наклона, целиком в кадре */
+  .page-head--inner .page-head__art--sockeye{bottom:10px;right:36px;width:min(640px,46vw);height:auto}
+  /* лось — как орёл по ширине и посадке */
+  .page-head--inner .page-head__art--moose{bottom:-56px;right:36px;width:min(600px,43vw);height:auto;
+    -webkit-mask-image:radial-gradient(ellipse 52% 54% at 50% 50%,#000 62%,transparent 100%);
+            mask-image:radial-gradient(ellipse 52% 54% at 50% 50%,#000 62%,transparent 100%)}
+  @media(max-width:980px){
+    .page-head--inner .page-head__body{padding:10px 22px 36px;min-height:160px}
+    .page-head--inner .page-head__art{opacity:.34}
+    .page-head--inner .page-head__art--eagle{right:-60px;bottom:-60px;width:400px}
+    .page-head--inner .page-head__art--bear{right:-40px;bottom:-60px;width:300px}
+    .page-head--inner .page-head__art--sockeye{right:-60px;bottom:0;width:400px}
+    .page-head--inner .page-head__art--moose{right:-60px;bottom:-40px;width:380px}
   }
 
-  /* ===================== ВРЕЗКА-ЦИТАТА =====================
-     Тёмная полоса. Артефакт (резной медведь) положен режимом screen —
-     он снят на чёрном, поэтому фон уходит сам, см. docs/MEDIA.md. */
+  /* ===================== ДОМИКИ — список + сцена =====================
+     Тот же приём, что «Виды рыб» на главной (DESIGN.md §10): слева заголовок
+     и список домиков (номер, название, гости, цена — сразу можно сравнить),
+     справа одна сцена 16:9. Наведение/клик по строке — кроссфейд к кадрам
+     этого домика. Внизу сцены стеклянная лента из 4 кадров (фасад + интерьеры):
+     наведение разворачивает кадр на всю сцену. Под сценой — удобства с иконками.
+     Раньше было «фото + текст» зигзагом на 4 экрана — Босс 15.09: не нравится всё. */
+  .stay{padding:var(--section-y) 46px}
+  .stay__grid{max-width:var(--grid-max);margin:0 auto;display:grid;
+    grid-template-columns:minmax(0,1fr) minmax(0,1.45fr);gap:80px;align-items:center}
+
+  .stay__head{margin-bottom:var(--head-gap)}
+  .stay__head .eyebrow{color:var(--olive)}
+  .stay__head h2{color:var(--ink);margin-bottom:var(--title-gap)}
+  .stay__head p{font-size:var(--base-size);color:var(--muted);max-width:40ch}
+
+  .stay-list{display:flex;flex-direction:column}
+  .stay-list__item{all:unset;box-sizing:border-box;cursor:pointer;display:grid;
+    grid-template-columns:auto minmax(0,1fr) auto 22px;align-items:center;column-gap:20px;
+    padding:20px 6px;border-top:1px solid rgba(35,35,24,.14);transition:padding-left .3s}
+  .stay-list__item:last-child{border-bottom:1px solid rgba(35,35,24,.14)}
+  /* all:unset стирает opacity/transform от .reveal — возвращаем адресно, как у .fish-list__item */
+  .stay-list__item.reveal{opacity:0;transform:translateY(26px);
+    transition:opacity .8s cubic-bezier(.16,.8,.24,1),transform .8s cubic-bezier(.16,.8,.24,1),padding-left .3s;
+    transition-delay:calc(var(--i,0) * 90ms)}
+  .stay-list__item.reveal.is-visible{opacity:1;transform:translateY(0)}
+  /* выбор по клику: активная строка сдвинута и зелёная; наведение лишь намекает (бледная стрелка) */
+  .stay-list__item.is-active{padding-left:14px}
+  .stay-list__item:not(.is-active):hover .stay-list__arrow{opacity:.45;transform:translateX(0)}
+  .stay-list__item:focus-visible{outline:2px solid var(--olive);outline-offset:2px}
+  .stay-list__no{font-family:var(--body);font-weight:600;font-size:var(--size-small);color:var(--muted);
+    font-variant-numeric:tabular-nums}
+  /* названия домиков — шрифтом заголовков (антиква капсом), Босс 15.09.
+     Цифры рядом (гости, цена) остаются Manrope — правило «цифры не антиквой» в силе */
+  .stay-list__name{display:block;font-family:var(--disp);font-weight:600;font-size:clamp(22px,1.95vw,28px);line-height:1;
+    text-transform:uppercase;letter-spacing:.01em;color:var(--ink);transition:color .3s}
+  .stay-list__guests{display:block;margin-top:6px;font-size:var(--size-copy);color:var(--muted)}
+  .stay-list__item.is-active .stay-list__name{color:var(--olive)}
+  .stay-list__price{text-align:right;white-space:nowrap;font-family:var(--body);font-weight:500;
+    font-size:20px;color:var(--ink);font-variant-numeric:tabular-nums}
+  .stay-list__price small{display:block;margin-top:4px;font-size:var(--size-small);font-weight:400;color:var(--muted)}
+  .stay-list__arrow{font-family:var(--body);font-weight:300;font-size:22px;color:var(--olive);
+    opacity:0;transform:translateX(-8px);transition:opacity .3s,transform .3s}
+  .stay-list__item.is-active .stay-list__arrow{opacity:1;transform:translateX(0)}
+
+  .stay-stage{position:relative;aspect-ratio:16/9;border-radius:8px;overflow:hidden;
+    background:#10140b;box-shadow:0 30px 64px rgba(35,35,24,.2)}
+  .stay-stage__set{position:absolute;inset:0;opacity:0;visibility:hidden;
+    transition:opacity .6s ease,visibility 0s linear .6s}
+  .stay-stage__set.is-active{opacity:1;visibility:visible;transition:opacity .6s ease,visibility 0s}
+  .stay-stage__shot{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+    opacity:0;transition:opacity .5s ease}
+  .stay-stage__shot.is-active{opacity:1}
+  /* затемнение снизу — под стеклянную ленту кадров */
+  .stay-stage__set::after{content:"";position:absolute;left:0;right:0;bottom:0;height:38%;pointer-events:none;
+    background:linear-gradient(180deg,transparent,rgba(8,11,5,.55))}
+  .stay-thumbs{position:absolute;left:18px;bottom:18px;z-index:2;display:flex;gap:8px;padding:6px;
+    border-radius:10px;background:rgba(26,33,18,.38);border:1px solid rgba(240,239,228,.22);
+    backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%)}
+  .stay-thumbs button{all:unset;box-sizing:border-box;cursor:pointer;width:88px;aspect-ratio:16/9;
+    border-radius:5px;overflow:hidden;border:1.5px solid transparent;opacity:.62;
+    transition:opacity .25s,border-color .25s}
+  .stay-thumbs button:hover,.stay-thumbs button.is-active{opacity:1;border-color:var(--cream)}
+  .stay-thumbs button:focus-visible{outline:2px solid var(--sage);outline-offset:2px}
+  .stay-thumbs img{width:100%;height:100%;object-fit:cover}
+  /* стрелки листания — тот же круглый стеклянный вид, что у стрелок лайтбокса */
+  .stay-arrow{position:absolute;top:50%;z-index:3;width:48px;height:48px;margin-top:-24px;padding:0;
+    border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;
+    border:1px solid rgba(240,239,228,.4);background:rgba(26,33,18,.42);color:var(--cream);
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    opacity:.8;transition:opacity .25s,border-color .25s,background .25s}
+  .stay-stage:hover .stay-arrow{opacity:1}
+  .stay-arrow:hover{border-color:rgba(240,239,228,.85);background:rgba(26,33,18,.72)}
+  .stay-arrow:focus{outline:none}
+  .stay-arrow:focus-visible{outline:2px solid var(--sage);outline-offset:3px;opacity:1}
+  .stay-arrow svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;
+    stroke-linecap:round;stroke-linejoin:round}
+  .stay-arrow--prev{left:18px}
+  .stay-arrow--next{right:18px}
+
+  /* удобства: панели всех домиков лежат в одной ячейке — высота не прыгает при переключении */
+  .stay-info{display:grid;margin-top:30px}
+  .stay-info__panel{grid-area:1/1;opacity:0;visibility:hidden;
+    transition:opacity .5s ease,visibility 0s linear .5s}
+  .stay-info__panel.is-active{opacity:1;visibility:visible;transition:opacity .5s ease,visibility 0s}
+  .stay-amen{list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px 24px;
+    padding-top:24px;border-top:1px solid rgba(35,35,24,.14)}
+  .stay-amen li{display:flex;align-items:center;gap:10px;font-size:var(--size-copy);line-height:1.3;color:var(--ink)}
+  .stay-amen svg{flex:none;width:20px;height:20px;color:var(--olive);fill:none;stroke:currentColor;
+    stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+
+  /* на средних экранах списку больше места — чтобы «Весёлая Компания» антиквой шла в одну строку */
+  @media(max-width:1300px){
+    .stay__grid{grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:56px}
+  }
+  @media(max-width:1000px){
+    .stay__grid{grid-template-columns:1fr;gap:40px}
+    .stay-list__name{font-size:28px}
+  }
+  @media(max-width:640px){
+    .stay{padding:var(--section-y) 22px}
+    .stay-thumbs{left:10px;bottom:10px;gap:5px;padding:4px}
+    .stay-thumbs button{width:58px}
+    .stay-arrow{width:38px;height:38px;margin-top:-19px}
+    .stay-arrow--prev{left:10px}
+    .stay-arrow--next{right:10px}
+  }
+
+  /* ===================== ВРЕЗКА «КАВИНКА РАСТЁТ» =====================
+     Босс 15.09: полоса «слабо выглядит». Было: одна строка текста и маленький медведь
+     в углу. Стало: две ступени текста (короткая фраза крупно, остальное лидом),
+     резной медвежонок — крупно, у правого края, с мягким светом за ним, как в шапках
+     внутренних страниц. Артефакт снят на чёрном — режим screen, фон уходит сам. */
   .quote{position:relative;background:var(--bog);color:var(--cream);overflow:hidden;
-    padding:110px 46px;isolation:isolate}
-  .quote::before{content:"";position:absolute;inset:0;z-index:0;
+    padding:88px 46px;isolation:isolate}
+  .quote::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
     background-image:url("../public/photo/camo.jpg");background-size:520px;background-repeat:repeat;
     opacity:.1;mix-blend-mode:overlay}
-  .quote__art{position:absolute;right:7%;bottom:-8%;z-index:1;
-    height:min(420px,118%);width:auto;
-    mix-blend-mode:screen;opacity:.92;pointer-events:none}
-  .quote__inner{position:relative;z-index:2;max-width:var(--grid-max);margin:0 auto}
-  .quote blockquote{font-family:var(--disp);font-weight:600;text-transform:uppercase;
-    font-size:clamp(28px,3.4vw,52px);line-height:1.06;letter-spacing:.005em;max-width:22ch}
+  .quote::after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+    background:radial-gradient(ellipse 22% 80% at 78% 60%,rgba(183,194,153,.13),transparent 70%)}
+  .quote__inner{position:relative;z-index:2;max-width:var(--grid-max);margin:0 auto;
+    display:grid;grid-template-columns:minmax(0,1fr) 360px;align-items:center;gap:40px;min-height:260px}
+  .quote__art{position:absolute;right:12%;bottom:0;z-index:1;height:100%;width:auto;
+    mix-blend-mode:screen;opacity:.95;pointer-events:none;
+    /* у медвежонка по краю виден ореол подсветки — растворяем края маской, как у орла в шапке */
+    -webkit-mask-image:radial-gradient(ellipse 50% 52% at 50% 50%,#000 60%,transparent 100%);
+            mask-image:radial-gradient(ellipse 50% 52% at 50% 50%,#000 60%,transparent 100%)}
+  /* текст — как заголовочный блок любой секции (Босс 15.09): эйбрау, H2 антиквой, лид */
+  .quote__inner .eyebrow{color:var(--sage)}
+  .quote__inner .h2{color:var(--cream);margin-bottom:var(--title-gap)}
+  .quote__lead{font-size:var(--base-size);line-height:1.6;color:rgba(240,239,228,.7);max-width:34ch}
   @media(max-width:900px){
-    .quote{padding:76px 22px}
-    .quote__art{height:220px;right:-24px;opacity:.5}
+    .quote{padding:var(--section-y) 22px}
+    .quote__inner{grid-template-columns:1fr;min-height:0}
+    .quote__art{height:220px;right:-30px;bottom:-20px;opacity:.45}
   }
 
-  /* ===================== ИНФРАСТРУКТУРА ===================== */
-  .infra{padding:130px 46px 140px}
+  /* ===================== ИНФРАСТРУКТУРА + ДОПОЛНИТЕЛЬНЫЕ УСЛУГИ =====================
+     Один блок вместо двух (Босс 15.09 — «не растягивать сайт»). Карточка места на базе,
+     внизу тёмный «корешок» с платными услугами, которые к этому месту относятся.
+     Перфорация корешка — тот же приём маской, что у «пропусков» на главной (DESIGN.md §9).
+     Что ни к чему не привязано (трансфер, съёмка) — тёмная полоса под карточками.
+     Допуслуги попали на «Размещение» со «Стоимости» — решение созвона 22.08, CALLS.md. */
+  .infra{padding:var(--section-y) 46px}
   .infra__grid{max-width:var(--grid-max);margin:0 auto;display:grid;
-    grid-template-columns:repeat(4,1fr);gap:20px}
-  .infra-card{border:1px solid var(--sand-line);border-radius:12px;overflow:hidden;
-    background:rgba(36,43,27,.05);display:flex;flex-direction:column;
-    transition:border-color .3s,transform .3s,box-shadow .3s}
-  .infra-card:hover{border-color:rgba(124,140,87,.55);transform:translateY(-3px);
-    box-shadow:0 18px 38px rgba(36,43,27,.12)}
-  .infra-card img{aspect-ratio:4/3;object-fit:cover;width:100%}
-  .infra-card__body{padding:24px 24px 28px}
-  .infra-card h3{font-family:var(--body);font-weight:700;font-size:13.5px;text-transform:uppercase;
-    letter-spacing:.13em;color:var(--ink);margin-bottom:10px}
+    grid-template-columns:repeat(4,minmax(0,1fr));gap:22px}
+  /* subgrid: фото, текст и корешок стоят на одной линии во всех карточках ряда */
+  .infra-card{grid-row:span 3;display:grid;grid-template-rows:subgrid;row-gap:0;
+    border:1px solid var(--sand-line);border-radius:12px;overflow:hidden;background:rgba(36,43,27,.05)}
+  .infra-card img{aspect-ratio:4/3;object-fit:cover;width:100%;height:100%}
+  .infra-card__body{padding:24px 24px 26px}
+  .infra-card h3{font-family:var(--body);font-weight:600;font-size:var(--size-h3-sm);line-height:1.25;
+    letter-spacing:-.005em;color:var(--ink);margin-bottom:8px}
   .infra-card p{font-size:var(--size-copy);color:var(--muted)}
-  @media(max-width:1000px){.infra__grid{grid-template-columns:repeat(2,1fr)}}
+
+  .infra-card__stub{position:relative;isolation:isolate;background:var(--bog);color:var(--cream);
+    padding:24px 24px 18px;
+    --notch:5px;--pitch:18px;
+    -webkit-mask-image:radial-gradient(circle var(--notch) at calc(var(--pitch)/2) 0,transparent 99%,#000 100%);
+    -webkit-mask-size:var(--pitch) 100%;-webkit-mask-repeat:repeat-x;
+            mask-image:radial-gradient(circle var(--notch) at calc(var(--pitch)/2) 0,transparent 99%,#000 100%);
+            mask-size:var(--pitch) 100%;mask-repeat:repeat-x}
+  .infra-card__stub::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+    background-image:url("../public/photo/camo.jpg");background-size:260px;
+    opacity:.07;mix-blend-mode:overlay}
+  /* подписи «Сверх проживания» нет — на базе платное всё, Босс 15.09 */
+  .stub-row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:baseline;gap:14px;
+    padding:10px 0;border-top:1px solid rgba(240,239,228,.12)}
+  .stub-row:first-child{border-top:0;padding-top:2px}
+  .stub-row__name{font-size:var(--size-copy);line-height:1.35;color:rgba(240,239,228,.84)}
+  .stub-row__name small{display:block;margin-top:2px;font-size:var(--size-small);color:rgba(240,239,228,.5)}
+  .stub-row__sum{font-family:var(--body);font-weight:500;font-size:16px;color:var(--cream);
+    white-space:nowrap;font-variant-numeric:tabular-nums}
+  .stub-row__sum small{font-size:var(--size-small);font-weight:400;color:rgba(240,239,228,.55)}
+
+  /* полоса под карточками: трансфер и съёмка */
+  .extras-bar{position:relative;isolation:isolate;overflow:hidden;max-width:var(--grid-max);
+    margin:20px auto 0;background:var(--bog);color:var(--cream);border-radius:12px;
+    display:grid;grid-template-columns:minmax(0,2.3fr) minmax(0,1fr);padding:30px 230px 30px 34px}
+  .extras-bar::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+    background-image:url("../public/photo/camo.jpg");background-size:420px;
+    opacity:.1;mix-blend-mode:overlay}
+  .extras-bar>*{position:relative;z-index:2}
+  /* резной хариус (снят на чёрном) — режим screen, фон уходит сам */
+  .extras-bar .extras__art{position:absolute;z-index:1;right:10px;top:50%;width:230px;
+    transform:translateY(-50%) rotate(-7deg);mix-blend-mode:screen;opacity:.7;pointer-events:none}
+  .extras-bar__group + .extras-bar__group{padding-left:34px;border-left:1px solid rgba(240,239,228,.14)}
+  .extras-bar__group:first-child{padding-right:34px}
+  .extras-bar__head{margin-bottom:16px}
+  .extras-bar h3{font-family:var(--body);font-weight:600;font-size:var(--size-h3-sm);line-height:1.25;
+    letter-spacing:-.005em;color:var(--cream)}
+  .extras-bar__head span{display:block;margin-top:4px;font-size:var(--size-copy);color:rgba(240,239,228,.58)}
+  .extras-bar__prices{list-style:none;display:flex;flex-wrap:wrap;gap:14px 44px}
+  .extras-bar__prices li{display:flex;flex-direction:column;gap:3px}
+  .extras-bar__prices span{font-size:var(--size-small);color:rgba(240,239,228,.55)}
+  .extras-bar__prices b{font-family:var(--body);font-weight:500;font-size:20px;color:var(--cream);
+    white-space:nowrap;font-variant-numeric:tabular-nums}
+  .extras-bar__prices b small{font-size:var(--size-small);font-weight:400;color:rgba(240,239,228,.55)}
+  .infra__note{max-width:var(--grid-max);margin:22px auto 0;font-size:var(--size-copy);color:var(--muted)}
+
+  @media(max-width:1100px){
+    .extras-bar{grid-template-columns:1fr;padding:28px 30px;gap:24px}
+    .extras-bar__group:first-child{padding-right:0}
+    .extras-bar__group + .extras-bar__group{padding-left:0;border-left:0;padding-top:24px;
+      border-top:1px solid rgba(240,239,228,.14)}
+    .extras-bar .extras__art{display:none}
+  }
+  @media(max-width:1000px){.infra__grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
   @media(max-width:560px){
-    .infra{padding:80px 22px 90px}
+    .infra{padding:var(--section-y) 22px}
     .infra__grid{grid-template-columns:1fr}
   }
-
-  /* ===================== ДОПОЛНИТЕЛЬНЫЕ УСЛУГИ =====================
-     Перенесены сюда со «Стоимости» — решение созвона 22.08, см. docs/CALLS.md.
-     Свёрстаны как меню: услуга, отточие, цена. */
-  .extras{position:relative;background:var(--bog);color:var(--cream);
-    padding:130px 46px 140px;overflow:hidden;isolation:isolate}
-  .extras::before{content:"";position:absolute;inset:0;z-index:0;
-    background-image:url("../public/photo/camo.jpg");background-size:560px;background-repeat:repeat;
-    opacity:.1;mix-blend-mode:overlay}
-  .extras>*{position:relative;z-index:2}
-  .extras__art{position:absolute;left:-1%;top:16%;z-index:1;width:min(330px,25vw);
-    mix-blend-mode:screen;opacity:.75;transform:rotate(-7deg);pointer-events:none}
-  .extras .section-head .eyebrow{color:var(--sage)}
-  .extras .section-head h2{color:var(--cream)}
-  .extras .section-head p{color:rgba(240,239,228,.62)}
-
-  .price-list{max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:34px}
-  .price-group h3{font-family:var(--disp);font-weight:600;font-size:var(--size-h3);
-    text-transform:uppercase;letter-spacing:.005em;color:var(--cream);margin-bottom:14px}
-  .price-row{display:flex;align-items:baseline;gap:14px;padding:11px 0;
-    border-bottom:1px solid rgba(240,239,228,.13)}
-  .price-row__name{font-size:var(--size-copy);color:rgba(240,239,228,.74)}
-  .price-row__dots{flex:1;border-bottom:1px dotted rgba(240,239,228,.28);transform:translateY(-4px)}
-  .price-row__sum{font-family:var(--body);font-weight:700;font-size:var(--meta-size);
-    letter-spacing:.04em;color:var(--cream);white-space:nowrap}
-  .extras__note{max-width:960px;margin:38px auto 0;font-size:var(--size-copy);
-    color:rgba(240,239,228,.5)}
-  @media(max-width:640px){.extras{padding:80px 22px 90px}}
 
   /* ===================== CTA ===================== */
   .cta-section{position:relative;background:var(--sand);overflow:hidden;
@@ -241,14 +454,21 @@
   .cta-section__stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
   .cta-section__stage::before{content:"";position:absolute;inset:0;z-index:1;
     background:linear-gradient(180deg,rgba(8,11,5,.5),rgba(8,11,5,.62) 60%,rgba(8,11,5,.72))}
-  .cta-section__content{position:relative;z-index:2;max-width:var(--head-max);margin:0 auto;
+  .cta-section__content{position:relative;z-index:2;max-width:820px;margin:0 auto;
     padding:96px 46px;text-align:center}
   .cta-section__title{color:var(--cream);margin-bottom:22px;text-shadow:0 3px 18px rgba(0,0,0,.5)}
-  .cta-section__lead{font-size:var(--base-size);color:rgba(240,239,228,.86);margin-bottom:38px;
+  .cta-section__lead{font-size:var(--base-size);max-width:var(--head-max);margin-inline:auto;color:rgba(240,239,228,.86);margin-bottom:38px;
     text-shadow:0 2px 12px rgba(0,0,0,.45)}
 
   /* ===================== ФУТЕР ===================== */
   .site-footer{background:var(--bog);color:rgba(240,239,228,.62);padding:86px 46px 34px}
+  /* камуфляж на фоне подвала — тот же, что на карточках «Быстрых фактов»:
+     едва заметен (~4%, screen), просто фактура вместо плоского зелёного (Босс 14.09) */
+  .site-footer{position:relative;isolation:isolate;overflow:hidden}
+  .site-footer::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+    background-image:url("../public/photo/camo.jpg");background-size:420px;background-position:30% 40%;
+    opacity:.04;filter:saturate(.4);mix-blend-mode:screen}
+  .site-footer>*{position:relative;z-index:1}
   .footer__top{max-width:var(--grid-max);margin:0 auto;display:grid;
     grid-template-columns:1.1fr 1fr 1.5fr;gap:60px;padding-bottom:56px;
     border-bottom:1px solid rgba(240,239,228,.14)}
@@ -270,160 +490,318 @@
     .site-footer{padding:64px 22px 28px}
     .footer__top{grid-template-columns:1fr}
   }
+
+  /* ===================== ЛАЙТБОКС (общий на весь сайт) =====================
+     Босс 14.09: любое фото в рамке/карточке открывается на весь экран. Код
+     одинаковый во всех design/*.html. Декоративные картинки исключены списком
+     EXCLUDE в скрипте (артефакты шапки, фоны). Стрелки ← →, Esc, клик по фону. */
+  .zoomable{cursor:zoom-in}
+  .lightbox{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;
+    background:rgba(14,18,10,.93);opacity:0;pointer-events:none;transition:opacity .3s ease}
+  .lightbox.is-open{opacity:1;pointer-events:auto}
+  .lightbox__img{max-width:min(90vw,1600px);max-height:80vh;object-fit:contain;border-radius:6px;
+    box-shadow:0 30px 80px rgba(0,0,0,.55);transform:scale(.97);transition:transform .35s ease}
+  .lightbox.is-open .lightbox__img{transform:scale(1)}
+  .lightbox__cap{position:absolute;left:80px;right:80px;bottom:26px;text-align:center;
+    font-family:var(--body);font-weight:600;font-size:14px;letter-spacing:0;color:var(--cream,#F0EFE4)}
+  .lightbox__count{position:absolute;top:34px;left:0;right:0;text-align:center;
+    font-family:var(--body);font-weight:500;font-size:13px;color:rgba(240,239,228,.6)}
+  .lightbox__btn{position:absolute;width:52px;height:52px;border-radius:50%;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;padding:0;
+    border:1px solid rgba(240,239,228,.35);background:rgba(36,43,27,.65);color:var(--cream,#F0EFE4);
+    transition:border-color .25s,background .25s}
+  .lightbox__btn:hover{border-color:rgba(240,239,228,.8);background:rgba(36,43,27,.9)}
+  /* фокус с клавиатуры — в тон сайта, без синей системной обводки */
+  .lightbox__btn:focus{outline:none}
+  .lightbox__btn:focus-visible{outline:2px solid var(--sage,#B7C299);outline-offset:3px}
+  .lightbox__btn svg{width:20px;height:20px}
+  .lightbox__close{top:20px;right:20px}
+  .lightbox__prev{left:20px;top:50%;margin-top:-26px}
+  .lightbox__next{right:20px;top:50%;margin-top:-26px}
+  .lightbox--single .lightbox__prev,.lightbox--single .lightbox__next,.lightbox--single .lightbox__count{display:none}
+  @media(max-width:640px){
+    .lightbox__prev,.lightbox__next{top:auto;bottom:18px;margin-top:0}
+    .lightbox__cap{bottom:84px;left:20px;right:20px;font-size:15px}
+  }
+  @media(prefers-reduced-motion:reduce){.lightbox,.lightbox__img{transition:none}}
+
+  /* ===================== МОБИЛЬНОЕ МЕНЮ (общее на все страницы, 16.09) =====================
+     Бургер в шапке открывает полноэкранное меню: пункты берутся скриптом из .site-nav__links
+     текущей страницы, ниже — кнопка «Оставить заявку» и телефон. Бургер анимируется в крестик. */
+  .site-nav__burger{position:relative;width:26px;height:22px;border:0;background:none;padding:0;cursor:pointer;flex:none}
+  .site-nav__burger::before,.site-nav__burger::after{content:"";position:absolute;left:0;right:0;height:1.5px;background:var(--cream);
+    transition:transform .3s,top .3s,bottom .3s}
+  .site-nav__burger::before{top:5px}
+  .site-nav__burger::after{bottom:5px}
+  .site-nav__burger:focus-visible{outline:2px solid var(--sage);outline-offset:4px}
+  body.menu-open .site-nav__burger::before{top:10px;transform:rotate(45deg)}
+  body.menu-open .site-nav__burger::after{bottom:10px;transform:rotate(-45deg)}
+  body.menu-open{overflow:hidden}
+  .mnav{position:fixed;inset:0;z-index:150;background:var(--bog);color:var(--cream);isolation:isolate;overflow:auto;
+    display:flex;flex-direction:column;padding:0 22px 26px;
+    opacity:0;visibility:hidden;transform:translateY(-10px);transition:opacity .3s,transform .3s,visibility 0s .3s}
+  .mnav::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+    background-image:url("../public/photo/camo.jpg");background-size:440px;opacity:.085;mix-blend-mode:overlay}
+  body.menu-open .mnav{opacity:1;visibility:visible;transform:none;transition:opacity .3s,transform .3s}
+  .mnav__top{display:flex;align-items:center;justify-content:space-between;height:72px;flex:none}
+  .mnav .site-nav__burger{display:block}
+  .mnav__links{list-style:none;margin:auto 0;display:flex;flex-direction:column}
+  .mnav__links a{display:flex;align-items:center;justify-content:space-between;padding:18px 0;
+    border-top:1px solid rgba(240,239,228,.12);text-decoration:none;color:var(--cream);
+    font-family:var(--body);font-weight:500;font-size:26px;line-height:1.1;letter-spacing:-.01em}
+  .mnav__links li:last-child a{border-bottom:1px solid rgba(240,239,228,.12)}
+  .mnav__links a i{font-style:normal;font-weight:300;font-size:22px;color:var(--olive)}
+  .mnav__links a.is-current{color:var(--sage)}
+  .mnav__links a.is-current i{color:var(--roe,#E86A12)}
+  .mnav__foot{display:flex;flex-direction:column;gap:16px;padding-top:28px;flex:none}
+  .mnav__foot .btn{width:100%}
+  .mnav__phone{text-align:center;color:rgba(240,239,228,.7);text-decoration:none;font-size:var(--size-copy)}
+  @media(min-width:1121px){.mnav{display:none}}
+
+  /* ===================== ТЕЛЕФОН — общий ритм (16.09) ===================== */
+  @media(max-width:640px){
+    /* шкала шрифтов на ступень меньше: десктопные 18/24/20 на телефоне крупноваты (Босс 16.09) */
+    :root{--section-y:80px;--head-gap:40px;--title-gap:18px;
+      --base-size:16px;--size-h3:20px;--size-h3-sm:18px;--size-copy:14px;--size-small:12px;--meta-size:13px}
+    .page-head h1{font-size:34px}
+    body{line-height:1.55}
+    /* карточки на телефоне: между карточками 16, внутри h3→текст 8, заголовок→контент 40 (единая система 16.09) */
+    .facts__grid,.inc-grid,.info-grid,.infra__grid,.packages__grid,.stay-amen{gap:16px}
+    /* карточки, кнопки и поля на телефоне компактнее (Босс 16.09): десктопные 30-px поля и 56-px кнопки великоваты */
+    .btn:not(.btn--sm){padding:15px 30px}
+    .cta-section__content{padding:64px 22px}
+    .site-footer{padding:56px 22px 24px}
+    .footer__top{gap:28px;padding-bottom:36px}
+    .infra-card__body{padding:20px}
+    .infra-card__stub{padding:18px 20px 14px}
+    .extras-bar{padding:22px 20px}
+    .site-nav__right{gap:16px}
+    /* «ИНФРАСТРУКТУРА» и «К НЕЗАБЫВАЕМОМУ» антиквой капсом не влезали в 346 px — H2 на телефоне чуть мельче */
+    .h2{font-size:clamp(27px,7.6vw,36px)}
+    .cta-section__title{font-size:26px}
+  }
+  @media(max-width:430px){
+    .site-nav__right .btn{display:none} /* кнопка есть в меню; в шапке остаются лого и бургер */
+  }
+
+  @media(max-width:640px){
+    /* список домиков: название антиквой мельче, цена под гостями, стрелку прячем */
+    .stay-list__item{grid-template-columns:32px minmax(0,1fr);column-gap:12px;row-gap:6px;padding:16px 4px}
+    .stay-list__no{align-self:start;padding-top:4px}
+    .stay-list__name{font-size:20px}
+    .stay-list__guests{margin-top:4px}
+    .stay-list__price{grid-column:2;text-align:left;display:flex;align-items:baseline;gap:8px;font-size:17px}
+    .stay-list__price small{margin:0}
+    .stay-list__arrow{display:none}
+    .stay-list__item.is-active{padding-left:4px}
+    .stay-amen{grid-template-columns:1fr 1fr}
+  }
 </style>
 </head>
 <body>
 
 <header class="site-header" id="siteHeader">
-  <div class="site-header__inner">
-    <a class="site-header__logo" href="page.html">Кавинка</a>
-    <nav class="site-header__links">
-      <a href="about.html">О туре</a><a class="is-current" href="accommodation.html">Размещение</a>
-      <a href="pricing.html">Тур</a><a href="#">Расписание</a>
-      <a href="#">Программа тура</a><a href="#">Контакты</a>
-    </nav>
-    <a class="btn btn--sm" href="https://t.me/KAVINKA_bot"><span>Оставить заявку</span></a>
-  </div>
+  <nav class="site-nav">
+    <a class="site-nav__logo" href="page.html">Кавинка</a>
+    <div class="site-nav__links">
+      <a href="about.html">О туре</a>
+      <a class="is-current" href="accommodation.html">Размещение</a>
+      <a href="pricing.html">Выбрать тур</a>
+      <a href="program.html">Программа тура</a>
+      <a href="contacts.html">Контакты</a>
+    </div>
+    <div class="site-nav__right">
+      <a class="btn btn--sm" href="https://t.me/KAVINKA_bot"><span>Оставить заявку</span></a>
+      <button class="site-nav__burger" type="button" aria-label="Меню"></button>
+    </div>
+  </nav>
 </header>
 
 <!-- ===================== ШАПКА СТРАНИЦЫ ===================== -->
-<section class="page-hero">
-  <div class="page-hero__panel">
-    <nav class="nav">
-      <a class="nav__logo" href="page.html">Кавинка</a>
-      <div class="nav__links">
-        <a href="about.html">О туре</a><a class="is-current" href="accommodation.html">Размещение</a>
-        <a href="pricing.html">Тур</a><a href="#">Расписание</a>
-        <a href="#">Программа тура</a><a href="#">Контакты</a>
-      </div>
-      <div class="nav__burger" role="button" aria-label="Меню"></div>
-    </nav>
-
-    <div>
-      <div class="eyebrow page-hero__eyebrow reveal" style="--i:0">
-        <span>Кавинская долина</span><span style="opacity:.5">•</span><span>4 домика</span>
-      </div>
-      <h1 class="reveal" style="--i:1">Размещение</h1>
-      <p class="page-hero__lead reveal" style="--i:2">
-        KAVINKA — это спокойствие дикой природы, комфорт, уют.
-      </p>
-      <a class="btn reveal" style="--i:3" href="https://t.me/KAVINKA_bot"><span>Забронировать домик</span></a>
+<section class="page-head page-head--inner">
+  <nav class="site-nav">
+    <a class="site-nav__logo" href="page.html">Кавинка</a>
+    <div class="site-nav__links">
+      <a href="about.html">О туре</a>
+      <a class="is-current" href="accommodation.html">Размещение</a>
+      <a href="pricing.html">Выбрать тур</a>
+      <a href="program.html">Программа тура</a>
+      <a href="contacts.html">Контакты</a>
     </div>
-
-    <div></div>
-  </div>
-
-  <div class="page-hero__shot">
-    <img src="../public/photo/pier-base-from-river.jpg" alt="База «Кавинка» с воды: домики и пирс на берегу Тауя">
+    <div class="site-nav__right">
+      <a class="btn btn--sm" href="https://t.me/KAVINKA_bot"><span>Оставить заявку</span></a>
+      <button class="site-nav__burger" type="button" aria-label="Меню"></button>
+    </div>
+  </nav>
+  <div class="page-head__body">
+    <img class="page-head__art page-head__art--bear" src="../public/photo/artifacts/artifact-bear-walking.jpg" alt="">
+    <div class="page-head__crumbs reveal" style="--i:0"><a href="page.html">Главная</a><i></i><span>Размещение</span></div>
+    <h1 class="reveal" style="--i:1">Размещение</h1>
   </div>
 </section>
 
+<!-- Бегущая строка — сразу под первым экраном, на всех страницах -->
+<div class="ticker">
+  <div class="ticker__track" id="tickerTrack"></div>
+</div>
+
 <!-- ===================== ДОМИКИ ===================== -->
-<section class="cottages soft" id="cottages">
-  <div class="section-head reveal">
-    <div class="eyebrow"><span>Где жить</span></div>
-    <h2 class="h2">Четыре <em>домика</em></h2>
-    <p>От двоих до тринадцати гостей. Все с кухней, отоплением, Wi-Fi и своей мангальной зоной.</p>
+<section class="stay soft" id="cottages">
+  <!-- иконки удобств: тонкий line-art, как в «Быстрых фактах» -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-kitchen" viewBox="0 0 24 24"><path d="M4 10h16v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M2 10h2M20 10h2M9.5 6.5c0-1.2 1-1.2 1-2.5M13.5 6.5c0-1.2 1-1.2 1-2.5"/></symbol>
+    <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M2.5 9a14 14 0 0 1 19 0M5.5 12.5a9.5 9.5 0 0 1 13 0M8.6 16a5 5 0 0 1 6.8 0"/><path d="M12 19.3h.01"/></symbol>
+    <symbol id="i-heat" viewBox="0 0 24 24"><path d="M12 21c-3.8 0-6.5-2.6-6.5-6.2 0-3.4 2.9-5.4 3.4-8.8 2 1.3 3 3 3.2 4.7 1.2-1.2 1.8-2.6 1.8-4.2 2.7 2 4.6 5 4.6 8.3 0 3.6-2.7 6.2-6.5 6.2z"/></symbol>
+    <symbol id="i-wc" viewBox="0 0 24 24"><path d="M12 3a4.5 4.5 0 0 1 4.5 4.5c0 4-4.5 9.5-4.5 9.5S7.5 11.5 7.5 7.5A4.5 4.5 0 0 1 12 3z"/><path d="M5 21h14"/></symbol>
+    <symbol id="i-grill" viewBox="0 0 24 24"><path d="M4 10h16a8 8 0 0 1-16 0z"/><path d="M8.5 16.5 6.5 21M15.5 16.5l2 4.5M12 18v3M9.5 6.5c0-1.2 1-1.2 1-2.5M13.5 6.5c0-1.2 1-1.2 1-2.5"/></symbol>
+    <symbol id="i-bed" viewBox="0 0 24 24"><path d="M3 19V6M3 14h18v5M21 14v-1.5A3.5 3.5 0 0 0 17.5 9H11v5"/><circle cx="7" cy="11" r="1.7"/></symbol>
+    <symbol id="i-bar" viewBox="0 0 24 24"><path d="M5 4h14l-7 8.5zM12 12.5V20M8 20h8"/></symbol>
+    <symbol id="i-stairs" viewBox="0 0 24 24"><path d="M3 20h5v-5h5v-5h5V5h3"/></symbol>
+    <symbol id="i-door" viewBox="0 0 24 24"><path d="M6 21V3h12v18M3 21h18"/><path d="M14.5 12h.01"/></symbol>
+  </svg>
+
+  <div class="stay__grid">
+    <div class="stay__side">
+      <div class="stay__head reveal">
+        <div class="eyebrow"><span>Где жить</span></div>
+        <h2 class="h2">Четыре <em>домика</em></h2>
+        <p>От двоих до тринадцати гостей. Все с кухней, отоплением, Wi-Fi и своей мангальной зоной.</p>
+      </div>
+
+      <div class="stay-list" id="stayList">
+        <!-- порядок — по цене, от дешёвого к дорогому (Босс 15.09) -->
+        <button class="stay-list__item is-active reveal" style="--i:0" data-index="0" type="button">
+          <span class="stay-list__no">01</span>
+          <span><span class="stay-list__name">Хижина Рыбака</span><span class="stay-list__guests">3–4 гостя</span></span>
+          <span class="stay-list__price">40 000 ₽<small>в сутки</small></span>
+          <span class="stay-list__arrow">→</span>
+        </button>
+        <button class="stay-list__item reveal" style="--i:1" data-index="1" type="button">
+          <span class="stay-list__no">02</span>
+          <span><span class="stay-list__name">Россия</span><span class="stay-list__guests">5–6 гостей</span></span>
+          <span class="stay-list__price">80 000 ₽<small>в сутки</small></span>
+          <span class="stay-list__arrow">→</span>
+        </button>
+        <button class="stay-list__item reveal" style="--i:2" data-index="2" type="button">
+          <span class="stay-list__no">03</span>
+          <span><span class="stay-list__name">Весёлая Компания</span><span class="stay-list__guests">7–10 гостей</span></span>
+          <span class="stay-list__price">100 000 ₽<small>в сутки</small></span>
+          <span class="stay-list__arrow">→</span>
+        </button>
+        <button class="stay-list__item reveal" style="--i:3" data-index="3" type="button">
+          <span class="stay-list__no">04</span>
+          <span><span class="stay-list__name">Отель КАВИНКА</span><span class="stay-list__guests">10–13 гостей</span></span>
+          <span class="stay-list__price">150 000 ₽<small>в сутки</small></span>
+          <span class="stay-list__arrow">→</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="stay__main reveal" style="--i:2">
+      <div class="stay-stage" id="stayStage">
+        <div class="stay-stage__set" data-index="3">
+          <img class="stay-stage__shot is-active" src="../public/photo/cottage-hotel-facade.jpg" alt="Отель КАВИНКА — главный корпус с зелёной крышей">
+          <img class="stay-stage__shot" src="../public/photo/cottage-hotel-kavinka.jpg" alt="Отель КАВИНКА — вход с крыльцом и резной вывеской">
+          <img class="stay-stage__shot" src="../public/photo/cottage-hotel-sign.jpg" alt="Резная вывеска HOTEL КАВИНКА с рыбой">
+          <img class="stay-stage__shot" src="../public/photo/lounge-foosball.jpg" alt="Комната отдыха с настольным футболом">
+          <img class="stay-stage__shot" src="../public/photo/interior-trophies-1.jpg" alt="Интерьер отеля с трофеями">
+        </div>
+        <div class="stay-stage__set is-active" data-index="0">
+          <img class="stay-stage__shot is-active" src="../public/photo/cottage-hut-exterior.jpg" alt="Хижина Рыбака — сруб с резным медведем у входа">
+          <img class="stay-stage__shot" src="../public/photo/cottage-hut-fisherman.jpg" alt="Хижина Рыбака — сруб с красной крышей и лавкой у входа">
+          <img class="stay-stage__shot" src="../public/photo/cottage-hut-bunks.jpg" alt="Двухъярусные кровати в Хижине Рыбака">
+          <img class="stay-stage__shot" src="../public/photo/cottage-hut-kitchen.jpg" alt="Кухонный уголок в Хижине Рыбака">
+          <img class="stay-stage__shot" src="../public/photo/cottage-hut-stove.jpg" alt="Печь и спальное место в Хижине Рыбака">
+        </div>
+        <div class="stay-stage__set" data-index="2">
+          <img class="stay-stage__shot is-active" src="../public/photo/cottage-merry-exterior.jpg" alt="Весёлая Компания — двухэтажный домик с красной крышей">
+          <img class="stay-stage__shot" src="../public/photo/cottage-merry-company.jpg" alt="Весёлая Компания — домик с резным орлом на коньке">
+          <img class="stay-stage__shot" src="../public/photo/cottage-merry-kitchen.jpg" alt="Кухня-столовая с печью">
+          <img class="stay-stage__shot" src="../public/photo/cottage-merry-attic.jpg" alt="Мансарда со спальными местами">
+          <img class="stay-stage__shot" src="../public/photo/cottage-merry-bunks.jpg" alt="Второй этаж с двухъярусными кроватями">
+          <img class="stay-stage__shot" src="../public/photo/cottage-merry-room.jpg" alt="Комната с кроватью у окна">
+        </div>
+        <div class="stay-stage__set" data-index="1">
+          <img class="stay-stage__shot is-active" src="../public/photo/cottage-russia-exterior.jpg" alt="Домик Россия — сруб с зелёной крышей">
+          <img class="stay-stage__shot" src="../public/photo/cottage-russia.jpg" alt="Домик Россия — вид с другой стороны">
+          <img class="stay-stage__shot" src="../public/photo/cottage-russia-dining.jpg" alt="Столовая с длинным столом">
+          <img class="stay-stage__shot" src="../public/photo/cottage-russia-kitchen.jpg" alt="Кухня в домике Россия">
+          <img class="stay-stage__shot" src="../public/photo/cottage-russia-bunks.jpg" alt="Спальня с двухъярусными кроватями">
+          <img class="stay-stage__shot" src="../public/photo/cottage-russia-bedroom.jpg" alt="Спальня с кроватью и двухъярусной кроватью">
+        </div>
+        <!-- лента кадров строится скриптом из кадров активного домика -->
+        <div class="stay-thumbs" id="stayThumbs"></div>
+        <button class="stay-arrow stay-arrow--prev" id="stayPrev" type="button" aria-label="Предыдущее фото"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <button class="stay-arrow stay-arrow--next" id="stayNext" type="button" aria-label="Следующее фото"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+      </div>
+
+      <div class="stay-info" id="stayInfo">
+        <div class="stay-info__panel" data-index="3">
+          <ul class="stay-amen">
+            <li><svg><use href="#i-door"/></svg>5 комнат по 2 чел.</li>
+            <li><svg><use href="#i-bed"/></svg>Мастер-спальня</li>
+            <li><svg><use href="#i-bar"/></svg>Бар с комнатой отдыха</li>
+            <li><svg><use href="#i-kitchen"/></svg>Кухня</li>
+            <li><svg><use href="#i-wifi"/></svg>Wi-Fi</li>
+            <li><svg><use href="#i-heat"/></svg>Отопление</li>
+            <li><svg><use href="#i-wc"/></svg>Туалет</li>
+            <li><svg><use href="#i-grill"/></svg>Мангальная зона</li>
+          </ul>
+        </div>
+        <div class="stay-info__panel is-active" data-index="0">
+          <ul class="stay-amen">
+            <li><svg><use href="#i-kitchen"/></svg>Кухня</li>
+            <li><svg><use href="#i-wifi"/></svg>Wi-Fi</li>
+            <li><svg><use href="#i-heat"/></svg>Отопление</li>
+            <li><svg><use href="#i-wc"/></svg>Туалет</li>
+            <li><svg><use href="#i-grill"/></svg>Мангальная зона</li>
+          </ul>
+        </div>
+        <div class="stay-info__panel" data-index="2">
+          <ul class="stay-amen">
+            <li><svg><use href="#i-stairs"/></svg>2 этажа</li>
+            <li><svg><use href="#i-bed"/></svg>Отдельная спальня</li>
+            <li><svg><use href="#i-kitchen"/></svg>Кухня</li>
+            <li><svg><use href="#i-wifi"/></svg>Wi-Fi</li>
+            <li><svg><use href="#i-heat"/></svg>Отопление</li>
+            <li><svg><use href="#i-wc"/></svg>Туалет</li>
+            <li><svg><use href="#i-grill"/></svg>Мангальная зона</li>
+          </ul>
+        </div>
+        <div class="stay-info__panel" data-index="1">
+          <ul class="stay-amen">
+            <li><svg><use href="#i-bed"/></svg>2 двуспальные кровати</li>
+            <li><svg><use href="#i-bed"/></svg>3 одноместные</li>
+            <li><svg><use href="#i-kitchen"/></svg>Кухня</li>
+            <li><svg><use href="#i-wifi"/></svg>Wi-Fi</li>
+            <li><svg><use href="#i-heat"/></svg>Отопление</li>
+            <li><svg><use href="#i-wc"/></svg>Туалет</li>
+            <li><svg><use href="#i-grill"/></svg>Мангальная зона</li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
-
-  <article class="cottage reveal">
-    <div class="cottage__shot">
-      <span class="cottage__no">01</span>
-      <img src="../public/photo/cottage-hotel-facade.jpg" alt="Отель КАВИНКА — главный корпус с зелёной крышей">
-    </div>
-    <div class="cottage__text">
-      <div class="cottage__cap">10–13 <u>гостей</u></div>
-      <h3 class="cottage__name">Отель КАВИНКА</h3>
-      <ul class="amenities">
-        <li>5 комнат по 2 чел.</li><li>Мастер-спальня</li><li>Бар с комнатой отдыха</li>
-        <li>Кухня</li><li>Wi-Fi</li><li>Отопление</li><li>Туалет</li><li>Мангальная зона</li>
-      </ul>
-      <div class="cottage__price">аренда <b>150 000 ₽</b> в сутки</div>
-      <div class="thumbs">
-        <img src="../public/photo/cottage-hotel-sign.jpg" alt="Резная вывеска HOTEL КАВИНКА с рыбой">
-        <img src="../public/photo/lounge-foosball.jpg" alt="Комната отдыха с настольным футболом">
-        <img src="../public/photo/interior-trophies-1.jpg" alt="Интерьер отеля с трофеями">
-      </div>
-    </div>
-  </article>
-
-  <article class="cottage reveal">
-    <div class="cottage__shot">
-      <span class="cottage__no">02</span>
-      <img src="../public/photo/cottage-hut-exterior.jpg" alt="Хижина Рыбака — сруб с резным медведем у входа">
-    </div>
-    <div class="cottage__text">
-      <div class="cottage__cap">3–4 <u>гостя</u></div>
-      <h3 class="cottage__name">Хижина Рыбака</h3>
-      <ul class="amenities">
-        <li>Кухня</li><li>Wi-Fi</li><li>Отопление</li><li>Туалет</li><li>Мангальная зона</li>
-      </ul>
-      <div class="cottage__price">аренда <b>40 000 ₽</b> в сутки</div>
-      <div class="thumbs">
-        <img src="../public/photo/cottage-hut-bunks.jpg" alt="Двухъярусные кровати в Хижине Рыбака">
-        <img src="../public/photo/cottage-hut-kitchen.jpg" alt="Кухонный уголок в Хижине Рыбака">
-        <img src="../public/photo/cottage-hut-stove.jpg" alt="Печь и спальное место в Хижине Рыбака">
-      </div>
-    </div>
-  </article>
-
-  <article class="cottage reveal">
-    <div class="cottage__shot">
-      <span class="cottage__no">03</span>
-      <img src="../public/photo/cottage-merry-exterior.jpg" alt="Весёлая Компания — двухэтажный домик с красной крышей">
-    </div>
-    <div class="cottage__text">
-      <div class="cottage__cap">7–10 <u>гостей</u></div>
-      <h3 class="cottage__name">Весёлая Компания</h3>
-      <ul class="amenities">
-        <li>2 этажа</li><li>Отдельная спальня</li><li>Кухня</li><li>Wi-Fi</li>
-        <li>Отопление</li><li>Туалет</li><li>Мангальная зона</li>
-      </ul>
-      <div class="cottage__price">аренда <b>100 000 ₽</b> в сутки</div>
-      <div class="thumbs">
-        <img src="../public/photo/cottage-merry-kitchen.jpg" alt="Кухня-столовая с печью">
-        <img src="../public/photo/cottage-merry-attic.jpg" alt="Мансарда со спальными местами">
-        <img src="../public/photo/cottage-merry-bunks.jpg" alt="Второй этаж с двухъярусными кроватями">
-      </div>
-    </div>
-  </article>
-
-  <article class="cottage reveal">
-    <div class="cottage__shot">
-      <span class="cottage__no">04</span>
-      <img src="../public/photo/cottage-russia-exterior.jpg" alt="Домик Россия — сруб с зелёной крышей">
-    </div>
-    <div class="cottage__text">
-      <div class="cottage__cap">5–6 <u>гостей</u></div>
-      <h3 class="cottage__name">Россия</h3>
-      <ul class="amenities">
-        <li>2 двуспальные кровати</li><li>3 одноместные</li><li>Кухня</li><li>Wi-Fi</li>
-        <li>Отопление</li><li>Туалет</li><li>Мангальная зона</li>
-      </ul>
-      <div class="cottage__price">аренда <b>80 000 ₽</b> в сутки</div>
-      <div class="thumbs">
-        <img src="../public/photo/cottage-russia-dining.jpg" alt="Столовая с длинным столом">
-        <img src="../public/photo/cottage-russia-kitchen.jpg" alt="Кухня в домике Россия">
-        <img src="../public/photo/cottage-russia-bunks.jpg" alt="Спальня с двухъярусными кроватями">
-      </div>
-    </div>
-  </article>
 </section>
 
 <!-- ===================== ВРЕЗКА-ЦИТАТА ===================== -->
 <section class="quote">
-  <img class="quote__art" src="../public/photo/artifacts/artifact-bear-standing.jpg" alt="">
+  <img class="quote__art" src="../public/photo/artifacts/artifact-bear-cub.jpg" alt="">
   <div class="quote__inner reveal">
-    <blockquote>Кавинка растёт. Скоро здесь появятся новые домики</blockquote>
+    <div>
+      <div class="eyebrow"><span>Что дальше</span></div>
+      <h2 class="h2">Кавинка <em>растёт</em></h2>
+      <p class="quote__lead">Скоро здесь появятся новые домики</p>
+    </div>
   </div>
 </section>
 
 <!-- ===================== ИНФРАСТРУКТУРА ===================== -->
 <section class="infra soft" id="infra">
   <div class="section-head reveal">
-    <div class="eyebrow"><span>На территории</span></div>
-    <h2 class="h2">Инфраструктура <em>базы</em></h2>
-    <p>Всё в пяти минутах от домиков — на берегу, под соснами.</p>
+    <div class="eyebrow"><span>На территории</span></div>
+    <h2 class="h2">Инфраструктура <em>и&nbsp;услуги</em></h2>
+    <p>Всё в пяти минутах от домиков — на берегу, под соснами.</p>
   </div>
 
   <div class="infra__grid">
@@ -431,7 +809,10 @@
       <img src="../public/photo/banya-house-day.jpg" alt="Русская баня — сруб с вывеской среди деревьев">
       <div class="infra-card__body">
         <h3>Русская баня</h3>
-        <p>Парная на берегу реки, комната отдыха и купель с видом на Тауй.</p>
+        <p>Парная на берегу реки, комната отдыха и купель с видом на Тауй.</p>
+      </div>
+      <div class="infra-card__stub">
+        <div class="stub-row"><span class="stub-row__name">Баня<small>2 часа</small></span><span class="stub-row__sum">20 000 ₽</span></div>
       </div>
     </article>
 
@@ -439,7 +820,11 @@
       <img src="../public/photo/gazebo-table.jpg" alt="Просторная беседка с длинным столом и видом на реку">
       <div class="infra-card__body">
         <h3>Просторная беседка</h3>
-        <p>Большой обеденный стол, лавки и вид на реку с закатом.</p>
+        <p>Большой обеденный стол, лавки и вид на реку с закатом.</p>
+      </div>
+      <div class="infra-card__stub">
+        <div class="stub-row"><span class="stub-row__name">Повар<small>3–5 человек</small></span><span class="stub-row__sum">18 000 ₽ <small>/ день</small></span></div>
+        <div class="stub-row"><span class="stub-row__name">Повар<small>5–10 человек</small></span><span class="stub-row__sum">30 000 ₽ <small>/ день</small></span></div>
       </div>
     </article>
 
@@ -447,7 +832,10 @@
       <img src="../public/photo/gazebo-fireplace.jpg" alt="Зона барбекю: открытый очаг под навесом">
       <div class="infra-card__body">
         <h3>Зона барбекю</h3>
-        <p>Открытый очаг под навесом — приготовить улов сразу после рыбалки.</p>
+        <p>Открытый очаг под навесом — приготовить улов сразу после рыбалки.</p>
+      </div>
+      <div class="infra-card__stub">
+        <div class="stub-row"><span class="stub-row__name">Переработка улова<small>почистить, посолить, завялить, упаковать</small></span><span class="stub-row__sum">1 000 ₽ <small>/ кг</small></span></div>
       </div>
     </article>
 
@@ -455,48 +843,34 @@
       <img src="../public/photo/pier-deck-view.jpg" alt="Пирс с лавками и видом на реку">
       <div class="infra-card__body">
         <h3>Пирс</h3>
-        <p>Настил с лавками у самой воды, здесь же стоят водомётные лодки.</p>
+        <p>Настил с лавками у самой воды, здесь же стоят водомётные лодки.</p>
+      </div>
+      <div class="infra-card__stub">
+        <div class="stub-row"><span class="stub-row__name">Прокат спиннинга<small>тест на выбор</small></span><span class="stub-row__sum">3 000 ₽ <small>/ день</small></span></div>
+        <div class="stub-row"><span class="stub-row__name">Локальная экскурсия<small>группа до 4 человек</small></span><span class="stub-row__sum">30 000 ₽</span></div>
       </div>
     </article>
   </div>
-</section>
 
-<!-- ===================== ДОПОЛНИТЕЛЬНЫЕ УСЛУГИ ===================== -->
-<section class="extras" id="extras">
-  <img class="extras__art" src="../public/photo/artifacts/artifact-grayling.jpg" alt="">
-  <div class="section-head reveal">
-    <div class="eyebrow"><span>Сверх проживания</span></div>
-    <h2 class="h2">Дополнительные <em>услуги</em></h2>
-    <p>Что можно добавить к проживанию — оплачивается отдельно.</p>
-  </div>
-
-  <div class="price-list">
-    <div class="price-group reveal" style="--i:0">
-      <h3>Трансфер</h3>
-      <div class="price-row"><span class="price-row__name">Магадан — Кавинка — Магадан, 3–4 человека</span><span class="price-row__dots"></span><span class="price-row__sum">50 000 ₽</span></div>
-      <div class="price-row"><span class="price-row__name">Магадан — Кавинка — Магадан, 5–7 человек</span><span class="price-row__dots"></span><span class="price-row__sum">90 000 ₽</span></div>
-      <div class="price-row"><span class="price-row__name">Магадан — Кавинка — Магадан, 8–10 человек</span><span class="price-row__dots"></span><span class="price-row__sum">130 000 ₽</span></div>
+  <div class="extras-bar reveal" id="extras">
+    <img class="extras__art" src="../public/photo/artifacts/artifact-grayling.jpg" alt="">
+    <div class="extras-bar__group">
+      <div class="extras-bar__head"><h3>Трансфер</h3><span>Магадан — Кавинка — Магадан</span></div>
+      <ul class="extras-bar__prices">
+        <li><span>3–4 человека</span><b>50 000 ₽</b></li>
+        <li><span>5–7 человек</span><b>90 000 ₽</b></li>
+        <li><span>8–10 человек</span><b>130 000 ₽</b></li>
+      </ul>
     </div>
-
-    <div class="price-group reveal" style="--i:1">
-      <h3>На базе</h3>
-      <div class="price-row"><span class="price-row__name">Баня, 2 часа</span><span class="price-row__dots"></span><span class="price-row__sum">20 000 ₽</span></div>
-      <div class="price-row"><span class="price-row__name">Повар, 3–5 человек</span><span class="price-row__dots"></span><span class="price-row__sum">18 000 ₽ / день</span></div>
-      <div class="price-row"><span class="price-row__name">Повар, 5–10 человек</span><span class="price-row__dots"></span><span class="price-row__sum">30 000 ₽ / день</span></div>
-      <div class="price-row"><span class="price-row__name">Переработка улова — почистить, посолить, завялить, упаковать</span><span class="price-row__dots"></span><span class="price-row__sum">1 000 ₽ / кг</span></div>
-    </div>
-
-    <div class="price-group reveal" style="--i:2">
-      <h3>На рыбалке</h3>
-      <div class="price-row"><span class="price-row__name">Прокат спиннинга, тест на выбор</span><span class="price-row__dots"></span><span class="price-row__sum">3 000 ₽ / день</span></div>
-      <div class="price-row"><span class="price-row__name">Локальная экскурсия, группа до 4 человек</span><span class="price-row__dots"></span><span class="price-row__sum">30 000 ₽</span></div>
-      <div class="price-row"><span class="price-row__name">Фото- и видеосъёмка, группа до 4 человек</span><span class="price-row__dots"></span><span class="price-row__sum">15 000 ₽ / день</span></div>
+    <div class="extras-bar__group">
+      <div class="extras-bar__head"><h3>Фото- и видеосъёмка на рыбалке</h3><span>группа до 4 человек</span></div>
+      <ul class="extras-bar__prices">
+        <li><span>за день</span><b>15 000 ₽</b></li>
+      </ul>
     </div>
   </div>
 
-  <p class="extras__note reveal">
-    Рыболовное снаряжение можно выслать заранее через СДЭК или взять на месте напрокат.
-  </p>
+  <p class="infra__note reveal">Рыболовное снаряжение можно выслать заранее через СДЭК или взять на месте напрокат.</p>
 </section>
 
 <!-- ===================== CTA ===================== -->
@@ -505,7 +879,7 @@
     <video src="../public/video/cta-trout.mp4" autoplay muted loop playsinline></video>
     <div class="cta-section__content reveal">
       <h2 class="h2 cta-section__title">Выбрали домик?</h2>
-      <p class="cta-section__lead">Напишите в Telegram — забронируем даты и подберём тур под вашу компанию</p>
+      <p class="cta-section__lead">Напишите в Telegram — забронируем даты и подберём тур под вашу компанию</p>
       <a class="btn" href="https://t.me/KAVINKA_bot"><span>Оставить заявку</span></a>
     </div>
   </div>
@@ -518,33 +892,89 @@
       <span class="footer__logo">Кавинка</span>
       <div class="footer__label">Контакты</div>
       <p>г. Магадан</p>
-      <a href="tel:+79140000000">+7 914 000-00-00</a>
+      <a href="tel:+79140333555">+7 914 0333 555</a>
     </div>
     <div class="footer__col">
       <div class="footer__label">Навигация</div>
-      <a href="about.html">О туре</a>
+      <a href="about.html">О туре</a>
       <a href="accommodation.html">Размещение</a>
-      <a href="pricing.html">Тур</a>
-      <a href="#">Расписание</a>
-      <a href="#">Программа тура</a>
-      <a href="#">Контакты</a>
+      <a href="pricing.html">Выбрать тур</a>
+      <a href="program.html">Программа тура</a>
+      <a href="contacts.html">Контакты</a>
     </div>
     <div class="footer__col footer__col--about">
-      <div class="footer__label">О компании</div>
-      <p>Рыболовная база «КАВИНКА» расположена на границе с Магаданским государственным заповедником, на берегу реки Тауй.</p>
+      <div class="footer__label">О компании</div>
+      <p>Рыболовная база «КАВИНКА» расположена на границе с Магаданским государственным заповедником, на берегу реки Тауй.</p>
     </div>
   </div>
   <div class="footer__bottom">
     <span>© 2026 КАВИНКА. Все права защищены.</span>
-    <span>Сайт носит информационный характер и не является публичной офертой.</span>
+    <span>Сайт носит информационный характер и не является публичной офертой.</span>
   </div>
 </footer>
 
 <script>
+  // Бегущая строка — одинаковая на всех страницах
+  const tickerItems = [
+    { text: 'Пароль в мир дикой природы', quote: true },
+    { text: 'Комфортные коттеджи' },
+    { text: '5 видов лососевых' },
+    { text: '4 гостя на одного гида' },
+    { text: 'Граница заповедника' },
+    { text: 'Основано в 2005' },
+  ];
+  const track = document.getElementById('tickerTrack');
+  function renderTicker() {
+    const html = tickerItems.map(it =>
+      `<span class="ticker__item">${it.quote ? `«${it.text}»` : it.text}</span><span class="ticker__dot">•</span>`
+    ).join('');
+    track.innerHTML = html + html;
+  }
+  renderTicker();
+
+  // Домики: строка списка переключает сцену и удобства, лента — кадр внутри домика
+  const stayItems = document.querySelectorAll('#stayList .stay-list__item');
+  const staySets = document.querySelectorAll('#stayStage .stay-stage__set');
+  const stayPanels = document.querySelectorAll('#stayInfo .stay-info__panel');
+  const stayThumbs = document.getElementById('stayThumbs');
+  let stayCurSet = null, stayCurShot = 0;
+  function showShot(set, n) {
+    const shots = set.querySelectorAll('.stay-stage__shot');
+    n = (n + shots.length) % shots.length; // стрелки листают по кругу
+    stayCurSet = set; stayCurShot = n;
+    shots.forEach((im, k) => im.classList.toggle('is-active', k === n));
+    stayThumbs.querySelectorAll('button').forEach((b, k) => b.classList.toggle('is-active', k === n));
+  }
+  document.getElementById('stayPrev').addEventListener('click', () => showShot(stayCurSet, stayCurShot - 1));
+  document.getElementById('stayNext').addEventListener('click', () => showShot(stayCurSet, stayCurShot + 1));
+  function showStay(i) {
+    stayItems.forEach(el => el.classList.toggle('is-active', el.dataset.index === i));
+    stayPanels.forEach(el => el.classList.toggle('is-active', el.dataset.index === i));
+    let set;
+    staySets.forEach(el => { const on = el.dataset.index === i; el.classList.toggle('is-active', on); if (on) set = el; });
+    stayThumbs.innerHTML = '';
+    set.querySelectorAll('.stay-stage__shot').forEach((im, k) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('aria-label', im.alt);
+      b.innerHTML = `<img src="${im.getAttribute('src')}" alt="" data-nozoom>`;
+      b.addEventListener('click', () => showShot(set, k));
+      stayThumbs.appendChild(b);
+    });
+    showShot(set, 0);
+  }
+  // Только по клику (Босс 15.09): по наведению домик сбивался, пока ведёшь мышь к фото
+  stayItems.forEach(item => {
+    item.addEventListener('click', () => { if (!item.classList.contains('is-active')) showStay(item.dataset.index); });
+  });
+  showStay('0');
+
+  // Закреплённая шапка — выезжает, когда первый экран прокручен
   const siteHeader = document.getElementById('siteHeader');
+  const firstScreen = document.querySelector('.hero, .page-head');
   let headerTicking = false;
   function updateHeader() {
-    siteHeader.classList.toggle('is-visible', window.scrollY > window.innerHeight * 0.6);
+    siteHeader.classList.toggle('is-visible', window.scrollY > firstScreen.offsetHeight - 60);
     headerTicking = false;
   }
   window.addEventListener('scroll', () => {
@@ -568,5 +998,56 @@
   }
 </script>
 
+
+<script>
+  /* ЛАЙТБОКС — общий на весь сайт, код одинаковый во всех design/*.html */
+  (function(){
+    var EXCLUDE='.page-head__art,.route__bg,.extras__art,.quote__art,.hero img,.site-nav img,.lightbox img,[data-nozoom]';
+    var all=[].slice.call(document.querySelectorAll('img')).filter(function(i){return !i.closest(EXCLUDE);});
+    if(!all.length) return;
+    var list=[],seen={};
+    all.forEach(function(i){var k=i.getAttribute('src'); if(!seen[k]){seen[k]=1; list.push(i);} i.classList.add('zoomable');});
+    var ico=function(d){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+d+'</svg>';};
+    var lb=document.createElement('div'); lb.className='lightbox'; lb.setAttribute('role','dialog'); lb.setAttribute('aria-modal','true'); lb.setAttribute('aria-label','Просмотр фото');
+    lb.innerHTML='<img class="lightbox__img" alt=""><div class="lightbox__count"></div><div class="lightbox__cap"></div>'+
+      '<button class="lightbox__btn lightbox__close" type="button" aria-label="Закрыть">'+ico('<path d="M6 6l12 12M18 6L6 18"/>')+'</button>'+
+      '<button class="lightbox__btn lightbox__prev" type="button" aria-label="Предыдущее фото">'+ico('<path d="M15 5l-7 7 7 7"/>')+'</button>'+
+      '<button class="lightbox__btn lightbox__next" type="button" aria-label="Следующее фото">'+ico('<path d="M9 5l7 7-7 7"/>')+'</button>';
+    document.body.appendChild(lb);
+    if(list.length<2) lb.classList.add('lightbox--single');
+    var big=lb.querySelector('.lightbox__img'),cap=lb.querySelector('.lightbox__cap'),cnt=lb.querySelector('.lightbox__count'),idx=0,last=null;
+    function caption(im){var f=im.closest('figure'),c=f&&f.querySelector('figcaption');return (c&&c.textContent.trim())||im.alt||'';}
+    function show(n){idx=(n+list.length)%list.length;var im=list[idx];big.src=im.getAttribute('src');big.alt=im.alt;cap.textContent=caption(im);cnt.textContent=(idx+1)+' / '+list.length;}
+    function open(n){last=document.activeElement;show(n);lb.classList.add('is-open');document.documentElement.style.overflow='hidden';lb.querySelector('.lightbox__close').focus();}
+    function close(){lb.classList.remove('is-open');document.documentElement.style.overflow='';if(last&&last.focus)last.focus();}
+    all.forEach(function(i){i.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();
+      var k=i.getAttribute('src');for(var n=0;n<list.length;n++){if(list[n].getAttribute('src')===k){open(n);break;}}});});
+    lb.querySelector('.lightbox__close').addEventListener('click',close);
+    lb.querySelector('.lightbox__prev').addEventListener('click',function(){show(idx-1);});
+    lb.querySelector('.lightbox__next').addEventListener('click',function(){show(idx+1);});
+    lb.addEventListener('click',function(e){if(e.target===lb)close();});
+    document.addEventListener('keydown',function(e){if(!lb.classList.contains('is-open'))return;
+      if(e.key==='Escape')close(); else if(e.key==='ArrowLeft')show(idx-1); else if(e.key==='ArrowRight')show(idx+1);});
+  })();
+</script>
+
+<script>
+  /* МОБИЛЬНОЕ МЕНЮ — общий код на всех design/*.html: строится из .site-nav__links текущей страницы */
+  (function(){
+    var links=document.querySelector('.site-nav__links'); if(!links) return;
+    var m=document.createElement('div'); m.className='mnav'; m.setAttribute('aria-hidden','true');
+    m.innerHTML='<div class="mnav__top"><a class="site-nav__logo" href="page.html">Кавинка</a>'+
+      '<button class="site-nav__burger" type="button" aria-label="Закрыть меню"></button></div>'+
+      '<ul class="mnav__links">'+[].map.call(links.querySelectorAll('a'),function(a){
+        return '<li><a href="'+a.getAttribute('href')+'"'+(a.classList.contains('is-current')?' class="is-current"':'')+'>'+a.textContent+'<i>→</i></a></li>';}).join('')+'</ul>'+
+      '<div class="mnav__foot"><a class="btn" href="https://t.me/KAVINKA_bot"><span>Оставить заявку</span></a>'+
+      '<a class="mnav__phone" href="tel:+79140333555">+7 914 0333 555</a></div>';
+    document.body.appendChild(m);
+    function toggle(o){document.body.classList.toggle('menu-open',o);m.setAttribute('aria-hidden',!o);}
+    document.querySelectorAll('.site-nav__burger').forEach(function(b){b.addEventListener('click',function(){toggle(!document.body.classList.contains('menu-open'));});});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')toggle(false);});
+    m.querySelectorAll('.mnav__links a').forEach(function(a){a.addEventListener('click',function(){toggle(false);});});
+  })();
+</script>
 </body>
 </html>

@@ -14,11 +14,18 @@ export const site = {
   coordinates: "59°47′32.61″ ● 148°16′24.23″",
   season: "10 июня — 30 сентября",
   contacts: {
-    // TODO: плейсхолдер из старого сайта — нужен настоящий номер
-    phone: "+7 914 000-00-00",
-    phoneHref: "tel:+79140000000",
-    address:
-      "Магаданская область, г. Магадан, 200 км на Запад, р. Тауй, рыболовная база «КАВИНКА»",
+    // данные от заказчика 16.09.2026 (скрин из Telegram-бота)
+    phone: "+7 914 0333 555",
+    phoneHref: "tel:+79140333555",
+    phoneNote: "Местное время",
+    phoneMoscow: "+7 938 4444 688",
+    phoneMoscowHref: "tel:+79384444688",
+    phoneMoscowNote: "Московское время",
+    telegram: "@kavinka_bot",
+    website: "www.КАВИНКА.рф",
+    websiteHref: "https://кавинка.рф",
+    address: "Магаданская область, Ольский район, Кавинская долина",
+    coordinatesText: "59°47′32.61″ N, 148°16′24.23″ E",
     city: "г. Магадан",
   },
   // TODO: WhatsApp и MAX ведут на Telegram — нужны реальные ссылки
@@ -33,19 +40,16 @@ export const site = {
 } as const;
 
 /**
- * Шесть вкладок. «Индивидуальный тур» и «Экскурсии» убраны заказчиком:
- * первый стал пакетом на «Туре», вторые — пунктом программы. См. docs/CALLS.md
+ * Итоговое меню — пять пунктов, утверждено Боссом 14.09.2026 (см. docs/CALLS.md).
+ * «Расписание» из меню убрано.
  */
 export const navigation: NavItem[] = [
   { href: "/about", label: "О туре" },
   { href: "/accommodation", label: "Размещение" },
-  { href: "/pricing", label: "Тур" },
-  { href: "/schedule", label: "Расписание" },
+  { href: "/pricing", label: "Выбрать тур" },
   { href: "/program", label: "Программа тура" },
   { href: "/contacts", label: "Контакты" },
 ];
 
-/** Сокращённая навигация в футере. */
-export const footerNavigation: NavItem[] = navigation.filter((item) =>
-  ["/about", "/accommodation", "/pricing", "/program"].includes(item.href),
-);
+/** Навигация в футере — тот же список, что в шапке (единое меню, 14.09.2026). */
+export const footerNavigation: NavItem[] = navigation;

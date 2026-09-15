@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>КАВИНКА — выбрать тур</title>
+<title>КАВИНКА — контакты</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -229,6 +229,11 @@
             mask-image:radial-gradient(ellipse 60% 58% at 50% 46%,#000 70%,transparent 100%)}
   /* нерка вытянутая и низкая — по ширине как орёл, без наклона, целиком в кадре */
   .page-head--inner .page-head__art--sockeye{bottom:10px;right:36px;width:min(640px,46vw);height:auto}
+  /* нерпа (1200×400, лежит) — «Контакты»: по ширине как орёл, у нижнего края */
+  .page-head--inner .page-head__art--nerpa{bottom:0;right:36px;width:min(600px,42vw);height:auto;opacity:.7;
+    /* маска только у самых кромок — иначе голова слева растворялась (Босс 16.09) */
+    -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 12%,#000 90%,transparent 100%);
+            mask-image:linear-gradient(90deg,transparent 0,#000 12%,#000 90%,transparent 100%)}
   /* лось — как орёл по ширине и посадке */
   .page-head--inner .page-head__art--moose{bottom:-56px;right:36px;width:min(600px,43vw);height:auto;
     -webkit-mask-image:radial-gradient(ellipse 52% 54% at 50% 50%,#000 62%,transparent 100%);
@@ -240,97 +245,59 @@
     .page-head--inner .page-head__art--bear{right:-40px;bottom:-60px;width:300px}
     .page-head--inner .page-head__art--sockeye{right:-60px;bottom:0;width:400px}
     .page-head--inner .page-head__art--moose{right:-60px;bottom:-40px;width:380px}
+    .page-head--inner .page-head__art--nerpa{right:-40px;bottom:0;width:360px}
   }
 
-  /* ===================== ТУРЫ =====================
-     По созвону 22.08 (Босс 15.09: «всё только по новому созвону, ничего по-старому»):
-     два сезонных тура — «Красная икра» и «Рыбалка на кижуча» (5 дней, цена за человека) —
-     и индивидуальный. В сезонный тур по созвону входят трансфер, проживание, рыбалка
-     с гидом и баня; всё остальное на базе платно, цены — на «Размещении».
-     Старые пакеты (чавыча, 240 000 ₽, 7 дней, «3-разовое питание») убраны. */
+  /* ===================== КОНТАКТЫ (16.09) =====================
+     Данные — с карточки заказчика (скрин из Telegram-бота, CALLS.md §8: «оформление
+     подсмотреть в боте»). Тот же приём, что домики и «Расположение»: слева список
+     контактов строками с линиями, справа сцена — оживлённая база с воды (видео).
+     Карты нет — ТЗ: «карту удали, там будет просто фото». Форм нет (DECISIONS №9). */
   .soft{position:relative;background:var(--sand);isolation:isolate}
   .soft::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
     background-image:url("../public/photo/camo.jpg");background-size:820px;background-repeat:repeat;
     opacity:.055;mix-blend-mode:multiply;filter:saturate(.28) contrast(.5)}
   .soft>*{position:relative;z-index:1}
 
-  .packages{padding:var(--section-y) 46px}
-  .packages__head{max-width:var(--head-max);margin:0 auto var(--head-gap);text-align:center}
-  .packages__head .h2{color:var(--ink);margin-bottom:var(--title-gap)}
-  .packages__lead{font-size:var(--base-size);color:var(--muted);max-width:48ch;margin:0 auto}
-  .packages__grid{max-width:var(--grid-max);margin:0 auto;display:grid;
-    grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;align-items:stretch}
+  .contacts{padding:var(--section-y) 46px}
+  .contacts__inner{max-width:var(--grid-max);margin:0 auto}
+  /* Босс 16.09: первый вариант (список слева, видео справа), но компактнее: без отдельной
+     строки координат (они пилюлей на видео), строки плотнее, видео растянуто по высоте списка */
+  .contacts__grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:56px;align-items:stretch}
+  .contacts__head{margin-bottom:var(--head-gap)}
+  .contacts__head .eyebrow{color:var(--olive)}
+  .contacts__head .h2{color:var(--ink);margin-bottom:var(--title-gap)}
+  .contacts__lead{font-size:var(--base-size);color:var(--muted);max-width:40ch}
 
-  .package-card{border-radius:12px;overflow:hidden;display:flex;flex-direction:column;
-    background:rgba(36,43,27,.05);border:1px solid var(--sand-line);transition:border-color .25s}
-  .package-card:hover{border-color:rgba(124,140,87,.5)}
+  .contact-list{display:flex;flex-direction:column}
+  .contact{display:grid;grid-template-columns:40px minmax(0,1fr);column-gap:16px;align-items:start;
+    padding:14px 0;border-top:1px solid rgba(35,35,24,.14)}
+  .contact:last-child{border-bottom:1px solid rgba(35,35,24,.14)}
+  .contact__icon{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    border:1px solid rgba(124,140,87,.45);color:var(--olive)}
+  .contact__icon svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+  .contact__label{display:block;font-weight:600;font-size:var(--size-small);letter-spacing:0;text-transform:uppercase;
+    color:var(--muted);margin-bottom:3px}
+  .contact__value{display:inline;font-family:var(--body);font-weight:500;font-size:var(--size-h3-sm);line-height:1.25;
+    letter-spacing:-.01em;color:var(--ink);text-decoration:none;font-variant-numeric:tabular-nums}
+  a.contact__value:hover{color:var(--olive)}
+  .contact__note{display:inline;margin-left:10px;font-size:var(--size-copy);color:var(--muted)}
+  .contact__row+.contact__row{margin-top:6px}
 
-  .package-card__photo{position:relative;aspect-ratio:4/3;overflow:hidden;background:#10140b}
-  .package-card__photo img{width:100%;height:100%;object-fit:cover}
-  .package-card__badge{position:absolute;top:16px;left:16px;z-index:1;
-    display:inline-flex;align-items:center;padding:8px 15px;border-radius:999px;
-    border:1px solid rgba(240,239,228,.35);background:rgba(20,26,14,.55);
-    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-    font-weight:600;font-size:12.5px;letter-spacing:.01em;color:var(--cream)}
-
-  .package-card__body{padding:30px 30px 32px;display:flex;flex-direction:column;flex:1}
-  .package-card__name{font-family:var(--body);font-weight:600;font-size:var(--size-h3);line-height:1.2;
-    letter-spacing:-.01em;color:var(--ink)}
-  .package-card__fish{display:block;margin-top:4px;font-size:var(--size-copy);color:var(--muted)}
-
-  .package-card__price-row{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;margin:20px 0 6px}
-  .package-card__price{font-family:var(--body);font-weight:500;font-size:32px;letter-spacing:-.02em;
-    font-variant-numeric:tabular-nums;color:var(--ink)}
-  .package-card__per{font-size:var(--size-copy);color:var(--muted)}
-  .package-card__duration{font-weight:600;font-size:var(--size-small);letter-spacing:0;
-    text-transform:uppercase;color:var(--muted)}
-  .package-card__note{font-size:var(--size-copy);line-height:1.5}
-
-  .package-card__label{margin:26px 0 12px;padding-top:20px;border-top:1px solid var(--sand-line);
-    font-weight:600;font-size:var(--size-small);letter-spacing:0;text-transform:uppercase;color:var(--olive)}
-  .package-card__included{list-style:none;display:flex;flex-direction:column;gap:9px;margin:0 0 30px}
-  .package-card__included li{font-size:var(--size-copy);color:var(--ink);padding-left:18px;position:relative}
-  .package-card__included li::before{content:"—";position:absolute;left:0;color:var(--olive);font-weight:700}
-
-  .package-card__body>.btn{margin-top:auto;width:100%}
-
-  /* индивидуальный тур — тёмная карточка, выделяет «по запросу» из ряда фиксированных цен */
-  .package-card--custom{background:var(--bog);color:var(--cream);border-color:transparent;position:relative;isolation:isolate}
-  .package-card--custom::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
-    background-image:url("../public/photo/camo.jpg");background-size:420px;opacity:.08;mix-blend-mode:overlay}
-  .package-card--custom .package-card__name,.package-card--custom .package-card__price{color:var(--cream)}
-  .package-card--custom .package-card__note{color:rgba(240,239,228,.62)}
-  .package-card--custom .package-card__label{color:var(--sage);border-top-color:rgba(240,239,228,.14)}
-  .package-card--custom .package-card__included li{color:rgba(240,239,228,.84)}
-  .package-card--custom .package-card__included li::before{color:var(--sage)}
-
-  /* полоса под турами: что по созвону осталось здесь + ссылка на все цены на «Размещении» */
-  .tour-extras{position:relative;isolation:isolate;overflow:hidden;max-width:var(--grid-max);
-    margin:24px auto 0;background:var(--bog);color:var(--cream);border-radius:12px;
-    display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1.4fr) auto;align-items:center;gap:28px 48px;
-    padding:30px 290px 30px 34px}
-  /* резной хариус у правого края (снят на чёрном — screen), как на полосе трансфера на «Размещении» */
-  .tour-extras .extras__art{position:absolute;z-index:1;right:24px;top:50%;width:230px;
-    transform:translateY(-50%) rotate(-7deg);mix-blend-mode:screen;opacity:.7;pointer-events:none}
-  .tour-extras>*:not(.extras__art){position:relative;z-index:2}
-  .tour-extras::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
-    background-image:url("../public/photo/camo.jpg");background-size:420px;opacity:.1;mix-blend-mode:overlay}
-  .tour-extras h3{font-family:var(--body);font-weight:600;font-size:var(--size-h3-sm);line-height:1.25;
-    letter-spacing:-.005em;color:var(--cream)}
-  .tour-extras__head span{display:block;margin-top:4px;font-size:var(--size-copy);color:rgba(240,239,228,.58)}
-  .tour-extras__prices{list-style:none;display:flex;flex-wrap:wrap;gap:14px 48px}
-  .tour-extras__prices li{display:flex;flex-direction:column;gap:3px}
-  .tour-extras__prices span{font-size:var(--size-small);color:rgba(240,239,228,.55)}
-  .tour-extras__prices b{font-family:var(--body);font-weight:500;font-size:20px;color:var(--cream);
-    white-space:nowrap;font-variant-numeric:tabular-nums}
-
+  .contacts__scene{position:relative;min-height:420px;border-radius:8px;overflow:hidden;background:#10140b;
+    box-shadow:0 30px 64px rgba(35,35,24,.2)}
+  .contacts__scene video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
   @media(max-width:1000px){
-    .packages__grid{grid-template-columns:1fr;max-width:520px}
-    .tour-extras{grid-template-columns:1fr;max-width:520px;padding:28px 30px}
-    .tour-extras .extras__art{display:none}
+    .contacts{padding:var(--section-y) 22px}
+    .contacts__grid{grid-template-columns:1fr;gap:32px}
+    .contacts__scene{min-height:0;aspect-ratio:16/9}
   }
   @media(max-width:640px){
-    .packages{padding:var(--section-y) 22px}
+    .contacts__scene{aspect-ratio:4/3}
+    .contact{grid-template-columns:36px minmax(0,1fr);column-gap:12px;padding:12px 0}
+    .contact__icon{width:36px;height:36px}
+    .contact__value{font-size:var(--size-h3-sm)}
+    .contact__note{display:block;margin:2px 0 0}
   }
 
   /* ===================== ФУТЕР — с главной, без изменений ===================== */
@@ -468,9 +435,9 @@
     <div class="site-nav__links">
       <a href="about.html">О туре</a>
       <a href="accommodation.html">Размещение</a>
-      <a class="is-current" href="pricing.html">Выбрать тур</a>
+      <a href="pricing.html">Выбрать тур</a>
       <a href="program.html">Программа тура</a>
-      <a href="contacts.html">Контакты</a>
+      <a class="is-current" href="contacts.html">Контакты</a>
     </div>
     <div class="site-nav__right">
       <a class="btn btn--sm" href="https://t.me/KAVINKA_bot"><span>Оставить заявку</span></a>
@@ -486,9 +453,9 @@
     <div class="site-nav__links">
       <a href="about.html">О туре</a>
       <a href="accommodation.html">Размещение</a>
-      <a class="is-current" href="pricing.html">Выбрать тур</a>
+      <a href="pricing.html">Выбрать тур</a>
       <a href="program.html">Программа тура</a>
-      <a href="contacts.html">Контакты</a>
+      <a class="is-current" href="contacts.html">Контакты</a>
     </div>
     <div class="site-nav__right">
       <a class="btn btn--sm" href="https://t.me/KAVINKA_bot"><span>Оставить заявку</span></a>
@@ -496,9 +463,9 @@
     </div>
   </nav>
   <div class="page-head__body">
-    <img class="page-head__art page-head__art--sockeye" src="../public/photo/artifacts/artifact-sockeye.jpg" alt="">
-    <div class="page-head__crumbs reveal" style="--i:0"><a href="page.html">Главная</a><i></i><span>Выбрать тур</span></div>
-    <h1 class="reveal" style="--i:1">Выбрать тур</h1>
+    <img class="page-head__art page-head__art--nerpa" src="../public/photo/artifacts/artifact-nerpa.jpg" alt="">
+    <div class="page-head__crumbs reveal" style="--i:0"><a href="page.html">Главная</a><i></i><span>Контакты</span></div>
+    <h1 class="reveal" style="--i:1">Контакты</h1>
   </div>
 </section>
 
@@ -508,98 +475,48 @@
 </div>
 
 <!-- ===================== ПАКЕТЫ ===================== -->
-<section class="packages soft">
-  <div class="packages__head reveal">
-    <div class="eyebrow eyebrow--center"><span>Сезон 10 июня — 30 сентября</span></div>
-    <h2 class="h2">Туры <em>сезона</em></h2>
-    <p class="packages__lead">Выберите подходящий Тур на нашей рыболовной базе или создайте Индивидуальный</p>
-  </div>
-
-  <div class="packages__grid">
-    <article class="package-card reveal" style="--i:0">
-      <div class="package-card__photo">
-        <span class="package-card__badge">10 июня — 10 августа</span>
-        <img src="../public/photo/red-caviar.jpg" alt="Рыбак ест красную икру ложкой" style="object-position:50% 40%">
+<section class="contacts soft" id="contacts">
+  <div class="contacts__inner">
+  <div class="contacts__grid">
+    <div>
+      <div class="contacts__head reveal">
+        <div class="eyebrow"><span>Как связаться</span></div>
+        <h2 class="h2">Свяжитесь <em style="color:var(--bog)">с нами</em></h2>
+        <p class="contacts__lead">Удобным для вас способом — быстрее всего в Telegram: там же и бронирование.</p>
       </div>
-      <div class="package-card__body">
-        <h3 class="package-card__name">Красная икра</h3>
-        <span class="package-card__fish">горбуша</span>
-        <div class="package-card__price-row">
-          <span class="package-card__price">150 000 ₽</span>
-          <span class="package-card__per">за человека</span>
+      <div class="contact-list">
+        <div class="contact reveal" style="--i:0">
+          <span class="contact__icon"><svg viewBox="0 0 24 24"><path d="M5 4h3.5l1.8 4.5-2.2 1.6a11 11 0 0 0 5.8 5.8l1.6-2.2L20 15.5V19a1.5 1.5 0 0 1-1.6 1.5A15.5 15.5 0 0 1 3.5 5.6 1.5 1.5 0 0 1 5 4z"/></svg></span>
+          <div><span class="contact__label">Телефон</span>
+            <div class="contact__row"><a class="contact__value" href="tel:+79140333555">+7 914 0333 555</a><span class="contact__note">местное время</span></div>
+            <div class="contact__row"><a class="contact__value" href="tel:+79384444688">+7 938 4444 688</a><span class="contact__note">московское время</span></div>
+          </div>
         </div>
-        <span class="package-card__duration">5 дней</span>
-        <div class="package-card__label">В тур входит</div>
-        <ul class="package-card__included">
-          <li>Трансфер</li>
-          <li>Проживание</li>
-          <li>Выезды на рыбалку с гидом</li>
-          <li>Баня</li>
-        </ul>
-        <a class="btn" href="https://t.me/KAVINKA_bot"><span>Забронировать</span></a>
-      </div>
-    </article>
-
-    <article class="package-card reveal" style="--i:1">
-      <div class="package-card__photo">
-        <span class="package-card__badge">10 августа — 30 сентября</span>
-        <img src="../public/photo/boy-with-coho.jpg" alt="Мальчик с пойманным кижучем на берегу" style="object-position:50% 30%">
-      </div>
-      <div class="package-card__body">
-        <h3 class="package-card__name">Рыбалка на кижуча</h3>
-        <!-- рыба уже в названии; пустая строка держит цены на одной высоте с «Красной икрой» -->
-        <span class="package-card__fish" aria-hidden="true">&nbsp;</span>
-        <div class="package-card__price-row">
-          <span class="package-card__price">175 000 ₽</span>
-          <span class="package-card__per">за человека</span>
+        <div class="contact reveal" style="--i:1">
+          <span class="contact__icon"><svg viewBox="0 0 24 24"><path d="M21 4 3.5 10.8c-.9.4-.9 1.2 0 1.5l4.4 1.4 1.7 5.3c.2.6.9.8 1.4.3l2.4-2.2 4.6 3.4c.6.4 1.3.1 1.5-.6L21.9 5.2c.2-.9-.3-1.4-.9-1.2z"/><path d="M8 13.7 19 6.5"/></svg></span>
+          <div><span class="contact__label">Telegram</span>
+            <a class="contact__value" href="https://t.me/KAVINKA_bot">@kavinka_bot</a>
+          </div>
         </div>
-        <span class="package-card__duration">5 дней</span>
-        <div class="package-card__label">В тур входит</div>
-        <ul class="package-card__included">
-          <li>Трансфер</li>
-          <li>Проживание</li>
-          <li>Выезды на рыбалку с гидом</li>
-          <li>Баня</li>
-        </ul>
-        <a class="btn" href="https://t.me/KAVINKA_bot"><span>Забронировать</span></a>
-      </div>
-    </article>
-
-    <article class="package-card package-card--custom reveal" style="--i:2">
-      <div class="package-card__photo">
-        <span class="package-card__badge">По запросу</span>
-        <img src="../public/photo/helicopter-private.jpg" alt="Частный вертолёт на площадке у реки" style="object-position:50% 60%">
-      </div>
-      <div class="package-card__body">
-        <h3 class="package-card__name">Индивидуальный тур</h3>
-        <div class="package-card__price-row">
-          <span class="package-card__price">По запросу</span>
+        <div class="contact reveal" style="--i:2">
+          <span class="contact__icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.8 2.6 2.8 14.4 0 17M12 3.5c-2.8 2.6-2.8 14.4 0 17"/></svg></span>
+          <div><span class="contact__label">Сайт</span>
+            <a class="contact__value" href="https://кавинка.рф">www.КАВИНКА.рф</a>
+          </div>
         </div>
-        <p class="package-card__note">Стоимость будет зависеть от вашей прихоти</p>
-        <div class="package-card__label">В тур входит</div>
-        <ul class="package-card__included">
-          <li>Индивидуальная программа под Ваши запросы</li>
-          <li>Трансфер на вертолёте</li>
-          <li>Проживание</li>
-          <li>Питание</li>
-          <li>Возможность комбинировать Тур с Морской рыбалкой</li>
-        </ul>
-        <a class="btn" href="https://t.me/KAVINKA_bot"><span>Обсудить тур</span></a>
+        <div class="contact reveal" style="--i:3">
+          <span class="contact__icon"><svg viewBox="0 0 24 24"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg></span>
+          <div><span class="contact__label">Адрес</span>
+            <span class="contact__value">Магаданская область, Ольский район, Кавинская долина</span>
+          </div>
+        </div>
       </div>
-    </article>
-  </div>
-
-  <div class="tour-extras reveal">
-    <img class="extras__art" src="../public/photo/artifacts/artifact-grayling.jpg" alt="">
-    <div class="tour-extras__head">
-      <h3>Дополнительно</h3>
-      <span>Всё остальное на базе оплачивается отдельно</span>
     </div>
-    <ul class="tour-extras__prices">
-      <li><span>Дополнительный день</span><b>от 35 000 ₽</b></li>
-      <li><span>Индивидуальный гид</span><b>по запросу</b></li>
-    </ul>
-    <a class="btn btn--sm" href="accommodation.html#extras"><span>Все услуги и цены</span></a>
+    <div class="contacts__scene reveal" style="--i:2">
+      <video src="../public/video/lake-ripples.mp4" autoplay muted loop playsinline></video>
+    </div>
+  </div>
+
   </div>
 </section>
 
@@ -619,7 +536,7 @@
       <a href="accommodation.html">Размещение</a>
       <a href="pricing.html">Выбрать тур</a>
       <a href="program.html">Программа тура</a>
-      <a href="contacts.html">Контакты</a>
+      <a class="is-current" href="contacts.html">Контакты</a>
     </div>
 
     <div class="footer__col footer__col--about">

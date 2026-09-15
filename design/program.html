@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>КАВИНКА — макет «О туре»</title>
+<title>КАВИНКА — программа тура</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -276,169 +276,101 @@
     .page-head--inner .page-head__art--moose{right:-60px;bottom:-40px;width:380px}
   }
 
-  /* ===================== ПОЛЯРОИД (общий приём страницы) =====================
-     Осязаемая «бумажная» вещь — из референсов Босса 14.09 («Российские Альпаки»):
-     фото в белой рамке с подписью снизу, лёгкий наклон через --r. Живёт в
-     «Расположении» (веер из трёх) и в «Галерее» (ряд). */
-  .polaroid{position:relative;background:#F8F6EE;padding:12px 12px 16px;border-radius:4px;
-    box-shadow:0 22px 44px rgba(35,35,24,.20),0 2px 6px rgba(35,35,24,.10);
-    transform:rotate(var(--r,0deg));transition:transform .5s cubic-bezier(.16,.8,.24,1),box-shadow .5s}
-  .polaroid:hover{transform:rotate(0deg) translateY(-6px);box-shadow:0 30px 56px rgba(35,35,24,.26);z-index:5}
-  .polaroid__img{aspect-ratio:4/5;overflow:hidden;background:var(--bog)}
-  .polaroid__img img{width:100%;height:100%;object-fit:cover}
-  .polaroid figcaption{margin-top:12px;font-family:var(--body);font-weight:600;font-size:var(--size-small);
-    letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:center;white-space:nowrap;
-    overflow:hidden;text-overflow:ellipsis}
-  /* .reveal и .polaroid оба задают transform — совмещаем адресно */
-  .polaroid.reveal{transform:rotate(var(--r,0deg)) translateY(26px)}
-  .polaroid.reveal.is-visible{transform:rotate(var(--r,0deg)) translateY(0)}
-  .polaroid.reveal.is-visible:hover{transform:rotate(0deg) translateY(-6px)}
-
-  /* ===================== РАСПОЛОЖЕНИЕ БАЗЫ =====================
-     Босс 15.09: веер из трёх карточек под центрированным текстом «висел в пустоте»,
-     самый шаблонный блок сайта. Стало тем же приёмом, что домики на «Размещении»:
-     текст слева, справа одна сцена 4:3 с пятью кадрами (база с воды, нерпа, беседка,
-     знак заповедника, пирс), лента миниатюр и стрелки — выбор кадра только кликом.
-     Карточки-полароиды .shot-card остались — ими живёт «Галерея» ниже. */
-  .location{position:relative;isolation:isolate;overflow:hidden;background:#E5E3D1;padding:var(--section-y) 46px}
-  .location::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  /* ===================== ПРОГРАММА — компактно (Босс 15.09, второй заход) =====================
+     Первый компактный вариант (список дней слева, панель справа) Босс забраковал:
+     три неравные колонки, список начинался ниже панели, пилюли маршрута выглядели
+     кнопками. Стало: заголовок с текстом во всю ширину → дни горизонтальной
+     лентой-таймлайном (вкладки, выбор кликом или стрелками ← →) → панель дня:
+     фото слева, пункты справа в две колонки, внизу «предыдущий / следующий день».
+     «Важная информация» — одна тёмная полоса. Тексты — дословно STRUCTURE.md §8. */
+  .program{position:relative;isolation:isolate;overflow:hidden;background:#E5E3D1;padding:var(--section-y) 46px}
+  .program::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
     background-image:url("../public/photo/camo.jpg");background-size:820px;background-repeat:repeat;
     opacity:.085;mix-blend-mode:multiply;filter:saturate(.3) contrast(.55)}
-  .location>*{position:relative;z-index:1}
-  .location__grid{max-width:var(--grid-max);margin:0 auto;display:grid;
-    grid-template-columns:minmax(0,1.25fr) minmax(0,1.3fr);gap:64px;align-items:center}
-  .location__text .eyebrow{color:var(--olive)}
-  .location__text .h2{color:var(--ink);margin-bottom:var(--title-gap)}
-  .location__lead{font-size:var(--base-size);line-height:1.7;color:var(--muted);max-width:46ch}
-  .location__lead+.location__lead{margin-top:var(--lead-gap)}
+  .program>*{position:relative;z-index:1}
+  .program__inner{max-width:var(--grid-max);margin:0 auto}
 
-  .scene{position:relative;aspect-ratio:4/3;border-radius:8px;overflow:hidden;
+  .program__head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px 64px;
+    align-items:end;margin-bottom:var(--head-gap)}
+  .program__head .eyebrow{color:var(--olive)}
+  .program__head .h2{color:var(--ink)}
+  .program__lead{font-size:var(--base-size);line-height:1.65;color:var(--muted);max-width:48ch}
+  .program__lead+.program__lead{margin-top:var(--lead-gap)}
+
+  /* лента дней — таймлайн: общая пунктирная ось, на ней точка каждого дня;
+     активный день — оранжевая икринка и зелёное название */
+  .day-tabs{position:relative;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0 18px;
+    margin-bottom:40px}
+  .day-tabs::before{content:"";position:absolute;left:8px;right:8px;top:7px;height:0;
+    border-top:1.5px dashed rgba(36,43,27,.36)}
+  .day-tab{all:unset;box-sizing:border-box;cursor:pointer;position:relative;display:block;
+    padding:28px 0 14px;border-bottom:2px solid transparent;transition:border-color .3s}
+  .day-tab::before{content:"";position:absolute;left:0;top:0;width:16px;height:16px;border-radius:50%;
+    background:#E5E3D1;border:2px solid var(--bog);box-sizing:border-box;transition:transform .3s}
+  .day-tab.is-active::before{border:0;box-shadow:0 0 0 4px rgba(232,106,18,.16);
+    background:radial-gradient(circle at 35% 30%,#FFE2B8 0 16%,var(--roe-lite,#F7A13A) 40%,var(--roe,#E86A12) 78%)}
+  .day-tab.is-active{border-bottom-color:var(--olive)}
+  .day-tab:focus-visible{outline:2px solid var(--olive);outline-offset:4px;border-radius:4px}
+  .day-tab__no{display:block;font-weight:600;font-size:var(--size-small);text-transform:uppercase;
+    color:var(--muted);margin-bottom:4px}
+  .day-tab__name{display:block;font-family:var(--body);font-weight:500;font-size:17px;line-height:1.25;
+    letter-spacing:-.01em;color:var(--ink);transition:color .3s}
+  .day-tab:hover .day-tab__name,.day-tab.is-active .day-tab__name{color:var(--olive)}
+
+  /* панели дней лежат в одной ячейке — высота не прыгает при переключении */
+  .day-panels{display:grid}
+  .day-panel{grid-area:1/1;display:grid;grid-template-columns:minmax(0,380px) minmax(0,1fr);gap:56px;align-items:start;
+    opacity:0;visibility:hidden;transition:opacity .45s ease,visibility 0s linear .45s}
+  .day-panel.is-active{opacity:1;visibility:visible;transition:opacity .45s ease,visibility 0s}
+  .day-panel__photo{position:relative;margin:0;aspect-ratio:4/5;border-radius:8px;overflow:hidden;
     background:#10140b;box-shadow:0 30px 64px rgba(35,35,24,.2)}
-  .scene__shot{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-    opacity:0;transition:opacity .5s ease}
-  .scene__shot.is-active{opacity:1}
-  .scene::after{content:"";position:absolute;left:0;right:0;bottom:0;height:38%;pointer-events:none;
-    background:linear-gradient(180deg,transparent,rgba(8,11,5,.55))}
-  /* подпись кадра — стеклянная пилюля, как подписи фото дня в «Программе» */
-  .scene__cap{position:absolute;left:18px;top:18px;z-index:2;padding:7px 13px;border-radius:100px;
+  .day-panel__photo img{width:100%;height:100%;object-fit:cover}
+  .day-panel__photo figcaption{position:absolute;left:14px;bottom:14px;padding:7px 13px;border-radius:100px;
     background:rgba(26,33,18,.55);border:1px solid rgba(240,239,228,.3);
     backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
     font-weight:600;font-size:var(--size-small);color:var(--cream)}
-  .scene__thumbs{position:absolute;left:18px;bottom:18px;z-index:2;display:flex;gap:8px;padding:6px;
-    border-radius:10px;background:rgba(26,33,18,.38);border:1px solid rgba(240,239,228,.22);
-    backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%)}
-  .scene__thumbs button{all:unset;box-sizing:border-box;cursor:pointer;width:88px;aspect-ratio:16/9;
-    border-radius:5px;overflow:hidden;border:1.5px solid transparent;opacity:.62;
-    transition:opacity .25s,border-color .25s}
-  .scene__thumbs button:hover,.scene__thumbs button.is-active{opacity:1;border-color:var(--cream)}
-  .scene__thumbs button:focus-visible{outline:2px solid var(--sage);outline-offset:2px}
-  .scene__thumbs img{width:100%;height:100%;object-fit:cover}
-  .scene__arrow{position:absolute;top:50%;z-index:3;width:48px;height:48px;margin-top:-24px;padding:0;
-    border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;
-    border:1px solid rgba(240,239,228,.4);background:rgba(26,33,18,.42);color:var(--cream);
-    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-    opacity:.8;transition:opacity .25s,border-color .25s,background .25s}
-  .scene:hover .scene__arrow{opacity:1}
-  .scene__arrow:hover{border-color:rgba(240,239,228,.85);background:rgba(26,33,18,.72)}
-  .scene__arrow:focus{outline:none}
-  .scene__arrow:focus-visible{outline:2px solid var(--sage);outline-offset:3px;opacity:1}
-  .scene__arrow svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-  .scene__arrow--prev{left:18px}
-  .scene__arrow--next{right:18px}
+  .day-panel__body{display:flex;flex-direction:column;min-height:100%}
+  .day-panel__no{display:block;font-weight:600;font-size:var(--size-small);text-transform:uppercase;color:var(--olive);margin-bottom:6px}
+  .day-panel__title{font-family:var(--body);font-weight:600;font-size:var(--size-h3);line-height:1.2;
+    letter-spacing:-.01em;color:var(--ink);margin-bottom:26px}
 
-  /* карточка-полароид — общий приём страницы, живёт в «Галерее» */
-  .shot-card{position:relative;flex:none;padding:16px 16px 20px;border-radius:8px;
-    background:var(--bog);border:1px solid rgba(240,239,228,.10);
-    box-shadow:0 6px 16px rgba(35,35,24,.16);
-    transform:rotate(var(--r,0deg))}
-  .shot-card.reveal{transform:rotate(var(--r,0deg)) translateY(26px)}
-  .shot-card.reveal.is-visible{transform:rotate(var(--r,0deg)) translateY(0)}
-  .shot-card__img{aspect-ratio:4/5;overflow:hidden;border-radius:3px;background:#10140b;
-    box-shadow:0 0 0 3px var(--cream),0 0 0 4px rgba(0,0,0,.35)}
-  .shot-card__img img{width:100%;height:100%;object-fit:cover}
-  .shot-card figcaption{margin-top:16px;font-family:var(--body);font-weight:600;font-size:var(--size-small);line-height:1.2;
-    letter-spacing:0;color:var(--sage);text-align:center;white-space:nowrap;padding:0 4px;
-    overflow:hidden;text-overflow:ellipsis}
+  /* пункты дня — в две колонки, у каждого точка и пунктир до следующего;
+     первый пункт дня — оранжевая икринка */
+  .steps{list-style:none;columns:2;column-gap:44px}
+  .step{position:relative;break-inside:avoid;padding:0 0 18px 30px}
+  .step::before{content:"";position:absolute;left:0;top:4px;width:14px;height:14px;border-radius:50%;
+    background:#E5E3D1;border:2px solid var(--bog);box-sizing:border-box}
+  .step::after{content:"";position:absolute;left:6px;top:22px;bottom:2px;width:2px;
+    background:repeating-linear-gradient(180deg,rgba(36,43,27,.34) 0 5px,transparent 5px 10px)}
+  .step:last-child::after{display:none}
+  .step:first-child::before{border:0;box-shadow:0 0 0 4px rgba(232,106,18,.16);
+    background:radial-gradient(circle at 35% 30%,#FFE2B8 0 16%,var(--roe-lite,#F7A13A) 40%,var(--roe,#E86A12) 78%)}
+  .step b{display:block;font-weight:600;font-size:16px;line-height:1.35;color:var(--ink)}
+  .step span{display:block;font-size:var(--size-copy);line-height:1.45;color:var(--muted);margin-top:1px}
 
+  /* листание дней под пунктами */
+  .day-nav{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:auto;
+    padding-top:26px;border-top:1px solid rgba(35,35,24,.14)}
+  .day-nav__btn{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;align-items:center;gap:10px;
+    font-weight:600;font-size:14px;color:var(--ink);transition:color .25s}
+  .day-nav__btn i{font-style:normal;font-weight:300;font-size:20px;line-height:1;color:var(--olive);transition:transform .25s}
+  .day-nav__btn:hover{color:var(--olive)}
+  .day-nav__btn:hover i{transform:translateX(3px)}
+  .day-nav__btn--prev:hover i{transform:translateX(-3px)}
+  .day-nav__btn:focus-visible{outline:2px solid var(--olive);outline-offset:3px;border-radius:4px}
+  .day-nav__btn[hidden]{display:none}
+  .day-nav__btn--next{margin-left:auto}
 
-  @media(max-width:1000px){
-    .location{padding:var(--section-y) 22px}
-    .location__grid{grid-template-columns:1fr;gap:40px}
-  }
-  @media(max-width:640px){
-    .scene__thumbs{left:10px;bottom:10px;gap:5px;padding:4px}
-    .scene__thumbs button{width:58px}
-    .scene__arrow{width:38px;height:38px;margin-top:-19px}
-    .scene__arrow--prev{left:10px}
-    .scene__arrow--next{right:10px}
-  }
-
-  /* ===================== КАК ДОБРАТЬСЯ =====================
-     Полноэкранная сцена как hero/CTA (Босс 14.09): список шагов убран, остался
-     только текст — по центру поверх кадра. Фон — .route__bg: сейчас <img>, Босс
-     подставит <video> — правило общее, менять только тег. Под текстом стеклянная
-     «лента маршрута» Магадан → 200 км → Кавинка (тот же стеклянный язык, что
-     пилюля координат в hero) и кнопка. */
-  .route{position:relative;background:var(--bog);overflow:hidden;min-height:92svh;display:flex;align-items:stretch}
-  .route__bg{position:absolute;inset:0;z-index:0;width:100%;height:100%;object-fit:cover;object-position:center 60%}
-  .route::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
-    /* темним только левый верх (текст) и правый низ (лента + кнопка); центр кадра с лодкой открыт */
-    /* Босс 15.09: всё в одной левой колонке — темним левую половину кадра, правая с лодкой открыта */
-    background:
-      linear-gradient(90deg,rgba(8,11,5,.80) 0%,rgba(8,11,5,.58) 36%,rgba(8,11,5,.08) 60%,rgba(8,11,5,0) 72%),
-      linear-gradient(180deg,rgba(8,11,5,.3) 0%,rgba(8,11,5,0) 30%,rgba(8,11,5,0) 70%,rgba(8,11,5,.35) 100%)}
-  .route__inner{position:relative;z-index:2;width:100%;max-width:calc(var(--grid-max) + 92px);margin:0 auto;
-    padding:var(--section-y) 46px;display:flex;flex-direction:column;justify-content:center;gap:32px}
-  .route__text{max-width:600px;text-align:left}
-  .route__aside{display:flex;flex-direction:column;align-items:flex-start;gap:32px}
-  .route__inner .eyebrow{color:rgba(240,239,228,.72)}
-  .route__title{color:var(--cream);margin-bottom:var(--title-gap);text-shadow:0 4px 22px rgba(0,0,0,.55)}
-  .route__title em{color:var(--cream)}
-  /* цитата — обычный лид, не второй заголовок (Босс 15.09: «не в нашем стиле») */
-  .route__quote{font-size:var(--base-size);line-height:1.7;color:var(--cream);max-width:44ch;
-    margin-bottom:32px;text-shadow:0 2px 12px rgba(0,0,0,.6)}
-  .route__lead{font-size:var(--base-size);line-height:1.7;color:rgba(240,239,228,.84);max-width:44ch;
-    text-shadow:0 2px 12px rgba(0,0,0,.6)}
-
-  /* лента маршрута — три стеклянные пилюли, между ними пунктир с икринкой */
-  .route__strip{display:flex;align-items:center;gap:0;flex-wrap:nowrap;justify-content:flex-start}
-  .route__pill{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:100px;
-    background:rgba(20,26,14,.42);border:1px solid rgba(240,239,228,.42);
-    backdrop-filter:blur(12px) saturate(140%);-webkit-backdrop-filter:blur(12px) saturate(140%);
-    box-shadow:0 12px 30px rgba(10,14,6,.35),inset 0 1px 0 rgba(255,255,255,.16);
-    font-family:var(--body);font-weight:600;font-size:14px;letter-spacing:.02em;color:var(--cream);white-space:nowrap}
-  .route__pill small{font-weight:500;font-size:12px;color:rgba(240,239,228,.62);letter-spacing:0}
-  .route__pill--km{font-family:var(--body);font-weight:600;font-size:15px;font-variant-numeric:tabular-nums}
-  .route__dash{position:relative;width:clamp(32px,4.5vw,64px);height:0;flex:none;
-    border-top:1.5px dashed rgba(240,239,228,.55)}
-  .route__dash::after{content:"";position:absolute;left:50%;top:-4px;width:7px;height:7px;margin-left:-3.5px;border-radius:50%;
-    background:radial-gradient(circle at 35% 30%,#FFE2B8 0 16%,var(--roe-lite,#F7A13A) 40%,var(--roe,#E86A12) 78%);
-    box-shadow:0 0 0 3px rgba(232,106,18,.18)}
-
-  @media(max-width:760px){
-    .route{min-height:auto}
-    .route__inner{padding:var(--section-y) 22px;gap:32px}
-    /* на телефоне лента маршрута столбиком: пилюли друг под другом, пунктир вертикальный (Босс 16.09) */
-    .route__strip{flex-direction:column;align-items:flex-start;gap:0}
-    .route__dash{width:0;height:26px;margin-left:24px;border-top:0;border-left:1.5px dashed rgba(240,239,228,.55)}
-    .route__dash::after{left:-4px;top:50%;margin:-3.5px 0 0 0}
-    .route__pill{padding:10px 16px;font-size:13px}
-  }
-
-  /* ===================== ЧТО ВКЛЮЧЕНО В ТУР =====================
-     Босс 14.09: фон — песочный с камуфляжем, как «Расположение базы»; карточки —
-     точь-в-точь как «Быстрые факты» на главной (design/page.html): тёмный --bog,
-     камуфляж ~4%, иконка-«нашивка» охотника/рыбака, без эффекта наведения.
-     Отклонено: болотно-зелёный фон с кремовыми билетами-корешками. */
-  .included{position:relative;isolation:isolate;overflow:hidden;background:#E5E3D1;padding:var(--section-y) 46px}
-  .included::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
-    background-image:url("../public/photo/camo.jpg");background-size:820px;background-repeat:repeat;
-    opacity:.085;mix-blend-mode:multiply;filter:saturate(.3) contrast(.55)}
-  .included>*{position:relative;z-index:1}
-  .included .h2{color:var(--ink)}
-  .included .h2 em{color:var(--bog)}
-
-  .inc-grid{max-width:var(--grid-max);margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  /* важная информация — карточки (Босс 15.09), тот же утверждённый компонент,
+     что «Что включено в тур» на «О туре»: тёмный --bog, камуфляж ~4%, иконка-«нашивка».
+     Пять в ряд; заголовочный блок — как у всех секций */
+  .info{margin-top:var(--section-y)}
+  .info .section-head{margin-bottom:var(--head-gap)}
+  /* пять карточек: три сверху, две шире снизу (Босс 15.09: пять в ряд «очень сжатые») */
+  .info-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:22px}
+  .info-grid .inc-card{grid-column:span 2}
+  .info-grid .inc-card:nth-child(n+4){grid-column:span 3}
+  .info-grid .inc-card p{max-width:44ch}
   .inc-card{position:relative;overflow:hidden;isolation:isolate;
     border:1px solid rgba(240,239,228,.10);border-radius:14px;background:var(--bog);color:var(--cream);
     padding:30px 30px 32px;display:flex;flex-direction:column;align-items:flex-start;
@@ -459,49 +391,32 @@
   .inc-card__icon svg{position:relative;width:36px;height:36px;color:#D8CDA2}
   .inc-card h3{font-family:var(--body);font-weight:600;font-size:var(--size-h3-sm);line-height:1.25;
     letter-spacing:-.005em;color:var(--cream);margin-bottom:8px}
-  .inc-card p{font-size:var(--size-copy);color:rgba(240,239,228,.66);max-width:30ch}
+  .inc-card p{font-size:var(--size-copy);color:rgba(240,239,228,.66)}
 
-  @media(max-width:1000px){
-    .included{padding:var(--section-y) 22px}
-    .inc-grid{grid-template-columns:repeat(2,1fr);gap:16px}
-    .inc-card{padding:26px 22px 26px}
-  }
-  @media(max-width:560px){ .inc-grid{grid-template-columns:1fr} }
-
-  /* ===================== ГАЛЕРЕЯ =====================
-     Босс 14.09: фон — песочный с камуфляжем, как «Расположение» и «Что включено»;
-     фото — бесконечная лента, едет сама, на наведении встаёт. Карточки — те же
-     .shot-card (тёмная рамка --bog, кремовая окантовка, подпись антиквой --sage).
-     Вторая половина ленты — копия (data-clone, aria-hidden) для бесшовного цикла.
-     Кадры — рыбалка и люди с уловом вперемешку с видами базы и природы, транспорт —
-     один кадр (Босс: «люди едут рыбачить и смотреть красоты, а не на вертолёт»).
-     Клик по фото — полноэкранный просмотр (общий лайтбокс, см. низ файла). */
-  .gallery{position:relative;isolation:isolate;overflow:hidden;background:#E5E3D1;padding:var(--section-y) 0}
-  .gallery::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
-    background-image:url("../public/photo/camo.jpg");background-size:820px;background-repeat:repeat;
-    opacity:.085;mix-blend-mode:multiply;filter:saturate(.3) contrast(.55)}
-  .gallery>*{position:relative;z-index:1}
-  .gallery .section-head{padding:0 46px}
-  /* паддинг — место под наклон и тень карточек; отрицательное поле возвращает общий ритм */
-  .gallery__marquee{overflow:hidden;padding:26px 0 44px;margin:-26px 0 -44px;
-    -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 5%,#000 95%,transparent 100%);
-            mask-image:linear-gradient(90deg,transparent 0,#000 5%,#000 95%,transparent 100%)}
-  .gallery__track{display:flex;align-items:flex-start;gap:34px;width:max-content;
-    animation:galleryMove 200s linear infinite}
-  .gallery__marquee:hover .gallery__track{animation-play-state:paused}
-  /* сдвиг ровно на половину ленты + половину зазора — стык не виден */
-  @keyframes galleryMove{to{transform:translateX(calc(-50% - 17px))}}
-  .gallery__track .shot-card{width:clamp(300px,26vw,400px)}
-  .gallery__track .shot-card:nth-child(odd){--r:-1.5deg}
-  .gallery__track .shot-card:nth-child(even){--r:1.5deg;margin-top:30px}
-  @media(prefers-reduced-motion:reduce){
-    .gallery__track{animation:none}
-    .gallery__marquee{overflow-x:auto;-webkit-mask-image:none;mask-image:none}
+  @media(max-width:1200px){
+    .inc-card{padding:24px 22px 26px}
+    .day-panel{grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:40px}
   }
   @media(max-width:1000px){
-    .gallery{padding:var(--section-y) 0}
-    .gallery .section-head{padding:0 22px}
-    .gallery__track .shot-card{width:260px}
+    .program{padding:var(--section-y) 22px}
+    .program__head{grid-template-columns:1fr;gap:20px}
+    /* лента дней прокручивается вбок, чтобы вкладки не сплющивались */
+    .day-tabs{display:flex;overflow-x:auto;scrollbar-width:none;margin-left:-22px;margin-right:-22px;padding:0 22px}
+    .day-tabs::-webkit-scrollbar{display:none}
+    .day-tabs::before{left:30px;right:22px}
+    .day-tab{flex:0 0 190px}
+    .steps{columns:1}
+    /* в одну колонку день 1 очень длинный — неактивные панели убираем совсем,
+       иначе под коротким днём остаётся пустота до кнопок листания */
+    .day-panel{display:none}
+    .day-panel.is-active{display:grid}
+    .day-nav{margin-top:26px}
+  }
+  @media(max-width:640px){
+    .day-panel{grid-template-columns:1fr}
+    .day-panel__photo{max-width:360px}
+    .info-grid{grid-template-columns:1fr}
+    .info-grid .inc-card{grid-column:auto!important}
   }
 
   /* ===================== CTA (утверждённый компонент, без изменений) ===================== */
@@ -632,6 +547,10 @@
     .cta-section__content{padding:64px 22px}
     .site-footer{padding:56px 22px 24px}
     .footer__top{gap:28px;padding-bottom:36px}
+    .day-panel__photo{aspect-ratio:4/3}
+    .day-tab__name{font-size:15px}
+    .step b{font-size:15px}
+    .day-tab{flex-basis:160px}
     .site-nav__right{gap:16px}
     /* «ИНФРАСТРУКТУРА» и «К НЕЗАБЫВАЕМОМУ» антиквой капсом не влезали в 346 px — H2 на телефоне чуть мельче */
     .h2{font-size:clamp(27px,7.6vw,36px)}
@@ -642,11 +561,14 @@
   }
 
   @media(max-width:560px){
-    /* карточки «Что включено» на телефоне — компактно: иконка слева, текст справа */
     .inc-card{display:grid;grid-template-columns:52px minmax(0,1fr);column-gap:16px;padding:20px 20px 22px}
     .inc-card__icon{grid-row:1/3;width:52px;height:52px;margin:0}
     .inc-card__icon svg{width:28px;height:28px}
     .inc-card h3{margin-bottom:8px}
+  }
+  @media(max-width:1000px){
+    /* подсказка, что лента дней прокручивается: правый край растворён */
+    .day-tabs{-webkit-mask-image:linear-gradient(90deg,#000 86%,transparent 100%);mask-image:linear-gradient(90deg,#000 86%,transparent 100%)}
   }
 </style>
 </head>
@@ -656,10 +578,10 @@
   <nav class="site-nav">
     <a class="site-nav__logo" href="page.html">Кавинка</a>
     <div class="site-nav__links">
-      <a class="is-current" href="about.html">О туре</a>
+      <a href="about.html">О туре</a>
       <a href="accommodation.html">Размещение</a>
       <a href="pricing.html">Выбрать тур</a>
-      <a href="program.html">Программа тура</a>
+      <a class="is-current" href="program.html">Программа тура</a>
       <a href="contacts.html">Контакты</a>
     </div>
     <div class="site-nav__right">
@@ -674,10 +596,10 @@
   <nav class="site-nav">
     <a class="site-nav__logo" href="page.html">Кавинка</a>
     <div class="site-nav__links">
-      <a class="is-current" href="about.html">О туре</a>
+      <a href="about.html">О туре</a>
       <a href="accommodation.html">Размещение</a>
       <a href="pricing.html">Выбрать тур</a>
-      <a href="program.html">Программа тура</a>
+      <a class="is-current" href="program.html">Программа тура</a>
       <a href="contacts.html">Контакты</a>
     </div>
     <div class="site-nav__right">
@@ -686,9 +608,9 @@
     </div>
   </nav>
   <div class="page-head__body">
-    <img class="page-head__art page-head__art--eagle" src="../public/photo/artifacts/artifact-eagle-flying.jpg" alt="">
-    <div class="page-head__crumbs reveal" style="--i:0"><a href="page.html">Главная</a><i></i><span>О туре</span></div>
-    <h1 class="reveal" style="--i:1">О туре</h1>
+    <img class="page-head__art page-head__art--moose" src="../public/photo/artifacts/artifact-moose-antlers-clean.jpg" alt="">
+    <div class="page-head__crumbs reveal" style="--i:0"><a href="page.html">Главная</a><i></i><span>Программа тура</span></div>
+    <h1 class="reveal" style="--i:1">Программа тура</h1>
   </div>
 </section>
 
@@ -697,379 +619,195 @@
   <div class="ticker__track" id="tickerTrack"></div>
 </div>
 
-<!-- ===================== РАСПОЛОЖЕНИЕ БАЗЫ ===================== -->
-<section class="location sand" id="location">
-  <div class="location__grid">
-    <div class="location__text reveal">
-      <div class="eyebrow"><span>Кавинская долина</span></div>
-      <h2 class="h2">Расположение <em style="color:var(--bog)">базы</em></h2>
-      <p class="location__lead">База «КАВИНКА» находится прямо на границе с Магаданским государственным заповедником. За вами — дикая тайга, куда не ступает цивилизация. Здесь можно встретить медвежьи семьи, нерп, выглядывающих из воды, и бесчисленные стаи лососевых.</p>
-      <p class="location__lead">Это уникальное место, где сочетается первозданная природа, богатая рыбой река и современная инфраструктура для комфортного отдыха.</p>
-    </div>
-    <div class="scene reveal" style="--i:2" id="locScene">
-          <img class="scene__shot is-active" src="../public/photo/base-from-water.jpg" alt="База «КАВИНКА» с воды" data-cap="База с воды" style="object-position:center 55%">
-          <img class="scene__shot" src="../public/photo/nerpa-river.jpg" alt="Нерпа на бревне у реки Тауй" data-cap="Нерпа у пирса" style="object-position:center 68%">
-          <img class="scene__shot" src="../public/photo/gazebo-kavinskaya-dolina.jpg" alt="Беседка «Кавинская долина» на берегу" data-cap="Кавинская долина" style="object-position:center 45%">
-          <img class="scene__shot" src="../public/photo/reserve-sign.jpg" alt="Знак Магаданского заповедника у воды" data-cap="Граница заповедника" style="object-position:center 45%">
-          <img class="scene__shot" src="../public/photo/pier-base-from-river.jpg" alt="Пирс и домики базы с реки" data-cap="Пирс с реки" style="object-position:center 55%">
-      <span class="scene__cap" id="locCap"></span>
-      <div class="scene__thumbs" id="locThumbs"></div>
-      <button class="scene__arrow scene__arrow--prev" type="button" data-dir="-1" aria-label="Предыдущее фото"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
-      <button class="scene__arrow scene__arrow--next" type="button" data-dir="1" aria-label="Следующее фото"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
-    </div>
-  </div>
-</section>
-
-<!-- ===================== КАК ДОБРАТЬСЯ ===================== -->
-<section class="route" id="howto">
-  <!-- фон: сейчас фото, заказчик подставит видео — заменить тег на
-       <video class="route__bg" src="..." autoplay muted loop playsinline></video> -->
-  <img class="route__bg" src="../public/photo/river-boat-hills.jpg" alt="">
-  <div class="route__inner">
-    <div class="route__text">
-    <div class="eyebrow reveal" style="--i:0"><span>Дорога до базы</span></div>
-    <h2 class="h2 route__title reveal" style="--i:1">Как <em>добраться</em></h2>
-    <p class="route__quote reveal" style="--i:2">«Дорога сюда — уже приключение. И&nbsp;первая награда»</p>
-    <p class="route__lead reveal" style="--i:3">200 км от Магадана: автомобиль, паром, вертолёт прямо с реки. Встречаем в аэропорту и довозим до базы — заезды с 10 июня по 30 сентября.</p>
+<!-- ===================== ПРОГРАММА: как устроен тур + по дням + важная информация ===================== -->
+<section class="program" id="days">
+  <div class="program__inner">
+    <div class="program__head reveal">
+      <div>
+        <div class="eyebrow"><span>5 дней на базе · 6 календарных</span></div>
+        <h2 class="h2">Как устроен <em>тур</em></h2>
+      </div>
+      <div>
+        <p class="program__lead">5-дневный тур на базе KAVINKA рассчитан на 6 календарных дней.</p>
+        <p class="program__lead">Пять дней гости проводят на базе и на рыбалке, а шестой день закладывается на выезд с базы, трансфер в Магадан, заселение в гостиницу, свободное время в городе и возможные экскурсии. Вылет планируется на следующий день.</p>
+      </div>
     </div>
 
-    <div class="route__aside">
-    <div class="route__strip reveal" style="--i:4">
-      <span class="route__pill">Магадан <small>аэропорт</small></span>
-      <span class="route__dash"></span>
-      <span class="route__pill route__pill--km">200 км</span>
-      <span class="route__dash"></span>
-      <span class="route__pill">Кавинка <small>река Тауй</small></span>
+    <div class="day-tabs" id="dayTabs" role="tablist" aria-label="Дни тура">
+      <button class="day-tab is-active reveal" style="--i:0" role="tab" aria-selected="true" data-index="0" type="button"><span class="day-tab__no">День 1</span><span class="day-tab__name">Прибытие на базу</span></button>
+      <button class="day-tab reveal" style="--i:1" role="tab" aria-selected="false" data-index="1" type="button"><span class="day-tab__no">День 2</span><span class="day-tab__name">Первый день рыбалки</span></button>
+      <button class="day-tab reveal" style="--i:2" role="tab" aria-selected="false" data-index="2" type="button"><span class="day-tab__no">День 3</span><span class="day-tab__name">Рыбалка</span></button>
+      <button class="day-tab reveal" style="--i:3" role="tab" aria-selected="false" data-index="3" type="button"><span class="day-tab__no">День 4</span><span class="day-tab__name">Рыбалка</span></button>
+      <button class="day-tab reveal" style="--i:4" role="tab" aria-selected="false" data-index="4" type="button"><span class="day-tab__no">День 5</span><span class="day-tab__name">Крайний день рыбалки</span></button>
+      <button class="day-tab reveal" style="--i:5" role="tab" aria-selected="false" data-index="5" type="button"><span class="day-tab__no">День 6</span><span class="day-tab__name">Возвращение в Магадан</span></button>
     </div>
 
-    <a class="btn reveal" style="--i:5" href="https://t.me/KAVINKA_bot"><span>Оставить заявку</span></a>
+    <div class="day-panels reveal" style="--i:3" id="dayPanels">
+    <article class="day-panel is-active" data-index="0">
+      <figure class="day-panel__photo"><img src="../public/photo/magadan-airport.jpg" alt="Аэропорт Магадана ночью"><figcaption>Аэропорт Магадан</figcaption></figure>
+      <div class="day-panel__body">
+        <span class="day-panel__no">День 1</span>
+        <h3 class="day-panel__title">Прибытие на базу</h3>
+        <ol class="steps">
+          <li class="step"><b>Встреча в аэропорту</b><span>Администратор встречает группу в аэропорту Магадана</span></li>
+          <li class="step"><b>Трансфер в город</b></li>
+          <li class="step"><b>Экскурсия / обед</b><span>В ожидании парома</span></li>
+          <li class="step"><b>Выезд на паром</b><span>Переезд к паромной переправе</span></li>
+          <li class="step"><b>Переправа на пароме</b><span>По расписанию</span></li>
+          <li class="step"><b>Переезд в посёлок Талон</b><span>Группа направляется к точке пересадки</span></li>
+          <li class="step"><b>Пересадка на болотоход</b><span>Маршрут через труднопроходимую тайгу</span></li>
+          <li class="step"><b>Прибытие на базу KAVINKA</b><span>Заселение в домики</span></li>
+          <li class="step"><b>Инструктаж</b><span>Знакомство с базой и программой</span></li>
+          <li class="step"><b>Обед / ужин</b><span>В зависимости от времени прибытия</span></li>
+          <li class="step"><b>Подготовка к рыбалке</b><span>Планирование маршрута, снасти, экипировка</span></li>
+        </ol>
+        <div class="day-nav">
+          <button class="day-nav__btn day-nav__btn--prev" type="button" data-dir="-1"><i>←</i><span></span></button>
+          <button class="day-nav__btn day-nav__btn--next" type="button" data-dir="1"><span></span><i>→</i></button>
+        </div>
+      </div>
+    </article>
+    <article class="day-panel" data-index="1">
+      <figure class="day-panel__photo"><img src="../public/photo/boat-pier-dawn.jpg" alt="Лодка у пирса на рассвете"><figcaption>Утро у пирса</figcaption></figure>
+      <div class="day-panel__body">
+        <span class="day-panel__no">День 2</span>
+        <h3 class="day-panel__title">Первый день рыбалки</h3>
+        <ol class="steps">
+          <li class="step"><b>Завтрак</b></li>
+          <li class="step"><b>Утренний выезд на рыбалку</b><span>Группами до 4 человек с гидом на водомётных лодках</span></li>
+          <li class="step"><b>Рыбалка</b><span>Знакомство с участком ловли</span></li>
+          <li class="step"><b>Возвращение на базу</b><span>Свободное время после рыбалки</span></li>
+          <li class="step"><b>Обед</b></li>
+          <li class="step"><b>Выезд на рыбалку</b></li>
+          <li class="step"><b>Возвращение на базу</b></li>
+          <li class="step"><b>Ужин</b></li>
+          <li class="step"><b>Баня</b><span>Отдых после первого рыболовного дня</span></li>
+        </ol>
+        <div class="day-nav">
+          <button class="day-nav__btn day-nav__btn--prev" type="button" data-dir="-1"><i>←</i><span></span></button>
+          <button class="day-nav__btn day-nav__btn--next" type="button" data-dir="1"><span></span><i>→</i></button>
+        </div>
+      </div>
+    </article>
+    <article class="day-panel" data-index="2">
+      <figure class="day-panel__photo"><img src="../public/photo/angler-grayling-cap.jpg" alt="Рыбак с хариусом"><figcaption>Хариус</figcaption></figure>
+      <div class="day-panel__body">
+        <span class="day-panel__no">День 3</span>
+        <h3 class="day-panel__title">Рыбалка</h3>
+        <ol class="steps">
+          <li class="step"><b>Завтрак</b></li>
+          <li class="step"><b>Утренний выезд на рыбалку</b><span>Группами до 4 человек с гидом на водомётных лодках</span></li>
+          <li class="step"><b>Рыбалка</b><span>Новый участок ловли</span></li>
+          <li class="step"><b>Возвращение на базу</b><span>Свободное время после рыбалки</span></li>
+          <li class="step"><b>Обед</b></li>
+          <li class="step"><b>Выезд на рыбалку</b><span>Можно выбрать участок ловли</span></li>
+          <li class="step"><b>Возвращение на базу</b></li>
+          <li class="step"><b>Ужин</b></li>
+          <li class="step"><b>Баня</b></li>
+        </ol>
+        <div class="day-nav">
+          <button class="day-nav__btn day-nav__btn--prev" type="button" data-dir="-1"><i>←</i><span></span></button>
+          <button class="day-nav__btn day-nav__btn--next" type="button" data-dir="1"><span></span><i>→</i></button>
+        </div>
+      </div>
+    </article>
+    <article class="day-panel" data-index="3">
+      <figure class="day-panel__photo"><img src="../public/photo/river-boat-hills.jpg" alt="Лодка на реке Тауй, сопки"><figcaption>На реке Тауй</figcaption></figure>
+      <div class="day-panel__body">
+        <span class="day-panel__no">День 4</span>
+        <h3 class="day-panel__title">Рыбалка</h3>
+        <ol class="steps">
+          <li class="step"><b>Завтрак</b></li>
+          <li class="step"><b>Утренний выезд на рыбалку</b><span>Группами до 4 человек с гидом на водомётных лодках</span></li>
+          <li class="step"><b>Рыбалка</b><span>Можно выбрать новый или понравившийся участок ловли</span></li>
+          <li class="step"><b>Возвращение на базу</b><span>Свободное время после рыбалки</span></li>
+          <li class="step"><b>Обед</b></li>
+          <li class="step"><b>Выезд на рыбалку</b></li>
+          <li class="step"><b>Возвращение на базу</b></li>
+          <li class="step"><b>Ужин</b></li>
+          <li class="step"><b>Баня</b></li>
+        </ol>
+        <div class="day-nav">
+          <button class="day-nav__btn day-nav__btn--prev" type="button" data-dir="-1"><i>←</i><span></span></button>
+          <button class="day-nav__btn day-nav__btn--next" type="button" data-dir="1"><span></span><i>→</i></button>
+        </div>
+      </div>
+    </article>
+    <article class="day-panel" data-index="4">
+      <figure class="day-panel__photo"><img src="../public/photo/angler-beach.jpg" alt="Рыбак идёт по берегу с уловом"><figcaption>С уловом на берегу</figcaption></figure>
+      <div class="day-panel__body">
+        <span class="day-panel__no">День 5</span>
+        <h3 class="day-panel__title">Крайний день рыбалки</h3>
+        <ol class="steps">
+          <li class="step"><b>Завтрак</b></li>
+          <li class="step"><b>Утренний выезд на рыбалку</b><span>Группами до 4 человек с гидом на водомётных лодках</span></li>
+          <li class="step"><b>Рыбалка</b><span>На любом понравившемся участке ловли</span></li>
+          <li class="step"><b>Возвращение на базу</b><span>Свободное время после рыбалки</span></li>
+          <li class="step"><b>Обед</b></li>
+          <li class="step"><b>Выезд на рыбалку</b></li>
+          <li class="step"><b>Возвращение на базу</b></li>
+          <li class="step"><b>Прощальный ужин</b></li>
+          <li class="step"><b>Баня</b></li>
+        </ol>
+        <div class="day-nav">
+          <button class="day-nav__btn day-nav__btn--prev" type="button" data-dir="-1"><i>←</i><span></span></button>
+          <button class="day-nav__btn day-nav__btn--next" type="button" data-dir="1"><span></span><i>→</i></button>
+        </div>
+      </div>
+    </article>
+    <article class="day-panel" data-index="5">
+      <figure class="day-panel__photo"><img src="../public/photo/ferry-crossing.jpg" alt="Машины на пароме, Магадан на горизонте"><figcaption>Паромная переправа</figcaption></figure>
+      <div class="day-panel__body">
+        <span class="day-panel__no">День 6</span>
+        <h3 class="day-panel__title">Возвращение в Магадан</h3>
+        <ol class="steps">
+          <li class="step"><b>Завтрак</b></li>
+          <li class="step"><b>Выезд с базы KAVINKA</b><span>Трансфер через тайгу</span></li>
+          <li class="step"><b>Паромная переправа</b><span>По расписанию</span></li>
+          <li class="step"><b>Заселение в гостиницу</b><span>Размещение перед вылетом</span></li>
+          <li class="step"><b>Свободный день в городе</b><span>Отдых, прогулка, возможные экскурсии</span></li>
+          <li class="step"><b>Сопровождение администратора</b><span>Администратор провожает группу и помогает с организационными вопросами</span></li>
+          <li class="step"><b>Вылет</b><span>На следующий день из аэропорта Магадана</span></li>
+        </ol>
+        <div class="day-nav">
+          <button class="day-nav__btn day-nav__btn--prev" type="button" data-dir="-1"><i>←</i><span></span></button>
+          <button class="day-nav__btn day-nav__btn--next" type="button" data-dir="1"><span></span><i>→</i></button>
+        </div>
+      </div>
+    </article>
     </div>
-  </div>
-</section>
 
-<!-- ===================== ЧТО ВКЛЮЧЕНО В ТУР ===================== -->
-<section class="included sand" id="included">
-  <div class="section-head reveal">
-    <div class="eyebrow eyebrow--center"><span>В стоимости тура</span></div>
-    <h2 class="h2">Что включено <em style="white-space:nowrap">в тур</em></h2>
-  </div>
-
-  <div class="inc-grid">
-    <article class="inc-card reveal" style="--i:0">
-      <span class="inc-card__icon">
-        <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 21.5v-4.2l2.6-5.6c.3-.7 1-1.2 1.8-1.2h11.4c.7 0 1.3.3 1.7.9l3.3 4.6 4.4 1.1c.8.2 1.3.9 1.3 1.7v2.7"/>
-          <path d="M3 21.5h2.6M12.4 21.5h7.3M26.5 21.5h2"/>
-          <circle cx="9" cy="21.8" r="3"/>
-          <circle cx="23" cy="21.8" r="3"/>
-          <path d="M8.6 11v4.6h14.2M14.4 11v4.6"/>
-          <path d="M6 8.3h13"/>
-          <path d="M3 17.3h2.2"/>
-        </svg>
-      </span>
-      <h3>Трансфер</h3>
-      <p>Встреча в аэропорту, доставка до базы и обратно</p>
-    </article>
-    <article class="inc-card reveal" style="--i:1">
-      <span class="inc-card__icon">
-        <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 17.5h22.5c1.2 0 2.1-.4 2.8-1.2l.7-.8H3z"/>
-          <path d="M5.5 17.5 7.4 21h16.2l3.3-3.5"/>
-          <path d="M11 15.5v-3.8h6.4l2.4 3.8"/>
-          <path d="M13.2 11.7l1.4-3h2.6"/>
-          <path d="M2.5 25c1.8-1 3.6-1 5.4 0s3.6 1 5.4 0 3.6-1 5.4 0 3.6 1 5.4 0 3.6-1 5.4 0"/>
-          <path d="M1.8 21.4c1.2-.6 2.3-.5 3.4.2"/>
-        </svg>
-      </span>
-      <h3>Лодки</h3>
-      <p>Современные водомёты</p>
-    </article>
-    <article class="inc-card reveal" style="--i:2">
-      <span class="inc-card__icon">
-        <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4.5 15.5 14 8l9.5 7.5"/>
-          <path d="M7 13.6V25h14V13.6"/>
-          <path d="M7 18h4.5M16.5 18H21M7 21.5h4.5M16.5 21.5H21"/>
-          <path d="M11.8 25v-5.2h4.4V25"/>
-          <path d="M18.3 10.9V7.6h2v4.8"/>
-          <path d="M19.3 5.6c-1.1-.8-.3-1.7.4-2.3"/>
-          <path d="M26.5 25V21M26.5 12.5l-3 4.2h1.6l-2.4 4.3h7.6l-2.4-4.3h1.6z"/>
-          <path d="M3 25h26.5"/>
-        </svg>
-      </span>
-      <h3>Проживание</h3>
-      <p>Комфортные коттеджи с удобствами</p>
-    </article>
-    <article class="inc-card reveal" style="--i:3">
-      <span class="inc-card__icon">
-        <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M6.2 9.4h8.6"/>
-          <path d="M8 9.4c.2-2.4 1.1-3.6 2.5-3.6s2.3 1.2 2.5 3.6"/>
-          <circle cx="10.5" cy="12.2" r="2.3"/>
-          <path d="M6 27v-6.5c0-2.6 2-4.6 4.5-4.6s4.5 2 4.5 4.6V27"/>
-          <path d="M14.6 18.6 18 17"/>
-          <path d="M17 18.4 28.5 5"/>
-          <path d="M28.5 5v12.8"/>
-          <path d="M26.6 19.5c.9-1.2 2.9-1.2 3.8 0-.9 1.2-2.9 1.2-3.8 0z"/>
-          <path d="M26.6 19.5l-1 .9v-1.8z"/>
-        </svg>
-      </span>
-      <h3>Гиды</h3>
-      <p>Профессиональные рыболовные гиды</p>
-    </article>
-    <article class="inc-card reveal" style="--i:4">
-      <span class="inc-card__icon">
-        <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4 16.5 13.5 10l9.5 6.5"/>
-          <path d="M6.3 15v10.5h14.4V15"/>
-          <path d="M11.2 25.5v-5.8h4.6v5.8"/>
-          <path d="M6.3 19h3.5M17.2 19h3.5"/>
-          <path d="M17.5 11.6V8.3h2.2v4.8"/>
-          <path d="M18.1 6.6c-1-.9-.2-1.8.5-2.4M20.3 6.1c-.8-.8-.1-1.5.4-2"/>
-          <path d="M25.2 25.5 27.4 16"/>
-          <path d="M27.4 16c-1.7-.6-2.1-2.3-1.4-3.8M27.4 16c.4-1.8 1.9-2.6 3.2-2.2M27.4 16c-.9-1.4-.3-3.2 1.1-3.8"/>
-          <path d="M2.5 25.5h23"/>
-        </svg>
-      </span>
-      <h3>Баня</h3>
-      <p>Доступ к банному комплексу</p>
-    </article>
-    <article class="inc-card reveal" style="--i:5">
-      <span class="inc-card__icon">
-        <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3.5 13 16 5.5 28.5 13"/>
-          <path d="M5.5 13h21"/>
-          <path d="M7 13v12M25 13v12"/>
-          <path d="M7 18.5h18"/>
-          <path d="M11.5 22h9l-1.4 3h-6.2z"/>
-          <path d="M13.2 25v2M18.8 25v2"/>
-          <path d="M14.6 20.2c-.7-.8-.1-1.6.4-2.1M17.4 20.2c-.7-.8-.1-1.6.4-2.1"/>
-          <path d="M3 27h26"/>
-        </svg>
-      </span>
-      <h3>Беседка</h3>
-      <p>Мангал, BBQ</p>
-    </article>
-  </div>
-</section>
-
-<!-- ===================== ГАЛЕРЕЯ ===================== -->
-<section class="gallery sand" id="gallery">
-  <div class="section-head reveal">
-    <div class="eyebrow eyebrow--center"><span>В дороге и на месте</span></div>
-    <h2 class="h2">Гал<em style="color:var(--bog)">ерея</em></h2>
-  </div>
-
-  <div class="gallery__marquee reveal">
-    <div class="gallery__track">
-      <figure class="shot-card">
-        <div class="shot-card__img"><img src="../public/photo/angler-beach.jpg" alt="Рыбак идёт по берегу с уловом" loading="lazy"></div>
-        <figcaption>С уловом на берегу</figcaption>
-      </figure>
-      <figure class="shot-card">
-        <div class="shot-card__img"><img src="../public/photo/autumn-larches-wide.jpg" alt="Осенние лиственницы отражаются в воде" loading="lazy"></div>
-        <figcaption>Осенняя тайга</figcaption>
-      </figure>
-      <figure class="shot-card">
-        <div class="shot-card__img"><img src="../public/photo/angler-grayling-cap.jpg" alt="Рыбак с хариусом" loading="lazy"></div>
-        <figcaption>Хариус</figcaption>
-      </figure>
-      <figure class="shot-card">
-        <div class="shot-card__img"><img src="../public/photo/base-from-water.jpg" alt="База «КАВИНКА» с воды" loading="lazy"></div>
-        <figcaption>База с воды</figcaption>
-      </figure>
-      <figure class="shot-card">
-        <div class="shot-card__img"><img src="../public/photo/boy-with-coho.jpg" alt="Мальчик с кижучем" loading="lazy"></div>
-        <figcaption>Первый кижуч</figcaption>
-      </figure>
-      <figure class="shot-card">
-        <div class="shot-card__img"><img src="../public/photo/boat-pier-dawn.jpg" alt="Лодка у пирса на рассвете" loading="lazy"></div>
-        <figcaption>Рассвет у пирса</figcaption>
-      </figure>
-      <figure class="shot-card">
-        <div class="shot-card__img"><img src="../public/photo/angler-char-boat.jpg" alt="Рыбак с крупным гольцом у лодки" loading="lazy"></div>
-        <figcaption>Голец у лодки</figcaption>
-      </figure>
-      <figure class="shot-card">
-        <div class="shot-card__img"><img src="../public/photo/river-boat-hills.jpg" alt="Лодка на реке Тауй, сопки" loading="lazy"></div>
-        <figcaption>На реке Тауй</figcaption>
-      </figure>
-      <figure class="shot-card">
-        <div class="shot-card__img"><img src="../public/photo/woman-angler.jpg" alt="Девушка в вейдерсах со спиннингом" loading="lazy"></div>
-        <figcaption>На спиннинг</figcaption>
-      </figure>
-      <figure class="shot-card">
-        <div class="shot-card__img"><img src="../public/photo/hill-table-panorama.jpg" alt="Стол на сопке с видом на долину" style="object-position:center 60%" loading="lazy"></div>
-        <figcaption>Долина с сопки</figcaption>
-      </figure>
-      <figure class="shot-card">
-        <div class="shot-card__img"><img src="../public/photo/grayling-in-hand.jpg" alt="Хариус в руке рыбака" loading="lazy"></div>
-        <figcaption>Хариус в руке</figcaption>
-      </figure>
-      <figure class="shot-card">
-        <div class="shot-card__img"><img src="../public/photo/cottage-pier-sunset.jpg" alt="Коттедж у воды на закате" loading="lazy"></div>
-        <figcaption>Закат на базе</figcaption>
-      </figure>
-      <figure class="shot-card">
-        <div class="shot-card__img"><img src="../public/photo/infra-release.jpg" alt="Рыбу отпускают обратно в реку" loading="lazy"></div>
-        <figcaption>Отпускаем в реку</figcaption>
-      </figure>
-      <figure class="shot-card">
-        <div class="shot-card__img"><img src="../public/photo/eagle-larch.jpg" alt="Белоплечий орлан на лиственнице" loading="lazy"></div>
-        <figcaption>Орлан на лиственнице</figcaption>
-      </figure>
-      <figure class="shot-card">
-        <div class="shot-card__img"><img src="../public/photo/angler-catch-fence.jpg" alt="Рыбак с уловом у забора базы" loading="lazy"></div>
-        <figcaption>Улов дня</figcaption>
-      </figure>
-      <figure class="shot-card">
-        <div class="shot-card__img"><img src="../public/photo/banya-tub-river.jpg" alt="Купель у реки возле бани" loading="lazy"></div>
-        <figcaption>Купель у реки</figcaption>
-      </figure>
-      <figure class="shot-card">
-        <div class="shot-card__img"><img src="../public/photo/fish-school-aerial.jpg" alt="Стая рыбы в воде сверху" loading="lazy"></div>
-        <figcaption>Стая лосося</figcaption>
-      </figure>
-      <figure class="shot-card">
-        <div class="shot-card__img"><img src="../public/photo/autumn-larches-vertical.jpg" alt="Осенние лиственницы у воды" loading="lazy"></div>
-        <figcaption>Золотая осень</figcaption>
-      </figure>
-      <figure class="shot-card">
-        <div class="shot-card__img"><img src="../public/photo/caviar-processing.jpg" alt="Обработка икры у лодки" loading="lazy"></div>
-        <figcaption>Икра на берегу</figcaption>
-      </figure>
-      <figure class="shot-card">
-        <div class="shot-card__img"><img src="../public/photo/pier-lights.jpg" alt="Пирс базы с огнями вечером" loading="lazy"></div>
-        <figcaption>Вечерний пирс</figcaption>
-      </figure>
-      <figure class="shot-card">
-        <div class="shot-card__img"><img src="../public/photo/angler-grayling-spring.jpg" alt="Рыбак с крупным хариусом" loading="lazy"></div>
-        <figcaption>Крупный хариус</figcaption>
-      </figure>
-      <figure class="shot-card">
-        <div class="shot-card__img"><img src="../public/photo/view-from-window.jpg" alt="Вид из окна коттеджа" loading="lazy"></div>
-        <figcaption>Вид из окна</figcaption>
-      </figure>
-      <figure class="shot-card">
-        <div class="shot-card__img"><img src="../public/photo/lighthouse-sea.jpg" alt="Морская рыбалка, маяк на берегу Охотского моря" loading="lazy"></div>
-        <figcaption>Морская рыбалка</figcaption>
-      </figure>
-      <figure class="shot-card">
-        <div class="shot-card__img"><img src="../public/photo/dog-in-boat.jpg" alt="Собака в лодке смотрит на реку" loading="lazy"></div>
-        <figcaption>Собака в лодке</figcaption>
-      </figure>
-      <figure class="shot-card">
-        <div class="shot-card__img"><img src="../public/photo/gazebo-yellow.jpg" alt="Беседка на берегу реки Тауй" style="object-position:center 60%" loading="lazy"></div>
-        <figcaption>Беседка на берегу</figcaption>
-      </figure>
-      <figure class="shot-card">
-        <div class="shot-card__img"><img src="../public/photo/swamp-buggy-rear.jpg" alt="Болотоход по дороге на базу" loading="lazy"></div>
-        <figcaption>Дорога на базу</figcaption>
-      </figure>
-      <figure class="shot-card" data-clone aria-hidden="true">
-        <div class="shot-card__img"><img src="../public/photo/angler-beach.jpg" alt="Рыбак идёт по берегу с уловом" loading="lazy"></div>
-        <figcaption>С уловом на берегу</figcaption>
-      </figure>
-      <figure class="shot-card" data-clone aria-hidden="true">
-        <div class="shot-card__img"><img src="../public/photo/autumn-larches-wide.jpg" alt="Осенние лиственницы отражаются в воде" loading="lazy"></div>
-        <figcaption>Осенняя тайга</figcaption>
-      </figure>
-      <figure class="shot-card" data-clone aria-hidden="true">
-        <div class="shot-card__img"><img src="../public/photo/angler-grayling-cap.jpg" alt="Рыбак с хариусом" loading="lazy"></div>
-        <figcaption>Хариус</figcaption>
-      </figure>
-      <figure class="shot-card" data-clone aria-hidden="true">
-        <div class="shot-card__img"><img src="../public/photo/base-from-water.jpg" alt="База «КАВИНКА» с воды" loading="lazy"></div>
-        <figcaption>База с воды</figcaption>
-      </figure>
-      <figure class="shot-card" data-clone aria-hidden="true">
-        <div class="shot-card__img"><img src="../public/photo/boy-with-coho.jpg" alt="Мальчик с кижучем" loading="lazy"></div>
-        <figcaption>Первый кижуч</figcaption>
-      </figure>
-      <figure class="shot-card" data-clone aria-hidden="true">
-        <div class="shot-card__img"><img src="../public/photo/boat-pier-dawn.jpg" alt="Лодка у пирса на рассвете" loading="lazy"></div>
-        <figcaption>Рассвет у пирса</figcaption>
-      </figure>
-      <figure class="shot-card" data-clone aria-hidden="true">
-        <div class="shot-card__img"><img src="../public/photo/angler-char-boat.jpg" alt="Рыбак с крупным гольцом у лодки" loading="lazy"></div>
-        <figcaption>Голец у лодки</figcaption>
-      </figure>
-      <figure class="shot-card" data-clone aria-hidden="true">
-        <div class="shot-card__img"><img src="../public/photo/river-boat-hills.jpg" alt="Лодка на реке Тауй, сопки" loading="lazy"></div>
-        <figcaption>На реке Тауй</figcaption>
-      </figure>
-      <figure class="shot-card" data-clone aria-hidden="true">
-        <div class="shot-card__img"><img src="../public/photo/woman-angler.jpg" alt="Девушка в вейдерсах со спиннингом" loading="lazy"></div>
-        <figcaption>На спиннинг</figcaption>
-      </figure>
-      <figure class="shot-card" data-clone aria-hidden="true">
-        <div class="shot-card__img"><img src="../public/photo/hill-table-panorama.jpg" alt="Стол на сопке с видом на долину" style="object-position:center 60%" loading="lazy"></div>
-        <figcaption>Долина с сопки</figcaption>
-      </figure>
-      <figure class="shot-card" data-clone aria-hidden="true">
-        <div class="shot-card__img"><img src="../public/photo/grayling-in-hand.jpg" alt="Хариус в руке рыбака" loading="lazy"></div>
-        <figcaption>Хариус в руке</figcaption>
-      </figure>
-      <figure class="shot-card" data-clone aria-hidden="true">
-        <div class="shot-card__img"><img src="../public/photo/cottage-pier-sunset.jpg" alt="Коттедж у воды на закате" loading="lazy"></div>
-        <figcaption>Закат на базе</figcaption>
-      </figure>
-      <figure class="shot-card" data-clone aria-hidden="true">
-        <div class="shot-card__img"><img src="../public/photo/infra-release.jpg" alt="Рыбу отпускают обратно в реку" loading="lazy"></div>
-        <figcaption>Отпускаем в реку</figcaption>
-      </figure>
-      <figure class="shot-card" data-clone aria-hidden="true">
-        <div class="shot-card__img"><img src="../public/photo/eagle-larch.jpg" alt="Белоплечий орлан на лиственнице" loading="lazy"></div>
-        <figcaption>Орлан на лиственнице</figcaption>
-      </figure>
-      <figure class="shot-card" data-clone aria-hidden="true">
-        <div class="shot-card__img"><img src="../public/photo/angler-catch-fence.jpg" alt="Рыбак с уловом у забора базы" loading="lazy"></div>
-        <figcaption>Улов дня</figcaption>
-      </figure>
-      <figure class="shot-card" data-clone aria-hidden="true">
-        <div class="shot-card__img"><img src="../public/photo/banya-tub-river.jpg" alt="Купель у реки возле бани" loading="lazy"></div>
-        <figcaption>Купель у реки</figcaption>
-      </figure>
-      <figure class="shot-card" data-clone aria-hidden="true">
-        <div class="shot-card__img"><img src="../public/photo/fish-school-aerial.jpg" alt="Стая рыбы в воде сверху" loading="lazy"></div>
-        <figcaption>Стая лосося</figcaption>
-      </figure>
-      <figure class="shot-card" data-clone aria-hidden="true">
-        <div class="shot-card__img"><img src="../public/photo/autumn-larches-vertical.jpg" alt="Осенние лиственницы у воды" loading="lazy"></div>
-        <figcaption>Золотая осень</figcaption>
-      </figure>
-      <figure class="shot-card" data-clone aria-hidden="true">
-        <div class="shot-card__img"><img src="../public/photo/caviar-processing.jpg" alt="Обработка икры у лодки" loading="lazy"></div>
-        <figcaption>Икра на берегу</figcaption>
-      </figure>
-      <figure class="shot-card" data-clone aria-hidden="true">
-        <div class="shot-card__img"><img src="../public/photo/pier-lights.jpg" alt="Пирс базы с огнями вечером" loading="lazy"></div>
-        <figcaption>Вечерний пирс</figcaption>
-      </figure>
-      <figure class="shot-card" data-clone aria-hidden="true">
-        <div class="shot-card__img"><img src="../public/photo/angler-grayling-spring.jpg" alt="Рыбак с крупным хариусом" loading="lazy"></div>
-        <figcaption>Крупный хариус</figcaption>
-      </figure>
-      <figure class="shot-card" data-clone aria-hidden="true">
-        <div class="shot-card__img"><img src="../public/photo/view-from-window.jpg" alt="Вид из окна коттеджа" loading="lazy"></div>
-        <figcaption>Вид из окна</figcaption>
-      </figure>
-      <figure class="shot-card" data-clone aria-hidden="true">
-        <div class="shot-card__img"><img src="../public/photo/lighthouse-sea.jpg" alt="Морская рыбалка, маяк на берегу Охотского моря" loading="lazy"></div>
-        <figcaption>Морская рыбалка</figcaption>
-      </figure>
-      <figure class="shot-card" data-clone aria-hidden="true">
-        <div class="shot-card__img"><img src="../public/photo/dog-in-boat.jpg" alt="Собака в лодке смотрит на реку" loading="lazy"></div>
-        <figcaption>Собака в лодке</figcaption>
-      </figure>
-      <figure class="shot-card" data-clone aria-hidden="true">
-        <div class="shot-card__img"><img src="../public/photo/gazebo-yellow.jpg" alt="Беседка на берегу реки Тауй" style="object-position:center 60%" loading="lazy"></div>
-        <figcaption>Беседка на берегу</figcaption>
-      </figure>
-      <figure class="shot-card" data-clone aria-hidden="true">
-        <div class="shot-card__img"><img src="../public/photo/swamp-buggy-rear.jpg" alt="Болотоход по дороге на базу" loading="lazy"></div>
-        <figcaption>Дорога на базу</figcaption>
-      </figure>
+  <div class="info" id="important">
+    <div class="section-head reveal">
+      <div class="eyebrow eyebrow--center"><span>Перед поездкой</span></div>
+      <h2 class="h2">Важная <em style="color:var(--bog)">информация</em></h2>
+    </div>
+    <div class="info-grid">
+      <article class="inc-card reveal" style="--i:0">
+        <span class="inc-card__icon"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="7" width="23" height="20" rx="2"/><path d="M4.5 12.5h23"/><path d="M10 4.5v5M22 4.5v5"/><path d="M9 17h3M14.5 17h3M20 17h3M9 21.5h3M14.5 21.5h3"/><circle cx="21.5" cy="21.5" r="1.3" fill="currentColor" stroke="none"/></svg></span>
+        <h3>Бронируйте заранее</h3>
+        <p>Рекомендуем бронировать тур уже в феврале–марте из-за высокого спроса и короткого сезона.</p>
+      </article>
+      <article class="inc-card reveal" style="--i:1">
+        <span class="inc-card__icon"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.2 7.4h7.6"/><path d="M13.6 7.4c.2-1.9.9-2.9 2.4-2.9s2.2 1 2.4 2.9"/><circle cx="16" cy="9.8" r="2"/><path d="M12 16.2c0-2.3 1.8-4 4-4s4 1.7 4 4"/><circle cx="5.5" cy="20.5" r="1.8"/><circle cx="12.2" cy="20.5" r="1.8"/><circle cx="19.8" cy="20.5" r="1.8"/><circle cx="26.5" cy="20.5" r="1.8"/><path d="M2.6 27c0-1.9 1.3-3.3 2.9-3.3s2.9 1.4 2.9 3.3M9.3 27c0-1.9 1.3-3.3 2.9-3.3s2.9 1.4 2.9 3.3M16.9 27c0-1.9 1.3-3.3 2.9-3.3s2.9 1.4 2.9 3.3M23.6 27c0-1.9 1.3-3.3 2.9-3.3s2.9 1.4 2.9 3.3"/></svg></span>
+        <h3>4 человека на гида</h3>
+        <p>Группы формируются по 4 человека на одного гида.</p>
+      </article>
+      <article class="inc-card reveal" style="--i:2">
+        <span class="inc-card__icon"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 27V10h12.5v17"/><path d="M17.5 15.5H24V27"/><path d="M3 27h23.5"/><path d="M8.5 13.5h2M12.5 13.5h2M8.5 17.5h2M12.5 17.5h2M8.5 21.5h2M12.5 21.5h2M20 19.5h1.5M20 23h1.5"/><path d="M20.5 7.5h8.5M26.5 5.2 29 7.5l-2.5 2.3M23.8 7.5l-1.6-2.6M23.8 7.5l-1.6 2.6"/></svg></span>
+        <h3>Отель в Магадане</h3>
+        <p>Необходимо бронирование отеля в Магадане в день отъезда с базы: вылет планируется на следующий день.</p>
+      </article>
+      <article class="inc-card reveal" style="--i:3">
+        <span class="inc-card__icon"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8.5 11 5.5l10 3 7-3v18l-7 3-10-3-7 3z"/><path d="M11 5.5v18M21 8.5v18"/><path d="M7 19.5c2.6-.9 3.7-4.3 7.2-4.3 3.3 0 4.3 2.7 7.6 1.5" stroke-dasharray="2 2.2"/><path d="M24.5 12.5s-2.4-2.2-2.4-4.2a2.4 2.4 0 0 1 4.8 0c0 2-2.4 4.2-2.4 4.2z"/></svg></span>
+        <h3>Экскурсии</h3>
+        <p>Возможна организация индивидуальных экскурсий.</p>
+      </article>
+      <article class="inc-card reveal" style="--i:4">
+        <span class="inc-card__icon"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 18 12 14.2l8.5 3.8v8.6L12 30.4l-8.5-3.8z"/><path d="M3.5 18 12 21.8l8.5-3.8M12 21.8v8.6"/><path d="M7.8 16.1l8.5 3.9"/><path d="M17 13.5 28.5 2.5"/><path d="M28.5 2.5v10.2"/><path d="M27.6 14.4c.6-.8 1.6-.8 2 0-.4.8-1.4.8-2 0z"/></svg></span>
+        <h3>Снаряжение</h3>
+        <p>Рыболовное снаряжение можно выслать заранее через СДЭК или взять на месте напрокат.</p>
+      </article>
     </div>
   </div>
 </section>
@@ -1081,7 +819,7 @@
     <div class="cta-section__content reveal">
       <h2 class="h2 cta-section__title">Готовы к незабываемому приключению?</h2>
       <p class="cta-section__lead">Напишите в Telegram — забронируем даты и подберём тур под вашу компанию</p>
-      <a class="glass-btn" href="https://t.me/KAVINKA_bot"><span>Оставить заявку</span></a>
+      <a class="btn" href="https://t.me/KAVINKA_bot"><span>Оставить заявку</span></a>
     </div>
   </div>
 </section>
@@ -1136,19 +874,32 @@
   }
   renderTicker();
 
-  // «Расположение базы»: сцена с кадрами — миниатюры и стрелки, выбор только кликом
-  (function(){
-    const shots=[...document.querySelectorAll('#locScene .scene__shot')], thumbs=document.getElementById('locThumbs'), cap=document.getElementById('locCap');
-    let cur=0;
-    function show(n){cur=(n+shots.length)%shots.length;
-      shots.forEach((im,k)=>im.classList.toggle('is-active',k===cur));
-      thumbs.querySelectorAll('button').forEach((b,k)=>b.classList.toggle('is-active',k===cur));
-      cap.textContent=shots[cur].dataset.cap;}
-    shots.forEach((im,k)=>{const b=document.createElement('button');b.type='button';b.setAttribute('aria-label',im.alt);
-      b.innerHTML='<img src="'+im.getAttribute('src')+'" alt="" data-nozoom>';b.addEventListener('click',()=>show(k));thumbs.appendChild(b);});
-    document.querySelectorAll('#locScene .scene__arrow').forEach(b=>b.addEventListener('click',()=>show(cur+Number(b.dataset.dir))));
-    show(0);
-  })();
+  // Программа: вкладки дней — клик, стрелки ← → на ленте, кнопки «предыдущий / следующий»
+  const dayTabs = [...document.querySelectorAll('#dayTabs .day-tab')];
+  const dayPanels = [...document.querySelectorAll('#dayPanels .day-panel')];
+  function showDay(i, focus) {
+    i = Math.max(0, Math.min(dayTabs.length - 1, i));
+    dayTabs.forEach((el, k) => { el.classList.toggle('is-active', k === i); el.setAttribute('aria-selected', k === i); });
+    dayPanels.forEach((el, k) => el.classList.toggle('is-active', k === i));
+    const p = dayPanels[i], prev = p.querySelector('.day-nav__btn--prev'), next = p.querySelector('.day-nav__btn--next');
+    prev.hidden = i === 0; next.hidden = i === dayTabs.length - 1;
+    if (!prev.hidden) prev.querySelector('span').textContent = dayTabs[i - 1].querySelector('.day-tab__no').textContent;
+    if (!next.hidden) next.querySelector('span').textContent = dayTabs[i + 1].querySelector('.day-tab__no').textContent;
+    if (focus) dayTabs[i].focus();
+  }
+  dayTabs.forEach((tab, i) => {
+    tab.addEventListener('click', () => showDay(i));
+    tab.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight') { e.preventDefault(); showDay(i + 1, true); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); showDay(i - 1, true); }
+    });
+  });
+  document.querySelectorAll('.day-nav__btn').forEach(b => b.addEventListener('click', () => {
+    const cur = dayPanels.findIndex(p => p.classList.contains('is-active'));
+    showDay(cur + Number(b.dataset.dir));
+    document.getElementById('dayTabs').scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }));
+  showDay(0);
 
   // Закреплённая шапка — выезжает, когда первый экран прокручен
   const siteHeader = document.getElementById('siteHeader');
