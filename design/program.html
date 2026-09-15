@@ -301,8 +301,11 @@
      активный день — оранжевая икринка и зелёное название */
   .day-tabs{position:relative;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0 18px;
     margin-bottom:40px}
-  .day-tabs::before{content:"";position:absolute;left:8px;right:8px;top:7px;height:0;
-    border-top:1.5px dashed rgba(36,43,27,.36)}
+  /* пунктирная ось — отрезком на каждой вкладке (от точки до следующей): на телефоне лента
+     прокручивается, и ось, нарисованная на самой ленте, оставалась на месте (Босс 16.09) */
+  .day-tab::after{content:"";position:absolute;left:16px;right:-18px;top:7px;height:0;
+    border-top:1.5px dashed rgba(36,43,27,.36);pointer-events:none}
+  .day-tab:last-child::after{display:none}
   .day-tab{all:unset;box-sizing:border-box;cursor:pointer;position:relative;display:block;
     padding:28px 0 14px;border-bottom:2px solid transparent;transition:border-color .3s}
   .day-tab::before{content:"";position:absolute;left:0;top:0;width:16px;height:16px;border-radius:50%;
@@ -316,6 +319,9 @@
   .day-tab__name{display:block;font-family:var(--body);font-weight:500;font-size:17px;line-height:1.25;
     letter-spacing:-.01em;color:var(--ink);transition:color .3s}
   .day-tab:hover .day-tab__name,.day-tab.is-active .day-tab__name{color:var(--olive)}
+
+  .day-tabs__hint{display:none}
+  .day-tabs-wrap{position:relative}
 
   /* панели дней лежат в одной ячейке — высота не прыгает при переключении */
   .day-panels{display:grid}
@@ -401,10 +407,19 @@
     .program{padding:var(--section-y) 22px}
     .program__head{grid-template-columns:1fr;gap:20px}
     /* лента дней прокручивается вбок, чтобы вкладки не сплющивались */
-    .day-tabs{display:flex;overflow-x:auto;scrollbar-width:none;margin-left:-22px;margin-right:-22px;padding:0 22px}
+    .day-tabs{display:flex;overflow-x:auto;scrollbar-width:none;margin-left:-22px;margin-right:-22px;padding:0 22px;
+      scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
     .day-tabs::-webkit-scrollbar{display:none}
-    .day-tabs::before{left:30px;right:22px}
-    .day-tab{flex:0 0 190px}
+    .day-tab{flex:0 0 190px;scroll-snap-align:start}
+    .day-tab:last-child{margin-right:22px}
+    /* подсказка «листайте»: правый край растворён + бегущая стрелка над лентой */
+      .day-tabs-wrap::after{content:"";position:absolute;right:-22px;top:0;bottom:0;width:64px;pointer-events:none;
+      background:linear-gradient(90deg,rgba(229,227,209,0),#E5E3D1)}
+    .day-tabs__hint{display:flex;align-items:center;justify-content:flex-end;gap:8px;margin:-6px 0 10px;
+      font-weight:600;font-size:var(--size-small);text-transform:uppercase;color:var(--olive)}
+    .day-tabs__hint i{font-style:normal;font-weight:300;font-size:18px;line-height:1;animation:hintNudge 1.6s ease-in-out infinite}
+    @keyframes hintNudge{0%,100%{transform:translateX(0)}50%{transform:translateX(6px)}}
+    @media(prefers-reduced-motion:reduce){.day-tabs__hint i{animation:none}}
     .steps{columns:1}
     /* в одну колонку день 1 очень длинный — неактивные панели убираем совсем,
        иначе под коротким днём остаётся пустота до кнопок листания */
@@ -567,8 +582,6 @@
     .inc-card h3{margin-bottom:8px}
   }
   @media(max-width:1000px){
-    /* подсказка, что лента дней прокручивается: правый край растворён */
-    .day-tabs{-webkit-mask-image:linear-gradient(90deg,#000 86%,transparent 100%);mask-image:linear-gradient(90deg,#000 86%,transparent 100%)}
   }
 </style>
 </head>
@@ -633,6 +646,8 @@
       </div>
     </div>
 
+    <div class="day-tabs-wrap">
+    <div class="day-tabs__hint" aria-hidden="true"><span>Листайте дни</span><i>→</i></div>
     <div class="day-tabs" id="dayTabs" role="tablist" aria-label="Дни тура">
       <button class="day-tab is-active reveal" style="--i:0" role="tab" aria-selected="true" data-index="0" type="button"><span class="day-tab__no">День 1</span><span class="day-tab__name">Прибытие на базу</span></button>
       <button class="day-tab reveal" style="--i:1" role="tab" aria-selected="false" data-index="1" type="button"><span class="day-tab__no">День 2</span><span class="day-tab__name">Первый день рыбалки</span></button>
@@ -640,6 +655,7 @@
       <button class="day-tab reveal" style="--i:3" role="tab" aria-selected="false" data-index="3" type="button"><span class="day-tab__no">День 4</span><span class="day-tab__name">Рыбалка</span></button>
       <button class="day-tab reveal" style="--i:4" role="tab" aria-selected="false" data-index="4" type="button"><span class="day-tab__no">День 5</span><span class="day-tab__name">Крайний день рыбалки</span></button>
       <button class="day-tab reveal" style="--i:5" role="tab" aria-selected="false" data-index="5" type="button"><span class="day-tab__no">День 6</span><span class="day-tab__name">Возвращение в Магадан</span></button>
+    </div>
     </div>
 
     <div class="day-panels reveal" style="--i:3" id="dayPanels">
