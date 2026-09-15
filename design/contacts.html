@@ -425,9 +425,64 @@
   @media(max-width:430px){
     .site-nav__right .btn{display:none} /* кнопка есть в меню; в шапке остаются лого и бургер */
   }
+
+  /* ===================== ПРЕЛОАДЕР (16.09, общий) =====================
+     Болотный экран с камуфляжем, имя базы антиквой собирается по буквам, под ним
+     пунктирная «леска» с бегущей икринкой. Показывается один раз за сессию, дальше
+     страницы открываются сразу. При prefers-reduced-motion не показывается. */
+  .preloader{position:fixed;inset:0;z-index:2000;background:var(--bog);color:var(--cream);isolation:isolate;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;
+    transition:opacity .6s ease,visibility 0s .6s}
+  .preloader::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+    background-image:url("../public/photo/camo.jpg");background-size:440px;opacity:.085;mix-blend-mode:overlay}
+  .preloader.is-done{opacity:0;visibility:hidden}
+  .preloader__brand{font-family:var(--disp);font-weight:600;text-transform:uppercase;letter-spacing:.06em;
+    font-size:clamp(34px,5vw,56px);line-height:1;display:flex}
+  .preloader__brand span{display:inline-block;opacity:0;transform:translateY(.4em);
+    animation:plLetter .7s cubic-bezier(.16,.8,.24,1) forwards;animation-delay:calc(var(--i) * 70ms + .15s)}
+  @keyframes plLetter{to{opacity:1;transform:none}}
+  .preloader__line{position:relative;width:min(260px,60vw);height:0;border-top:1.5px dashed rgba(240,239,228,.35)}
+  .preloader__line i{position:absolute;top:-5px;left:0;width:9px;height:9px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%,#FFE2B8 0 16%,var(--roe-lite,#F7A13A) 40%,var(--roe,#E86A12) 78%);
+    box-shadow:0 0 0 3px rgba(232,106,18,.18);animation:plRoe 1.4s cubic-bezier(.45,0,.55,1) infinite alternate}
+  @keyframes plRoe{from{left:0}to{left:calc(100% - 9px)}}
+  .preloader__sub{font-family:var(--body);font-weight:600;font-size:var(--size-small);letter-spacing:0;text-transform:uppercase;
+    color:rgba(240,239,228,.5);opacity:0;animation:plLetter .8s ease forwards .9s}
+  body.is-loading{overflow:hidden}
+  @media(prefers-reduced-motion:reduce){.preloader{display:none}}
+
+  /* ===================== ПОЯВЛЕНИЕ — усиленное (16.09) =====================
+     .reveal: мягкий подъём с лёгким размытием. Заголовки H1/H2: слова выезжают из-под
+     линии по очереди (обёртки .w ставит скрипт). Сцены с фото/видео (.reveal-clip):
+     раскрываются снизу вверх, кадр в это время слегка наезжает. Счётчики [data-count]
+     набирают число, когда карточка появилась. */
+  .reveal{filter:blur(6px)}
+  .reveal.is-visible{filter:blur(0)}
+  .reveal{transition-property:opacity,transform,filter}
+  .h2 .w,.page-head h1 .w,.hero__brand .w{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.06em;margin-bottom:-.06em}
+  .h2 .w>span,.page-head h1 .w>span,.hero__brand .w>span{display:inline-block;transform:translateY(110%);
+    transition:transform .9s cubic-bezier(.16,.8,.24,1);transition-delay:calc(var(--w,0) * 80ms + var(--i,0) * 90ms)}
+  .is-visible .w>span,.is-visible.h2 .w>span{transform:translateY(0)}
+  .reveal-clip{clip-path:inset(100% 0 0 0);transition:clip-path 1s cubic-bezier(.16,.8,.24,1),opacity .6s,filter .6s}
+  .reveal-clip.is-visible{clip-path:inset(0 0 0 0)}
+  .reveal-clip img,.reveal-clip video,.reveal-clip .stay-stage__set{transform:scale(1.08);transition:transform 1.4s cubic-bezier(.16,.8,.24,1)}
+  .reveal-clip.is-visible img,.reveal-clip.is-visible video,.reveal-clip.is-visible .stay-stage__set{transform:scale(1)}
+  .reveal-clip .stay-stage__shot,.reveal-clip .scene__shot{transition:opacity .5s ease,transform 1.4s cubic-bezier(.16,.8,.24,1)}
+  @media(prefers-reduced-motion:reduce){
+    .reveal{filter:none}
+    .h2 .w>span,.page-head h1 .w>span,.hero__brand .w>span{transform:none;transition:none}
+    .reveal-clip{clip-path:none;transition:none}
+    .reveal-clip img,.reveal-clip video{transform:none;transition:none}
+  }
 </style>
 </head>
 <body>
+<div class="preloader" id="preloader" aria-hidden="true">
+  <div class="preloader__brand"><span style="--i:0">К</span><span style="--i:1">а</span><span style="--i:2">в</span><span style="--i:3">и</span><span style="--i:4">н</span><span style="--i:5">к</span><span style="--i:6">а</span></div>
+  <div class="preloader__line"><i></i></div>
+  <div class="preloader__sub">Рыболовная база</div>
+</div>
+
 
 <header class="site-header" id="siteHeader">
   <nav class="site-nav">
@@ -556,7 +611,7 @@
   const tickerItems = [
     { text: 'Пароль в мир дикой природы', quote: true },
     { text: 'Комфортные коттеджи' },
-    { text: '5 видов лососевых' },
+    { text: '6 видов лососевых' },
     { text: '4 гостя на одного гида' },
     { text: 'Граница заповедника' },
     { text: 'Основано в 2005' },
@@ -599,6 +654,66 @@
   }
 </script>
 
+
+<script>
+  /* ПРЕЛОАДЕР + УСИЛЕННОЕ ПОЯВЛЕНИЕ — общий код на всех design/*.html (16.09) */
+  (function(){
+    var pl=document.getElementById('preloader'), reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var seen=false; try{seen=sessionStorage.getItem('kv-pl')==='1';}catch(e){}
+    if(pl){
+      if(seen||reduce){pl.remove();}
+      else{
+        document.body.classList.add('is-loading');
+        var t0=Date.now();
+        var done=function(){var wait=Math.max(0,1500-(Date.now()-t0));setTimeout(function(){
+          pl.classList.add('is-done');document.body.classList.remove('is-loading');
+          try{sessionStorage.setItem('kv-pl','1');}catch(e){}
+          setTimeout(function(){pl.remove();},700);},wait);};
+        if(document.readyState==='complete')done();else window.addEventListener('load',done);
+        setTimeout(done,3500); /* страховка: не держим дольше 3.5 с */
+      }
+    }
+    /* заголовки — по словам */
+    document.querySelectorAll('.h2,.page-head h1,.hero__brand').forEach(function(h){
+      if(h.querySelector('.w'))return; var n=0;
+      var wrap=function(node){
+        [].slice.call(node.childNodes).forEach(function(c){
+          if(c.nodeType===3){
+            var parts=c.nodeValue.split(/( +)/), frag=document.createDocumentFragment();
+            parts.forEach(function(p){ if(!p)return;
+              if(/^ +$/.test(p)){frag.appendChild(document.createTextNode(p));return;}
+              var w=document.createElement('span');w.className='w';w.style.setProperty('--w',n++);
+              var s=document.createElement('span');s.textContent=p;w.appendChild(s);frag.appendChild(w);});
+            node.replaceChild(frag,c);
+          } else if(c.nodeType===1 && !c.classList.contains('w')) wrap(c);
+        });
+      };
+      wrap(h);
+      /* заголовок не внутри .reveal — показываем сразу, когда попадает в экран */
+      if(!h.closest('.reveal') && !h.classList.contains('reveal')){
+        var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){h.classList.add('is-visible');io.unobserve(h);}});},{threshold:.2});
+        io.observe(h);
+      }
+    });
+    /* сцены с фото — раскрытие снизу вверх */
+    document.querySelectorAll('.stay-stage,.scene,.contacts__scene,.day-panel__photo,.package-card__photo,.infra-card>img,.fish-stage,.shot-card__img').forEach(function(el){
+      var host=el.classList.contains('reveal')?el:(el.closest('.reveal')||el);
+      if(host===el&&!el.classList.contains('reveal')){el.classList.add('reveal');}
+      host.classList.add('reveal-clip');
+    });
+    /* счётчики */
+    var ease=function(t){return 1-Math.pow(1-t,3);};
+    var cnt=document.querySelectorAll('[data-count]');
+    if(cnt.length){
+      var cio=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;cio.unobserve(e.target);
+        var el=e.target,to=+el.dataset.count,from=+(el.dataset.from||0),dur=+(el.dataset.dur||1400),t0=null;
+        if(reduce){el.textContent=to;return;}
+        var step=function(ts){if(!t0)t0=ts;var p=Math.min(1,(ts-t0)/dur);el.textContent=Math.round(from+(to-from)*ease(p));if(p<1)requestAnimationFrame(step);};
+        requestAnimationFrame(step);});},{threshold:.5});
+      cnt.forEach(function(el){cio.observe(el);});
+    }
+  })();
+</script>
 
 <script>
   /* ЛАЙТБОКС — общий на весь сайт, код одинаковый во всех design/*.html */
