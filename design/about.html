@@ -245,8 +245,11 @@
      вверх под меню, подрезан снизу, приглушён (.6). Артефакты не повторять:
      «О туре» — орёл, «Размещение» — медведь, «Выбрать тур» — нерка,
      «Программа тура» — лось. */
-  .page-head--inner::after{background:radial-gradient(ellipse 34% 90% at 82% 80%,rgba(183,194,153,.10),transparent 70%)}
-  .page-head--inner .page-head__body{max-width:none;padding:14px 46px 44px;min-height:176px}
+  .page-head--inner::after{display:none}
+  .page-head--inner .page-head__body{max-width:none;padding:0 46px 26px;min-height:0} /* без артефакта шапка ниже, крошки крупнее (Босс 22.09) */
+  .page-head--inner .page-head__crumbs{font-size:16px;margin-bottom:8px}
+  .page-head--inner .page-head__crumbs i{width:5px;height:5px}
+  .page-head--inner h1{font-size:clamp(34px,3.6vw,52px)}
   .page-head--inner h1{margin-bottom:0;margin-left:-.035em;max-width:none}
   .page-head--inner .page-head__sub{display:none}
   /* меню над артефактом (z-index на .site-nav безопасен: он не предок артефакта, screen не ломается) */
@@ -268,7 +271,8 @@
     -webkit-mask-image:radial-gradient(ellipse 52% 54% at 50% 50%,#000 62%,transparent 100%);
             mask-image:radial-gradient(ellipse 52% 54% at 50% 50%,#000 62%,transparent 100%)}
   @media(max-width:980px){
-    .page-head--inner .page-head__body{padding:10px 22px 36px;min-height:160px}
+    .page-head--inner .page-head__body{padding:0 22px 22px;min-height:0}
+    .page-head--inner .page-head__crumbs{font-size:14px}
     .page-head--inner .page-head__art{opacity:.34}
     .page-head--inner .page-head__art--eagle{right:-60px;bottom:-60px;width:400px}
     .page-head--inner .page-head__art--bear{right:-40px;bottom:-60px;width:300px}
@@ -684,7 +688,8 @@
   .h2 .w,.page-head h1 .w,.hero__brand .w{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.06em;margin-bottom:-.06em}
   .h2 .w>span,.page-head h1 .w>span,.hero__brand .w>span{display:inline-block;transform:translateY(110%);
     transition:transform .9s cubic-bezier(.16,.8,.24,1);transition-delay:calc(var(--w,0) * 80ms + var(--i,0) * 90ms)}
-  .is-visible .w>span,.is-visible.h2 .w>span{transform:translateY(0)}
+  /* специфичность выше правила со сдвигом (.page-head h1 .w>span) — иначе H1 внутренних страниц не показывался */
+  .is-visible .w>span,.is-visible.h2 .w>span,.page-head h1.is-visible .w>span,.hero__brand.is-visible .w>span{transform:translateY(0)}
   /* раскрытие снизу вверх — маской, НЕ clip-path: clip-path схлопывает видимую область,
      и IntersectionObserver считает элемент невидимым — сцена никогда не раскрывалась (16.09) */
   .reveal-clip{-webkit-mask-image:linear-gradient(#000 0 0);mask-image:linear-gradient(#000 0 0);
@@ -701,6 +706,29 @@
     .reveal-clip{-webkit-mask-image:none;mask-image:none;transition:none}
     .reveal-clip img,.reveal-clip video{transform:none;transition:none}
   }
+
+  /* ===================== АРТЕФАКТ В ПОДВАЛЕ (Босс 22.09) =====================
+     Резные фигуры с базы переехали из шапок в подвал, справа, режимом screen (сняты на
+     чёрном — фон уходит сам). Под них в сетке подвала зарезервирована четвёртая колонка,
+     чтобы не ложиться на текст «О компании». Артефакты не повторяются: главная — медведь
+     с рыбой, «О туре» — орёл, «Размещение» — медведь, «Выбрать тур» — нерка,
+     «Программа» — лось, «Контакты» — нерпа. */
+  .site-footer>.site-footer__art{position:absolute;z-index:0;right:46px;bottom:86px;pointer-events:none;
+    mix-blend-mode:screen;opacity:.72;height:auto} /* крупно (Босс 22.09) */
+  .site-footer__art--eagle{width:min(520px,36vw);
+    -webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 60%,transparent 100%);mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 60%,transparent 100%);bottom:calc(86px + -40px)}
+  .site-footer__art--bear{width:min(360px,25vw);
+    -webkit-mask-image:radial-gradient(ellipse 60% 58% at 50% 46%,#000 70%,transparent 100%);mask-image:radial-gradient(ellipse 60% 58% at 50% 46%,#000 70%,transparent 100%);bottom:calc(86px + -30px)}
+  .site-footer__art--sockeye{width:min(640px,44vw)}
+  .site-footer__art--moose{width:min(500px,35vw);
+    -webkit-mask-image:radial-gradient(ellipse 52% 54% at 50% 50%,#000 62%,transparent 100%);mask-image:radial-gradient(ellipse 52% 54% at 50% 50%,#000 62%,transparent 100%);bottom:calc(86px + -20px)}
+  .site-footer__art--nerpa{width:min(620px,43vw);
+    -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 12%,#000 90%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 12%,#000 90%,transparent 100%)}
+  .site-footer__art--bearfish{width:auto;height:calc(100% - 96px)!important;right:60px!important;
+    -webkit-mask-image:linear-gradient(180deg,#000 80%,transparent 100%);mask-image:linear-gradient(180deg,#000 80%,transparent 100%)}
+  @media(min-width:901px){ .footer__top{grid-template-columns:1fr .9fr 1.4fr minmax(300px,520px)} }
+  @media(min-width:901px) and (max-width:1200px){ .footer__top{grid-template-columns:1fr .9fr 1.5fr minmax(240px,360px)} .site-footer>.site-footer__art{opacity:.55} }
+  @media(max-width:900px){ .site-footer>.site-footer__art{opacity:.4;right:-16px;top:24px;bottom:auto;width:190px} .site-footer__art--bearfish{height:230px!important;width:auto;right:0!important} }
 </style>
 </head>
 <body>
@@ -745,7 +773,6 @@
     </div>
   </nav>
   <div class="page-head__body">
-    <img class="page-head__art page-head__art--eagle" src="../public/photo/artifacts/artifact-eagle-flying.jpg" alt="">
     <div class="page-head__crumbs reveal" style="--i:0"><a href="page.html">Главная</a><i></i><span>О туре</span></div>
     <h1 class="reveal" style="--i:1">О туре</h1>
   </div>
@@ -1146,6 +1173,7 @@
 
 <!-- ===================== ФУТЕР (утверждённый компонент) ===================== -->
 <footer class="site-footer">
+  <img class="site-footer__art site-footer__art--eagle" src="../public/photo/artifacts/artifact-eagle-flying.jpg" alt="">
   <div class="footer__top reveal">
     <div class="footer__col">
       <span class="footer__logo">Кавинка</span>
@@ -1315,7 +1343,7 @@
 <script>
   /* ЛАЙТБОКС — общий на весь сайт, код одинаковый во всех design/*.html */
   (function(){
-    var EXCLUDE='.page-head__art,.route__bg,.extras__art,.quote__art,.hero img,.site-nav img,.lightbox img,[data-nozoom]';
+    var EXCLUDE='.page-head__art,.site-footer__art,.route__bg,.extras__art,.quote__art,.hero img,.site-nav img,.lightbox img,[data-nozoom]';
     var all=[].slice.call(document.querySelectorAll('img')).filter(function(i){return !i.closest(EXCLUDE);});
     if(!all.length) return;
     var list=[],seen={};
