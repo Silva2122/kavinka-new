@@ -45,9 +45,10 @@ export const site = {
  */
 export const navigation: NavItem[] = [
   { href: "/about", label: "О туре" },
-  { href: "/accommodation", label: "Размещение" },
   { href: "/pricing", label: "Выбрать тур" },
   { href: "/program", label: "Программа тура" },
+  // Босс 22.09: «Размещение» после «Программы тура»
+  { href: "/accommodation", label: "Размещение" },
   { href: "/contacts", label: "Контакты" },
 ];
 
