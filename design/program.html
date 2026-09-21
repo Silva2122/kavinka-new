@@ -444,7 +444,7 @@
     background:linear-gradient(180deg,rgba(8,11,5,.5),rgba(8,11,5,.62) 60%,rgba(8,11,5,.72))}
   .cta-section__content{position:relative;z-index:2;max-width:820px;margin:0 auto;
     padding:var(--section-y) 46px;text-align:center}
-  .cta-section__title{color:var(--cream);margin-bottom:var(--title-gap);text-shadow:0 3px 18px rgba(0,0,0,.5)}
+  .cta-section__title{color:var(--cream);margin-bottom:38px;text-shadow:0 3px 18px rgba(0,0,0,.5)}
   .cta-section__lead{font-size:var(--base-size);max-width:var(--head-max);margin-inline:auto;color:rgba(240,239,228,.86);margin-bottom:38px;
     text-shadow:0 2px 12px rgba(0,0,0,.45)}
   @media(max-width:640px){ .cta-section__content{padding:var(--section-y) 22px} }
@@ -517,7 +517,7 @@
 
   /* ===================== МОБИЛЬНОЕ МЕНЮ (общее на все страницы, 16.09) =====================
      Бургер в шапке открывает полноэкранное меню: пункты берутся скриптом из .site-nav__links
-     текущей страницы, ниже — кнопка «Оставить заявку» и телефон. Бургер анимируется в крестик. */
+     текущей страницы, ниже — кнопка «Забронировать» и телефон. Бургер анимируется в крестик. */
   .site-nav__burger{position:relative;width:26px;height:22px;border:0;background:none;padding:0;cursor:pointer;flex:none}
   .site-nav__burger::before,.site-nav__burger::after{content:"";position:absolute;left:0;right:0;height:1.5px;background:var(--cream);
     transition:transform .3s,top .3s,bottom .3s}
@@ -658,7 +658,7 @@
       <a href="contacts.html">Контакты</a>
     </div>
     <div class="site-nav__right">
-      <a class="btn btn--sm" href="https://t.me/KAVINKA_bot"><span>Оставить заявку</span></a>
+      <a class="btn btn--sm" href="https://t.me/KAVINKA_bot"><span>Забронировать</span></a>
       <button class="site-nav__burger" type="button" aria-label="Меню"></button>
     </div>
   </nav>
@@ -676,7 +676,7 @@
       <a href="contacts.html">Контакты</a>
     </div>
     <div class="site-nav__right">
-      <a class="btn btn--sm" href="https://t.me/KAVINKA_bot"><span>Оставить заявку</span></a>
+      <a class="btn btn--sm" href="https://t.me/KAVINKA_bot"><span>Забронировать</span></a>
       <button class="site-nav__burger" type="button" aria-label="Меню"></button>
     </div>
   </nav>
@@ -894,8 +894,7 @@
     <video src="../public/video/cta-trout.mp4" autoplay muted loop playsinline></video>
     <div class="cta-section__content reveal">
       <h2 class="h2 cta-section__title">Готовы к незабываемому приключению?</h2>
-      <p class="cta-section__lead">Напишите в Telegram — забронируем даты и подберём тур под вашу компанию</p>
-      <a class="btn" href="https://t.me/KAVINKA_bot"><span>Оставить заявку</span></a>
+      <a class="btn" href="https://t.me/KAVINKA_bot"><span>Забронировать</span></a>
     </div>
   </div>
 </section>
@@ -1122,7 +1121,7 @@
       '<button class="site-nav__burger" type="button" aria-label="Закрыть меню"></button></div>'+
       '<ul class="mnav__links">'+[].map.call(links.querySelectorAll('a'),function(a){
         return '<li><a href="'+a.getAttribute('href')+'"'+(a.classList.contains('is-current')?' class="is-current"':'')+'>'+a.textContent+'<i>→</i></a></li>';}).join('')+'</ul>'+
-      '<div class="mnav__foot"><a class="btn" href="https://t.me/KAVINKA_bot"><span>Оставить заявку</span></a>'+
+      '<div class="mnav__foot"><a class="btn" href="https://t.me/KAVINKA_bot"><span>Забронировать</span></a>'+
       '<a class="mnav__phone" href="tel:+79140333555">+7 914 0333 555</a></div>';
     document.body.appendChild(m);
     function toggle(o){document.body.classList.toggle('menu-open',o);m.setAttribute('aria-hidden',!o);}
