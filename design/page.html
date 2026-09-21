@@ -415,6 +415,15 @@
     .about__content{gap:40px;padding:56px 32px 44px}
   }
   @media(max-width:640px){
+    /* Босс 22.09: на телефоне «пропуска» убираем — остаётся видео и текст.
+       Без карточек блок стал низким и текст лёг на дома: даём высоту и темним плотнее */
+    .passes{display:none}
+    .about__stage{min-height:78svh}
+    .about__stage::before{background:
+      linear-gradient(180deg,rgba(8,11,5,.82) 0%,rgba(8,11,5,.62) 45%,rgba(8,11,5,.18) 78%,rgba(8,11,5,.55) 100%)}
+    .about__content{justify-content:flex-start;padding:56px 24px 40px}
+  }
+  @media(max-width:640px){
     .about__content{padding:48px 24px 40px;gap:32px}
     .pass{padding:22px 24px 20px}
   }
@@ -878,7 +887,7 @@
             <div class="pass__kicker"><span>Пропуск · 03</span></div>
             <h3 class="is-num" data-count="2005" data-from="1985" data-dur="1800">1985</h3>
           </div>
-          <p>Год основания. Работаем в Кавинской долине больше двадцати лет.</p>
+          <p>Год основания.</p>
         </article>
       </div>
     </div>
@@ -890,7 +899,7 @@
   <div class="fish-section__head reveal">
     <div class="eyebrow eyebrow--center"><span>6 видов лососевых · июнь — сентябрь</span></div>
     <h2 class="h2 fish-section__title">Виды <em>рыб</em></h2>
-    <p class="fish-section__note">У каждой рыбы своё окно: хариус и голец держатся всё лето, кета выходит только в августе.</p>
+    <p class="fish-section__note">У каждой рыбы своё окно.</p>
   </div>
 
   <div class="fish-explorer">
