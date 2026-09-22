@@ -701,11 +701,12 @@
   /* телефон (Босс 22.09): подвал не удлиняем — фигура крупная, справа, слегка уходит за правый край,
      как будто выезжает сбоку; низ на линии над копирайтом, за текст не цепляется (лежит под ним, z-index 0) */
   @media(max-width:900px){
-    .site-footer>.site-footer__art{opacity:.55;left:auto!important;right:-14vw!important;top:auto!important;bottom:130px!important;
-      transform:none!important;height:300px!important;width:auto!important}
-    .site-footer__art--sockeye,.site-footer__art--nerpa{height:auto!important;width:min(420px,105vw)!important;right:-30vw!important}
-    .site-footer__art--eagle{right:-24vw!important;-webkit-mask-image:none;mask-image:none}
-    .site-footer__art--bearfish{right:-4vw!important}
+    /* пропорции не трогаем (Босс): задана только одна сторона, вторая — auto; сами фигуры меньше */
+    .site-footer>.site-footer__art{opacity:.55;left:auto!important;right:-8vw!important;top:auto!important;bottom:130px!important;
+      transform:none!important;height:240px!important;width:auto!important}
+    .site-footer__art--sockeye,.site-footer__art--nerpa{height:auto!important;width:300px!important;right:-12vw!important}
+    .site-footer__art--eagle{right:-16vw!important;-webkit-mask-image:none;mask-image:none}
+    .site-footer__art--bearfish{right:0!important}
   }
 </style>
 </head>
