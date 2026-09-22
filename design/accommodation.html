@@ -680,7 +680,6 @@
   .extras{position:relative;background:var(--bog);color:var(--cream);padding:var(--section-y) 46px;overflow:hidden;isolation:isolate}
   .extras::before{content:"";position:absolute;inset:0;z-index:0;background-image:url("../public/photo/camo.jpg");background-size:560px;background-repeat:repeat;opacity:.1;mix-blend-mode:overlay}
   .extras>*{position:relative;z-index:2}
-  .extras>.extras__art{position:absolute;z-index:1;left:-1%;top:18%;width:min(330px,25vw);mix-blend-mode:screen;opacity:.7;transform:rotate(-7deg);pointer-events:none}
   .extras .section-head .eyebrow{color:var(--sage)}
   .extras .section-head h2{color:var(--cream)}
   .extras .section-head p{color:rgba(240,239,228,.62)}
@@ -693,8 +692,7 @@
   .extras__note{max-width:960px;margin:36px auto 0;font-size:var(--size-copy);color:rgba(240,239,228,.5)}
   @media(max-width:640px){
     .extras{padding:var(--section-y) 22px}
-    .extras>.extras__art{display:none}
-    .price-row{flex-wrap:wrap;gap:4px 14px}
+      .price-row{flex-wrap:wrap;gap:4px 14px}
     .price-row__dots{display:none}
     .price-row__sum{margin-left:auto}
   }
@@ -944,7 +942,6 @@
 
 <!-- ===================== ДОПОЛНИТЕЛЬНЫЕ УСЛУГИ (отдельный блок, Босс 22.09) ===================== -->
 <section class="extras" id="extras">
-  <img class="extras__art" src="../public/photo/artifacts/artifact-grayling.jpg" alt="">
   <div class="section-head reveal">
     <div class="eyebrow"><span>На базе Кавинка</span></div>
     <h2 class="h2">Дополнительные <em>услуги</em></h2>
