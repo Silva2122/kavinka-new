@@ -385,7 +385,25 @@
   /* subgrid: фото, текст и корешок стоят на одной линии во всех карточках ряда */
   .infra-card{grid-row:span 2;display:grid;grid-template-rows:subgrid;row-gap:0;
     border:1px solid var(--sand-line);border-radius:12px;overflow:hidden;background:rgba(36,43,27,.05)}
-  .infra-card img{aspect-ratio:4/3;object-fit:cover;width:100%;height:100%}
+  /* карусель в карточке (Босс 22.09): кадры наложены, кроссфейд. Атрибут числа кадров — data-shots, НЕ data-count:
+     data-count перехватывает скрипт счётчиков и заменяет содержимое числом (так пропали фото, 22.09); стрелки — стеклянные, как у домиков;
+     точки внизу; свайп на телефоне; клик по кадру — общий лайтбокс (там же увеличение и листание) */
+  .infra-card__gal{position:relative;aspect-ratio:4/3;overflow:hidden;background:#10140b}
+  .infra-card__gal img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .5s ease;cursor:zoom-in}
+  .infra-card__gal img.is-active{opacity:1;position:absolute}
+  .infra-card__arrow{position:absolute;top:50%;z-index:3;width:34px;height:34px;margin-top:-17px;padding:0;border-radius:50%;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;border:1px solid rgba(240,239,228,.4);background:rgba(26,33,18,.45);color:var(--cream);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);opacity:0;transition:opacity .25s,background .25s}
+  .infra-card__gal:hover .infra-card__arrow,.infra-card__gal:focus-within .infra-card__arrow{opacity:1}
+  .infra-card__arrow:hover{background:rgba(26,33,18,.75)}
+  .infra-card__arrow:focus{outline:none}.infra-card__arrow:focus-visible{outline:2px solid var(--sage);outline-offset:2px;opacity:1}
+  .infra-card__arrow svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .infra-card__arrow--prev{left:10px}.infra-card__arrow--next{right:10px}
+  .infra-card__dots{position:absolute;left:0;right:0;bottom:10px;z-index:3;display:flex;justify-content:center;gap:6px;pointer-events:none}
+  .infra-card__dots i{width:6px;height:6px;border-radius:50%;background:rgba(240,239,228,.45);transition:background .25s,transform .25s}
+  .infra-card__dots i.is-active{background:var(--cream);transform:scale(1.25)}
+  .infra-card__gal[data-shots="1"] .infra-card__arrow,.infra-card__gal[data-shots="1"] .infra-card__dots{display:none}
+  @media(hover:none){ .infra-card__arrow{opacity:.85} }
   .infra-card__body{padding:24px 24px 26px}
   .infra-card h3{font-family:var(--body);font-weight:600;font-size:var(--size-h3-sm);line-height:1.25;
     letter-spacing:-.005em;color:var(--ink);margin-bottom:8px}
@@ -915,7 +933,17 @@
 
   <div class="infra__grid">
     <article class="infra-card reveal" style="--i:0">
-      <img src="../public/photo/banya-house-day.jpg" alt="Русская баня — сруб с вывеской среди деревьев">
+      <div class="infra-card__gal" data-shots="6">
+        <img class="is-active" src="../public/photo/infra-banya-02.jpg" alt="Русская баня — сруб с вывеской">
+        <img src="../public/photo/infra-banya-04.jpg" alt="Парная">
+        <img src="../public/photo/infra-banya-01.jpg" alt="Предбанник с лавками">
+        <img src="../public/photo/infra-banya-03.jpg" alt="Комната отдыха">
+        <img src="../public/photo/infra-banya-05.jpg" alt="Зал с окнами на реку">
+        <img src="../public/photo/infra-banya-06.jpg" alt="Купель у реки">
+        <button class="infra-card__arrow infra-card__arrow--prev" type="button" aria-label="Предыдущее фото"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <button class="infra-card__arrow infra-card__arrow--next" type="button" aria-label="Следующее фото"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+        <div class="infra-card__dots"></div>
+      </div>
       <div class="infra-card__body">
         <h3>Русская баня</h3>
         <p>Парная на берегу реки, комната отдыха и купель с видом на Тауй.</p>
@@ -923,7 +951,13 @@
     </article>
 
     <article class="infra-card reveal" style="--i:1">
-      <img src="../public/photo/gazebo-bear-river.jpg" alt="Просторная беседка: стол из бруса, резной медведь и вид на реку">
+      <div class="infra-card__gal" data-shots="2">
+        <img class="is-active" src="../public/photo/infra-gazebo-02.jpg" alt="Беседка с видом на реку">
+        <img src="../public/photo/infra-gazebo-03.jpg" alt="Большой обеденный стол в беседке">
+        <button class="infra-card__arrow infra-card__arrow--prev" type="button" aria-label="Предыдущее фото"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <button class="infra-card__arrow infra-card__arrow--next" type="button" aria-label="Следующее фото"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+        <div class="infra-card__dots"></div>
+      </div>
       <div class="infra-card__body">
         <h3>Просторная беседка</h3>
         <p>Большой обеденный стол, лавки и вид на реку с закатом.</p>
@@ -931,7 +965,9 @@
     </article>
 
     <article class="infra-card reveal" style="--i:2">
-      <img src="../public/photo/gazebo-fireplace.jpg" alt="Зона барбекю: открытый очаг под навесом">
+      <div class="infra-card__gal" data-shots="1">
+        <img class="is-active" src="../public/photo/infra-gazebo-01.jpg" alt="Зона барбекю: очаг под крышей беседки">
+      </div>
       <div class="infra-card__body">
         <h3>Зона барбекю</h3>
         <p>Открытый очаг под навесом — приготовить улов сразу после рыбалки.</p>
@@ -939,7 +975,14 @@
     </article>
 
     <article class="infra-card reveal" style="--i:3">
-      <img src="../public/photo/pier-deck-view.jpg" alt="Пирс с лавками и видом на реку">
+      <div class="infra-card__gal" data-shots="3">
+        <img class="is-active" src="../public/photo/infra-pier-01.jpg" alt="Пирс с лавками и видом на реку">
+        <img src="../public/photo/infra-pier-02.jpg" alt="Пирс, у причала лодка">
+        <img src="../public/photo/infra-pier-03.jpg" alt="Спиннинги на пирсе над водой">
+        <button class="infra-card__arrow infra-card__arrow--prev" type="button" aria-label="Предыдущее фото"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <button class="infra-card__arrow infra-card__arrow--next" type="button" aria-label="Следующее фото"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+        <div class="infra-card__dots"></div>
+      </div>
       <div class="infra-card__body">
         <h3>Пирс</h3>
         <p>Настил с лавками у самой воды, здесь же стоят водомётные лодки.</p>
@@ -1039,6 +1082,17 @@
   }
   renderTicker();
 
+  // Карусели инфраструктуры (Босс 22.09): стрелки, точки, свайп; клик по кадру уходит в общий лайтбокс
+  document.querySelectorAll('.infra-card__gal').forEach(function(g){
+    var imgs=[].slice.call(g.querySelectorAll('img')),dots=g.querySelector('.infra-card__dots'),cur=0;
+    if(dots) imgs.forEach(function(){dots.appendChild(document.createElement('i'));});
+    function show(n){cur=(n+imgs.length)%imgs.length;imgs.forEach(function(im,k){im.classList.toggle('is-active',k===cur);});
+      if(dots)[].forEach.call(dots.children,function(d,k){d.classList.toggle('is-active',k===cur);});}
+    g.querySelectorAll('.infra-card__arrow').forEach(function(b){b.addEventListener('click',function(e){e.stopPropagation();show(cur+(b.classList.contains('infra-card__arrow--next')?1:-1));});});
+    var x0=null;g.addEventListener('touchstart',function(e){x0=e.touches[0].clientX;},{passive:true});
+    g.addEventListener('touchend',function(e){if(x0===null)return;var dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)>40)show(cur+(dx<0?1:-1));},{passive:true});
+    show(0);
+  });
   // Домики: строка списка переключает сцену и удобства, лента — кадр внутри домика
   const stayItems = document.querySelectorAll('#stayList .stay-list__item');
   const staySets = document.querySelectorAll('#stayStage .stay-stage__set');
@@ -1148,7 +1202,7 @@
     });
     /* сцены с фото — раскрытие снизу вверх */
     var clips=[];
-    document.querySelectorAll('.stay-stage,.scene,.contacts__scene,.day-panel__photo,.package-card__photo,.infra-card>img,.fish-stage,.shot-card__img').forEach(function(el){
+    document.querySelectorAll('.stay-stage,.scene,.contacts__scene,.day-panel__photo,.package-card__photo,.infra-card__gal,.fish-stage,.shot-card__img').forEach(function(el){
       var host=el.classList.contains('reveal')?el:(el.closest('.reveal')||el);
       if(host===el&&!el.classList.contains('reveal')){el.classList.add('reveal');}
       host.classList.add('reveal-clip'); if(clips.indexOf(host)<0)clips.push(host);
