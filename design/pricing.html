@@ -836,8 +836,13 @@
     var EXCLUDE='.page-head__art,.site-footer__art,.route__bg,.extras__art,.quote__art,.hero img,.site-nav img,.lightbox img,[data-nozoom]';
     var all=[].slice.call(document.querySelectorAll('img')).filter(function(i){return !i.closest(EXCLUDE);});
     if(!all.length) return;
-    var list=[],seen={};
-    all.forEach(function(i){var k=i.getAttribute('src'); if(!seen[k]){seen[k]=1; list.push(i);} i.classList.add('zoomable');});
+    /* Босс 22.09: листание — только внутри своей группы (карусель карточки, набор одного домика, сцена,
+       галерея, карточка тура), а не по всем фото страницы. Группа — ближайший из GROUPS; без группы — фото одно. */
+    var GROUPS='.infra-card__gal,.stay-stage__set,.scene,.gallery__track,.package-card__photo,.day-panel__photo,.contacts__scene';
+    var list=[];
+    function buildList(img){var g=img.closest(GROUPS);var pool=g?[].slice.call(g.querySelectorAll('img')).filter(function(i){return !i.closest(EXCLUDE);}):[img];
+      var out=[],seen={};pool.forEach(function(i){var k=i.getAttribute('src');if(!seen[k]){seen[k]=1;out.push(i);}});return out;}
+    all.forEach(function(i){i.classList.add('zoomable');});
     var ico=function(d){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+d+'</svg>';};
     var lb=document.createElement('div'); lb.className='lightbox'; lb.setAttribute('role','dialog'); lb.setAttribute('aria-modal','true'); lb.setAttribute('aria-label','Просмотр фото');
     lb.innerHTML='<img class="lightbox__img" alt=""><div class="lightbox__count"></div><div class="lightbox__cap"></div>'+
@@ -845,14 +850,13 @@
       '<button class="lightbox__btn lightbox__prev" type="button" aria-label="Предыдущее фото">'+ico('<path d="M15 5l-7 7 7 7"/>')+'</button>'+
       '<button class="lightbox__btn lightbox__next" type="button" aria-label="Следующее фото">'+ico('<path d="M9 5l7 7-7 7"/>')+'</button>';
     document.body.appendChild(lb);
-    if(list.length<2) lb.classList.add('lightbox--single');
     var big=lb.querySelector('.lightbox__img'),cap=lb.querySelector('.lightbox__cap'),cnt=lb.querySelector('.lightbox__count'),idx=0,last=null;
     function caption(im){var f=im.closest('figure'),c=f&&f.querySelector('figcaption');return (c&&c.textContent.trim())||im.alt||'';}
     function show(n){idx=(n+list.length)%list.length;var im=list[idx];big.src=im.getAttribute('src');big.alt=im.alt;cap.textContent=caption(im);cnt.textContent=(idx+1)+' / '+list.length;}
-    function open(n){last=document.activeElement;show(n);lb.classList.add('is-open');document.documentElement.style.overflow='hidden';lb.querySelector('.lightbox__close').focus();}
+    function open(n){last=document.activeElement;lb.classList.toggle('lightbox--single',list.length<2);show(n);lb.classList.add('is-open');document.documentElement.style.overflow='hidden';lb.querySelector('.lightbox__close').focus();}
     function close(){lb.classList.remove('is-open');document.documentElement.style.overflow='';if(last&&last.focus)last.focus();}
     all.forEach(function(i){i.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();
-      var k=i.getAttribute('src');for(var n=0;n<list.length;n++){if(list[n].getAttribute('src')===k){open(n);break;}}});});
+      list=buildList(i);var k=i.getAttribute('src');for(var n=0;n<list.length;n++){if(list[n].getAttribute('src')===k){open(n);break;}}});});
     lb.querySelector('.lightbox__close').addEventListener('click',close);
     lb.querySelector('.lightbox__prev').addEventListener('click',function(){show(idx-1);});
     lb.querySelector('.lightbox__next').addEventListener('click',function(){show(idx+1);});
