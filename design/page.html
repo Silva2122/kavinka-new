@@ -739,7 +739,11 @@
 
 <section class="hero">
   <div class="hero__bg">
-    <video src="../public/video/hero-salmon.mp4" autoplay muted loop playsinline></video>
+    <!-- на телефоне — вертикальный ролик 9:16 (Босс 22.09), браузер выбирает по media без JS -->
+    <video autoplay muted loop playsinline>
+      <source src="../public/video/hero-salmon-mobile.mp4" media="(max-width: 640px) and (orientation: portrait)" type="video/mp4">
+      <source src="../public/video/hero-salmon.mp4" type="video/mp4">
+    </video>
   </div>
 
   <nav class="site-nav site-nav--overlay">
@@ -1041,6 +1045,13 @@
     track.innerHTML = html + html;
   }
   renderTicker();
+  // Hero: вертикальное видео на телефоне. У <source media> в Safari поддержка неполная — дублируем выбором src
+  (function(){var v=document.querySelector('.hero__bg video');if(!v)return;
+    var mq=matchMedia('(max-width: 640px) and (orientation: portrait)');
+    function pick(){var want=mq.matches?'hero-salmon-mobile.mp4':'hero-salmon.mp4';
+      if(v.currentSrc&&v.currentSrc.indexOf(want)>-1)return;
+      var srcs=v.querySelectorAll('source');v.innerHTML='';var s=document.createElement('source');s.src='../public/video/'+want;s.type='video/mp4';v.appendChild(s);v.load();v.play().catch(function(){});}
+    pick();mq.addEventListener?mq.addEventListener('change',pick):mq.addListener(pick);})();
 
   const fishItems = document.querySelectorAll('#fishList .fish-list__item');
   const fishVideos = document.querySelectorAll('#fishStage video');
