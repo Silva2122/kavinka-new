@@ -411,7 +411,8 @@
     .program{padding:var(--section-y) 22px}
     .program__head{grid-template-columns:1fr;gap:20px}
     /* лента дней прокручивается вбок, чтобы вкладки не сплющивались */
-    .day-tabs{display:flex;overflow-x:auto;scrollbar-width:none;margin-left:-22px;margin-right:-22px;padding:0 22px;
+    /* лента едет за правый край экрана (видно, что есть ещё дни), но начинается ровно по левому краю фото (Босс 22.09) */
+    .day-tabs{display:flex;overflow-x:auto;scrollbar-width:none;margin-left:0;margin-right:-22px;padding:0 22px 0 0;
       scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
     .day-tabs::-webkit-scrollbar{display:none}
     .day-tab{flex:0 0 190px;scroll-snap-align:start}
