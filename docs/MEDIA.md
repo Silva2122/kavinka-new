@@ -57,10 +57,10 @@ ffmpeg -i SRC -filter_complex "[0:v]trim=start_frame=37:end_frame=175,setpts=PTS
 
 | Префикс | Домик | Файлы |
 |---|---|---|
-| `cottage-hotel-*` | Отель КАВИНКА | `facade`, `sign` (резная вывеска «HOTEL КАВИНКА» с рыбой) |
-| `cottage-hut-*` | Хижина Рыбака | `exterior`, `bunks`, `kitchen`, `stove` |
-| `cottage-merry-*` | Весёлая Компания | `exterior`, `kitchen`, `attic`, `bunks`, `room` |
-| `cottage-russia-*` | Россия | `exterior`, `dining`, `kitchen`, `bunks`, `bedroom` |
+| `cottage-hotel-*` | Отель КАВИНКА | **переснято заказчиком 22.09** (4 архива «Домик …», по одному на домик; старые кадры удалены): `facade`, `sign` |
+| `cottage-hut-*` | Хижина Рыбака | 22.09: `exterior`, `bunks`, `kitchen`, `stove` |
+| `cottage-merry-*` | Весёлая Компания | 22.09: `exterior`, `kitchen`, `attic`, `bunks`, `room` |
+| `cottage-russia-*` | Россия | 22.09: `exterior`, `dining`, `bedroom`, `kitchen`, `bunks` |
 
 ### Баня — 7 кадров
 
@@ -156,10 +156,10 @@ ffmpeg -i SRC -filter_complex "[0:v]trim=start_frame=37:end_frame=175,setpts=PTS
 
 | Файл | Коттедж |
 |---|---|
-| `cottage-hotel-kavinka.jpg` | Отель КАВИНКА (10–13 чел.) |
-| `cottage-hut-fisherman.jpg` | Хижина Рыбака (2–4 чел.) |
-| `cottage-merry-company.jpg` | Весёлая Компания (5–10 чел.) |
-| `cottage-russia.jpg` | Россия (5–7 чел.) |
+| ~~`cottage-hotel-kavinka.jpg`~~ | Отель КАВИНКА (10–13 чел.) — **удалён 22.09**, домики пересняты заказчиком |
+| ~~`cottage-hut-fisherman.jpg`~~ | Хижина Рыбака (2–4 чел.) — **удалён 22.09**, домики пересняты заказчиком |
+| ~~`cottage-merry-company.jpg`~~ | Весёлая Компания (5–10 чел.) — **удалён 22.09**, домики пересняты заказчиком |
+| ~~`cottage-russia.jpg`~~ | Россия (5–7 чел.) — **удалён 22.09**, домики пересняты заказчиком |
 
 ⚠️ Привязка по порядку файлов, не подтверждена заказчиком — стоит проверить.
 
