@@ -526,8 +526,9 @@
   @media(max-width:900px){
     /* пропорции не трогаем (Босс): задана только одна сторона, вторая — auto; сами фигуры меньше */
     .site-footer>.site-footer__art{opacity:.55;left:auto!important;right:-8vw!important;top:auto!important;bottom:130px!important;
-      transform:none!important;height:240px!important;width:auto!important}
-    .site-footer__art--sockeye,.site-footer__art--nerpa{height:auto!important;width:300px!important;right:-12vw!important}
+      transform:none!important;max-width:none!important;height:240px!important;width:auto!important}
+    /* длинные фигуры — только по ширине: общее height:240 их сплющивало (нерка 3.5:1 → 1.6:1) */
+    .site-footer>.site-footer__art--sockeye,.site-footer>.site-footer__art--nerpa,.site-footer>.site-footer__art--moose{height:auto!important;width:300px!important;right:-12vw!important}
     .site-footer__art--eagle{right:-16vw!important;-webkit-mask-image:none;mask-image:none}
     .site-footer__art--bearfish{right:0!important}
   }
