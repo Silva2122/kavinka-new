@@ -727,13 +727,14 @@
   /* телефон (Босс 22.09): подвал не удлиняем — фигура крупная, справа, слегка уходит за правый край,
      как будто выезжает сбоку; низ на линии над копирайтом, за текст не цепляется (лежит под ним, z-index 0) */
   @media(max-width:900px){
-    /* пропорции не трогаем (Босс): задана только одна сторона, вторая — auto; сами фигуры меньше */
-    .site-footer>.site-footer__art{opacity:.55;left:auto!important;right:-8vw!important;top:auto!important;bottom:130px!important;
-      transform:none!important;max-width:none!important;height:240px!important;width:auto!important}
-    /* длинные фигуры — только по ширине: общее height:240 их сплющивало (нерка 3.5:1 → 1.6:1) */
-    .site-footer>.site-footer__art--sockeye,.site-footer>.site-footer__art--nerpa,.site-footer>.site-footer__art--moose{height:auto!important;width:300px!important;right:-12vw!important}
-    .site-footer__art--eagle{right:-16vw!important;-webkit-mask-image:none;mask-image:none}
-    .site-footer__art--bearfish{right:0!important}
+    /* один размер для всех (Босс 22.09): общая коробка 260×220, фигура вписана целиком (contain) —
+       пропорции родные, масштаб на глаз одинаковый. Стоит справа от «Контактов»/«Навигации»,
+       за край не выходит, на «О компании» не наезжает. Нерка плывёт вверх. */
+    .site-footer>.site-footer__art{opacity:.6;left:auto!important;right:14px!important;top:110px!important;bottom:auto!important;
+      transform:none!important;max-width:none!important;width:260px!important;height:220px!important;object-fit:contain;object-position:right center;
+      -webkit-mask-image:none!important;mask-image:none!important}
+    .site-footer>.site-footer__art--sockeye{transform:rotate(-28deg)!important}
+    .site-footer>.site-footer__art--nerpa{transform:rotate(-8deg)!important}
   }
 </style>
 </head>
