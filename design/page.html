@@ -442,7 +442,7 @@
     grid-template-columns:1fr 1.5fr;gap:80px;align-items:center}
 
   .fish-list{display:flex;flex-direction:column}
-  .fish-list__item{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:baseline;
+  .fish-list__item{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;
     gap:20px;padding:21px 6px;border-top:1px solid rgba(35,35,24,.14);transition:padding-left .3s}
   .fish-list__item:last-child{border-bottom:1px solid rgba(35,35,24,.14)}
   /* .reveal задаёт opacity/transform через all:unset выше — переопределяем адресно (выше специфичность) */
@@ -455,8 +455,11 @@
   .fish-list__name{font-family:var(--body);font-weight:500;font-size:var(--size-h3);line-height:1.1;
     letter-spacing:-.015em;color:var(--ink);transition:color .3s}
   .fish-list__item:hover .fish-list__name,.fish-list__item.is-active .fish-list__name{color:var(--olive)}
-  .fish-list__season{font-family:var(--body);font-weight:600;font-size:var(--size-small);letter-spacing:0;
-    text-transform:uppercase;color:var(--muted);margin-left:auto;white-space:nowrap;flex:none}
+  /* сезон и трофей (Босс 22.09, как в боте): две строки с иконками справа от названия */
+  .fish-list__meta{margin-left:auto;display:flex;flex-direction:column;align-items:flex-start;gap:5px;flex:none;min-width:168px} /* одна ширина — иконки в столбик */
+  .fish-list__season,.fish-list__trophy{display:inline-flex;align-items:center;gap:7px;font-family:var(--body);font-weight:500;
+    font-size:var(--size-copy);letter-spacing:0;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+  .fish-list__season svg,.fish-list__trophy svg{width:15px;height:15px;flex:none;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;color:var(--olive)}
   .fish-list__arrow{font-family:var(--body);font-weight:300;font-size:22px;color:var(--olive);flex:none;
     opacity:0;transform:translateX(-8px);transition:opacity .3s,transform .3s}
   .fish-list__item:hover .fish-list__arrow,.fish-list__item.is-active .fish-list__arrow{
@@ -474,7 +477,9 @@
   }
   @media(max-width:640px){
     .fish-section{padding:var(--section-y) 22px}
-    .fish-list__season{display:none}
+    .fish-list__meta{gap:3px;min-width:150px}
+    .fish-list__season,.fish-list__trophy{font-size:var(--size-small)}
+    .fish-list__season svg,.fish-list__trophy svg{width:13px;height:13px}
   }
 
   /* ===================== CTA =====================
@@ -936,37 +941,37 @@
       <button class="fish-list__item is-active reveal" style="--i:0" data-index="0">
         <span class="fish-list__no">01</span>
         <span class="fish-list__name">Хариус</span>
-        <span class="fish-list__season">Июнь — Сентябрь</span>
+        <span class="fish-list__meta"><span class="fish-list__season"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg>Июнь — Сентябрь</span><span class="fish-list__trophy"><svg viewBox="0 0 24 24"><path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4.5a2.5 2.5 0 0 0 2.6 3.2M17 6h2.5a2.5 2.5 0 0 1-2.6 3.2M12 14v3M8.5 20h7M12 17c-1.5 0-2.5.8-2.5 3M12 17c1.5 0 2.5.8 2.5 3"/></svg>Трофей: 500 г — 1,2 кг</span></span>
         <span class="fish-list__arrow">→</span>
       </button>
       <button class="fish-list__item reveal" style="--i:1" data-index="1">
         <span class="fish-list__no">02</span>
         <span class="fish-list__name">Голец</span>
-        <span class="fish-list__season">Июнь — Сентябрь</span>
+        <span class="fish-list__meta"><span class="fish-list__season"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg>Июнь — Сентябрь</span><span class="fish-list__trophy"><svg viewBox="0 0 24 24"><path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4.5a2.5 2.5 0 0 0 2.6 3.2M17 6h2.5a2.5 2.5 0 0 1-2.6 3.2M12 14v3M8.5 20h7M12 17c-1.5 0-2.5.8-2.5 3M12 17c1.5 0 2.5.8 2.5 3"/></svg>Трофей: 1 — 2,5 кг</span></span>
         <span class="fish-list__arrow">→</span>
       </button>
       <button class="fish-list__item reveal" style="--i:2" data-index="2">
         <span class="fish-list__no">03</span>
         <span class="fish-list__name">Кунджа</span>
-        <span class="fish-list__season">Июнь — Сентябрь</span>
+        <span class="fish-list__meta"><span class="fish-list__season"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg>Июнь — Сентябрь</span><span class="fish-list__trophy"><svg viewBox="0 0 24 24"><path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4.5a2.5 2.5 0 0 0 2.6 3.2M17 6h2.5a2.5 2.5 0 0 1-2.6 3.2M12 14v3M8.5 20h7M12 17c-1.5 0-2.5.8-2.5 3M12 17c1.5 0 2.5.8 2.5 3"/></svg>Трофей: 3 — 7 кг</span></span>
         <span class="fish-list__arrow">→</span>
       </button>
       <button class="fish-list__item reveal" style="--i:3" data-index="3">
         <span class="fish-list__no">04</span>
         <span class="fish-list__name">Горбуша</span>
-        <span class="fish-list__season">Июнь — Июль</span>
+        <span class="fish-list__meta"><span class="fish-list__season"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg>Июнь — Июль</span><span class="fish-list__trophy"><svg viewBox="0 0 24 24"><path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4.5a2.5 2.5 0 0 0 2.6 3.2M17 6h2.5a2.5 2.5 0 0 1-2.6 3.2M12 14v3M8.5 20h7M12 17c-1.5 0-2.5.8-2.5 3M12 17c1.5 0 2.5.8 2.5 3"/></svg>Трофей: 2 — 4 кг</span></span>
         <span class="fish-list__arrow">→</span>
       </button>
       <button class="fish-list__item reveal" style="--i:4" data-index="4">
         <span class="fish-list__no">05</span>
         <span class="fish-list__name">Кета</span>
-        <span class="fish-list__season">Август</span>
+        <span class="fish-list__meta"><span class="fish-list__season"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg>Август</span><span class="fish-list__trophy"><svg viewBox="0 0 24 24"><path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4.5a2.5 2.5 0 0 0 2.6 3.2M17 6h2.5a2.5 2.5 0 0 1-2.6 3.2M12 14v3M8.5 20h7M12 17c-1.5 0-2.5.8-2.5 3M12 17c1.5 0 2.5.8 2.5 3"/></svg>Трофей: 3 — 7 кг</span></span>
         <span class="fish-list__arrow">→</span>
       </button>
       <button class="fish-list__item reveal" style="--i:5" data-index="5">
         <span class="fish-list__no">06</span>
         <span class="fish-list__name">Кижуч</span>
-        <span class="fish-list__season">Август — Сентябрь</span>
+        <span class="fish-list__meta"><span class="fish-list__season"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg>Август — Сентябрь</span><span class="fish-list__trophy"><svg viewBox="0 0 24 24"><path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4.5a2.5 2.5 0 0 0 2.6 3.2M17 6h2.5a2.5 2.5 0 0 1-2.6 3.2M12 14v3M8.5 20h7M12 17c-1.5 0-2.5.8-2.5 3M12 17c1.5 0 2.5.8 2.5 3"/></svg>Трофей: 4 — 8 кг</span></span>
         <span class="fish-list__arrow">→</span>
       </button>
     </div>
