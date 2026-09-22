@@ -308,30 +308,17 @@
   .package-card--custom .package-card__included li{color:rgba(240,239,228,.84)}
   .package-card--custom .package-card__included li::before{color:var(--sage)}
 
-  /* полоса под турами: что по созвону осталось здесь + ссылка на все цены на «Размещении» */
-  .tour-extras{position:relative;isolation:isolate;overflow:hidden;max-width:var(--grid-max);
     margin:24px auto 0;background:var(--bog);color:var(--cream);border-radius:12px;
     display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1.4fr) auto;align-items:center;gap:28px 48px;
     padding:30px 290px 30px 34px}
   /* резной хариус у правого края (снят на чёрном — screen), как на полосе трансфера на «Размещении» */
-  .tour-extras .extras__art{position:absolute;z-index:1;right:24px;top:50%;width:230px;
     transform:translateY(-50%) rotate(-7deg);mix-blend-mode:screen;opacity:.7;pointer-events:none}
-  .tour-extras>*:not(.extras__art){position:relative;z-index:2}
-  .tour-extras::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
     background-image:url("../public/photo/camo.jpg");background-size:420px;opacity:.1;mix-blend-mode:overlay}
-  .tour-extras h3{font-family:var(--body);font-weight:600;font-size:var(--size-h3-sm);line-height:1.25;
     letter-spacing:-.005em;color:var(--cream)}
-  .tour-extras__head span{display:block;margin-top:4px;font-size:var(--size-copy);color:rgba(240,239,228,.58)}
-  .tour-extras__prices{list-style:none;display:flex;flex-wrap:wrap;gap:14px 48px}
-  .tour-extras__prices li{display:flex;flex-direction:column;gap:3px}
-  .tour-extras__prices span{font-size:var(--size-small);color:rgba(240,239,228,.55)}
-  .tour-extras__prices b{font-family:var(--body);font-weight:500;font-size:20px;color:var(--cream);
     white-space:nowrap;font-variant-numeric:tabular-nums}
 
   @media(max-width:1000px){
     .packages__grid{grid-template-columns:1fr;max-width:520px}
-    .tour-extras{grid-template-columns:1fr;max-width:520px;padding:28px 30px}
-    .tour-extras .extras__art{display:none}
   }
   @media(max-width:640px){
     .packages{padding:var(--section-y) 22px}
@@ -452,7 +439,6 @@
     .footer__top{gap:28px;padding-bottom:36px}
     .package-card__photo{aspect-ratio:16/10}
     .package-card__body{padding:22px 20px 24px}
-    .tour-extras{padding:22px 20px}
     .package-card__price{font-size:28px}
     .site-nav__right{gap:16px}
     /* «ИНФРАСТРУКТУРА» и «К НЕЗАБЫВАЕМОМУ» антиквой капсом не влезали в 346 px — H2 на телефоне чуть мельче */
@@ -606,7 +592,7 @@
       </div>
       <div class="package-card__body">
         <h3 class="package-card__name">Красная икра</h3>
-        <span class="package-card__fish">горбуша</span>
+        <span class="package-card__fish">горбуша — активно идёт на нерест</span>
         <div class="package-card__price-row">
           <span class="package-card__price">150 000 ₽</span>
           <span class="package-card__per">за человека</span>
@@ -616,6 +602,7 @@
         <ul class="package-card__included">
           <li>Трансфер</li>
           <li>Проживание</li>
+          <li>Питание</li>
           <li>Выезды на рыбалку с гидом</li>
           <li>Баня</li>
         </ul>
@@ -629,9 +616,8 @@
         <img src="../public/photo/boy-with-coho.jpg" alt="Мальчик с пойманным кижучем на берегу" style="object-position:50% 30%">
       </div>
       <div class="package-card__body">
-        <h3 class="package-card__name">Рыбалка на кижуча</h3>
-        <!-- рыба уже в названии; пустая строка держит цены на одной высоте с «Красной икрой» -->
-        <span class="package-card__fish" aria-hidden="true">&nbsp;</span>
+        <h3 class="package-card__name">Трофейный</h3>
+        <span class="package-card__fish">рыбалка на кету и кижуча</span>
         <div class="package-card__price-row">
           <span class="package-card__price">175 000 ₽</span>
           <span class="package-card__per">за человека</span>
@@ -641,6 +627,7 @@
         <ul class="package-card__included">
           <li>Трансфер</li>
           <li>Проживание</li>
+          <li>Питание</li>
           <li>Выезды на рыбалку с гидом</li>
           <li>Баня</li>
         </ul>
@@ -663,6 +650,7 @@
         <ul class="package-card__included">
           <li>Индивидуальная программа под Ваши запросы</li>
           <li>Трансфер на вертолёте</li>
+          <li>Индивидуальный гид</li>
           <li>Проживание</li>
           <li>Питание</li>
           <li>Возможность комбинировать Тур с Морской рыбалкой</li>
@@ -672,18 +660,6 @@
     </article>
   </div>
 
-  <div class="tour-extras reveal">
-    <img class="extras__art" src="../public/photo/artifacts/artifact-grayling.jpg" alt="">
-    <div class="tour-extras__head">
-      <h3>Дополнительно</h3>
-      <span>Всё остальное на базе оплачивается отдельно</span>
-    </div>
-    <ul class="tour-extras__prices">
-      <li><span>Дополнительный день</span><b>от 35 000 ₽</b></li>
-      <li><span>Индивидуальный гид</span><b>по запросу</b></li>
-    </ul>
-    <a class="btn btn--sm" href="accommodation.html#extras"><span>Все услуги и цены</span></a>
-  </div>
 </section>
 
 <!-- ===================== ФУТЕР ===================== -->
