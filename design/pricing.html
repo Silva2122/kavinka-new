@@ -308,20 +308,22 @@
   .package-card--custom .package-card__included li{color:rgba(240,239,228,.84)}
   .package-card--custom .package-card__included li::before{color:var(--sage)}
 
-    margin:24px auto 0;background:var(--bog);color:var(--cream);border-radius:12px;
-    display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1.4fr) auto;align-items:center;gap:28px 48px;
-    padding:30px 290px 30px 34px}
-  /* резной хариус у правого края (снят на чёрном — screen), как на полосе трансфера на «Размещении» */
-    transform:translateY(-50%) rotate(-7deg);mix-blend-mode:screen;opacity:.7;pointer-events:none}
-    background-image:url("../public/photo/camo.jpg");background-size:420px;opacity:.1;mix-blend-mode:overlay}
-    letter-spacing:-.005em;color:var(--cream)}
-    white-space:nowrap;font-variant-numeric:tabular-nums}
-
   @media(max-width:1000px){
     .packages__grid{grid-template-columns:1fr;max-width:520px}
   }
+  /* телефон (Босс 22.09): карточки в столбик на всю ширину, фото 16:10, цена и «за человека» в строку,
+     список включённого в две колонки, кнопка во всю ширину */
   @media(max-width:640px){
     .packages{padding:var(--section-y) 22px}
+    .packages__grid{max-width:none;gap:16px}
+    .package-card__photo{aspect-ratio:16/10}
+    .package-card__body{padding:22px 20px 24px}
+    .package-card__name{font-size:22px}
+    .package-card__price-row{margin:16px 0 4px}
+    .package-card__price{font-size:28px}
+    .package-card__label{margin:20px 0 10px;padding-top:16px}
+    .package-card__included{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;margin-bottom:22px}
+    .package-card--custom .package-card__included{grid-template-columns:1fr}
   }
 
   /* ===================== ФУТЕР — с главной, без изменений ===================== */
