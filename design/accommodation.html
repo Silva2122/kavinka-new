@@ -356,10 +356,8 @@
   .quote::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
     background-image:url("../public/photo/camo.jpg");background-size:520px;background-repeat:repeat;
     opacity:.1;mix-blend-mode:overlay}
-  .quote::after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
-    background:radial-gradient(ellipse 22% 80% at 78% 60%,rgba(183,194,153,.13),transparent 70%)}
   .quote__inner{position:relative;z-index:2;max-width:var(--grid-max);margin:0 auto;
-    display:grid;grid-template-columns:minmax(0,1fr) 360px;align-items:center;gap:40px;min-height:260px}
+    display:block}
   .quote__art{position:absolute;right:12%;bottom:0;z-index:1;height:100%;width:auto;
     mix-blend-mode:screen;opacity:.95;pointer-events:none;
     /* у медвежонка по краю виден ореол подсветки — растворяем края маской, как у орла в шапке */
@@ -385,7 +383,7 @@
   .infra__grid{max-width:var(--grid-max);margin:0 auto;display:grid;
     grid-template-columns:repeat(4,minmax(0,1fr));gap:22px}
   /* subgrid: фото, текст и корешок стоят на одной линии во всех карточках ряда */
-  .infra-card{grid-row:span 3;display:grid;grid-template-rows:subgrid;row-gap:0;
+  .infra-card{grid-row:span 2;display:grid;grid-template-rows:subgrid;row-gap:0;
     border:1px solid var(--sand-line);border-radius:12px;overflow:hidden;background:rgba(36,43,27,.05)}
   .infra-card img{aspect-ratio:4/3;object-fit:cover;width:100%;height:100%}
   .infra-card__body{padding:24px 24px 26px}
@@ -675,6 +673,31 @@
   @media(min-width:901px){ .footer__top{grid-template-columns:1fr .9fr 1.4fr minmax(300px,520px)} }
   @media(min-width:901px) and (max-width:1200px){ .footer__top{grid-template-columns:1fr .9fr 1.5fr minmax(240px,360px)} .site-footer>.site-footer__art{opacity:.55} }
   @media(max-width:900px){ .site-footer>.site-footer__art{opacity:.4;right:80px!important;top:24px;bottom:auto!important;width:auto!important;height:190px!important} }
+
+  /* ===================== ДОПОЛНИТЕЛЬНЫЕ УСЛУГИ — отдельный тёмный блок (Босс 22.09) =====================
+     Цены сняты с карточек инфраструктуры: инфраструктура — что есть на базе, здесь — что стоит денег.
+     Меню: услуга, отточие, цена. Резной хариус слева режимом screen. */
+  .extras{position:relative;background:var(--bog);color:var(--cream);padding:var(--section-y) 46px;overflow:hidden;isolation:isolate}
+  .extras::before{content:"";position:absolute;inset:0;z-index:0;background-image:url("../public/photo/camo.jpg");background-size:560px;background-repeat:repeat;opacity:.1;mix-blend-mode:overlay}
+  .extras>*{position:relative;z-index:2}
+  .extras>.extras__art{position:absolute;z-index:1;left:-1%;top:18%;width:min(330px,25vw);mix-blend-mode:screen;opacity:.7;transform:rotate(-7deg);pointer-events:none}
+  .extras .section-head .eyebrow{color:var(--sage)}
+  .extras .section-head h2{color:var(--cream)}
+  .extras .section-head p{color:rgba(240,239,228,.62)}
+  .price-list{max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:34px}
+  .price-group h3{font-family:var(--body);font-weight:600;font-size:var(--size-h3-sm);letter-spacing:-.005em;color:var(--cream);margin-bottom:12px}
+  .price-row{display:flex;align-items:baseline;gap:14px;padding:11px 0;border-bottom:1px solid rgba(240,239,228,.13)}
+  .price-row__name{font-size:var(--size-copy);color:rgba(240,239,228,.78)}
+  .price-row__dots{flex:1;border-bottom:1px dotted rgba(240,239,228,.28);transform:translateY(-4px)}
+  .price-row__sum{font-family:var(--body);font-weight:500;font-size:16px;color:var(--cream);white-space:nowrap;font-variant-numeric:tabular-nums}
+  .extras__note{max-width:960px;margin:36px auto 0;font-size:var(--size-copy);color:rgba(240,239,228,.5)}
+  @media(max-width:640px){
+    .extras{padding:var(--section-y) 22px}
+    .extras>.extras__art{display:none}
+    .price-row{flex-wrap:wrap;gap:4px 14px}
+    .price-row__dots{display:none}
+    .price-row__sum{margin-left:auto}
+  }
 </style>
 </head>
 <body>
@@ -785,21 +808,18 @@
       <div class="stay-stage" id="stayStage">
         <div class="stay-stage__set" data-index="3">
           <img class="stay-stage__shot is-active" src="../public/photo/cottage-hotel-facade.jpg" alt="Отель КАВИНКА — главный корпус с зелёной крышей">
-          <img class="stay-stage__shot" src="../public/photo/cottage-hotel-kavinka.jpg" alt="Отель КАВИНКА — вход с крыльцом и резной вывеской">
           <img class="stay-stage__shot" src="../public/photo/cottage-hotel-sign.jpg" alt="Резная вывеска HOTEL КАВИНКА с рыбой">
           <img class="stay-stage__shot" src="../public/photo/lounge-foosball.jpg" alt="Комната отдыха с настольным футболом">
           <img class="stay-stage__shot" src="../public/photo/interior-trophies-1.jpg" alt="Интерьер отеля с трофеями">
         </div>
         <div class="stay-stage__set is-active" data-index="0">
           <img class="stay-stage__shot is-active" src="../public/photo/cottage-hut-exterior.jpg" alt="Хижина Рыбака — сруб с резным медведем у входа">
-          <img class="stay-stage__shot" src="../public/photo/cottage-hut-fisherman.jpg" alt="Хижина Рыбака — сруб с красной крышей и лавкой у входа">
           <img class="stay-stage__shot" src="../public/photo/cottage-hut-bunks.jpg" alt="Двухъярусные кровати в Хижине Рыбака">
           <img class="stay-stage__shot" src="../public/photo/cottage-hut-kitchen.jpg" alt="Кухонный уголок в Хижине Рыбака">
           <img class="stay-stage__shot" src="../public/photo/cottage-hut-stove.jpg" alt="Печь и спальное место в Хижине Рыбака">
         </div>
         <div class="stay-stage__set" data-index="2">
           <img class="stay-stage__shot is-active" src="../public/photo/cottage-merry-exterior.jpg" alt="Весёлая Компания — двухэтажный домик с красной крышей">
-          <img class="stay-stage__shot" src="../public/photo/cottage-merry-company.jpg" alt="Весёлая Компания — домик с резным орлом на коньке">
           <img class="stay-stage__shot" src="../public/photo/cottage-merry-kitchen.jpg" alt="Кухня-столовая с печью">
           <img class="stay-stage__shot" src="../public/photo/cottage-merry-attic.jpg" alt="Мансарда со спальными местами">
           <img class="stay-stage__shot" src="../public/photo/cottage-merry-bunks.jpg" alt="Второй этаж с двухъярусными кроватями">
@@ -807,7 +827,6 @@
         </div>
         <div class="stay-stage__set" data-index="1">
           <img class="stay-stage__shot is-active" src="../public/photo/cottage-russia-exterior.jpg" alt="Домик Россия — сруб с зелёной крышей">
-          <img class="stay-stage__shot" src="../public/photo/cottage-russia.jpg" alt="Домик Россия — вид с другой стороны">
           <img class="stay-stage__shot" src="../public/photo/cottage-russia-dining.jpg" alt="Столовая с длинным столом">
           <img class="stay-stage__shot" src="../public/photo/cottage-russia-kitchen.jpg" alt="Кухня в домике Россия">
           <img class="stay-stage__shot" src="../public/photo/cottage-russia-bunks.jpg" alt="Спальня с двухъярусными кроватями">
@@ -870,7 +889,6 @@
 
 <!-- ===================== ВРЕЗКА-ЦИТАТА ===================== -->
 <section class="quote">
-  <img class="quote__art" src="../public/photo/artifacts/artifact-bear-cub.jpg" alt="">
   <div class="quote__inner reveal">
     <div>
       <div class="eyebrow"><span>Что дальше</span></div>
@@ -884,7 +902,7 @@
 <section class="infra soft" id="infra">
   <div class="section-head reveal">
     <div class="eyebrow"><span>На территории</span></div>
-    <h2 class="h2">Инфраструктура <em>и&nbsp;услуги</em></h2>
+    <h2 class="h2">Инфраструктура <em>базы</em></h2>
     <p>Всё в пяти минутах от домиков — на берегу, под соснами.</p>
   </div>
 
@@ -895,9 +913,6 @@
         <h3>Русская баня</h3>
         <p>Парная на берегу реки, комната отдыха и купель с видом на Тауй.</p>
       </div>
-      <div class="infra-card__stub">
-        <div class="stub-row"><span class="stub-row__name">Баня<small>2 часа</small></span><span class="stub-row__sum">20 000 ₽</span></div>
-      </div>
     </article>
 
     <article class="infra-card reveal" style="--i:1">
@@ -905,10 +920,6 @@
       <div class="infra-card__body">
         <h3>Просторная беседка</h3>
         <p>Большой обеденный стол, лавки и вид на реку с закатом.</p>
-      </div>
-      <div class="infra-card__stub">
-        <div class="stub-row"><span class="stub-row__name">Повар<small>3–5 человек</small></span><span class="stub-row__sum">18 000 ₽ <small>/ день</small></span></div>
-        <div class="stub-row"><span class="stub-row__name">Повар<small>5–10 человек</small></span><span class="stub-row__sum">30 000 ₽ <small>/ день</small></span></div>
       </div>
     </article>
 
@@ -918,9 +929,6 @@
         <h3>Зона барбекю</h3>
         <p>Открытый очаг под навесом — приготовить улов сразу после рыбалки.</p>
       </div>
-      <div class="infra-card__stub">
-        <div class="stub-row"><span class="stub-row__name">Переработка улова<small>почистить, посолить, завялить, упаковать</small></span><span class="stub-row__sum">1 000 ₽ <small>/ кг</small></span></div>
-      </div>
     </article>
 
     <article class="infra-card reveal" style="--i:3">
@@ -929,32 +937,41 @@
         <h3>Пирс</h3>
         <p>Настил с лавками у самой воды, здесь же стоят водомётные лодки.</p>
       </div>
-      <div class="infra-card__stub">
-        <div class="stub-row"><span class="stub-row__name">Прокат спиннинга<small>тест на выбор</small></span><span class="stub-row__sum">3 000 ₽ <small>/ день</small></span></div>
-        <div class="stub-row"><span class="stub-row__name">Локальная экскурсия<small>группа до 4 человек</small></span><span class="stub-row__sum">30 000 ₽</span></div>
-      </div>
     </article>
   </div>
 
-  <div class="extras-bar reveal" id="extras">
-    <img class="extras__art" src="../public/photo/artifacts/artifact-grayling.jpg" alt="">
-    <div class="extras-bar__group">
-      <div class="extras-bar__head"><h3>Трансфер</h3><span>Магадан — Кавинка — Магадан</span></div>
-      <ul class="extras-bar__prices">
-        <li><span>3–4 человека</span><b>50 000 ₽</b></li>
-        <li><span>5–7 человек</span><b>90 000 ₽</b></li>
-        <li><span>8–10 человек</span><b>130 000 ₽</b></li>
-      </ul>
+</section>
+
+<!-- ===================== ДОПОЛНИТЕЛЬНЫЕ УСЛУГИ (отдельный блок, Босс 22.09) ===================== -->
+<section class="extras" id="extras">
+  <img class="extras__art" src="../public/photo/artifacts/artifact-grayling.jpg" alt="">
+  <div class="section-head reveal">
+    <div class="eyebrow"><span>На базе Кавинка</span></div>
+    <h2 class="h2">Дополнительные <em>услуги</em></h2>
+    <p>Оплачиваются отдельно — сверх тура и проживания.</p>
+  </div>
+  <div class="price-list">
+    <div class="price-group reveal" style="--i:0">
+      <h3>Трансфер</h3>
+      <div class="price-row"><span class="price-row__name">Магадан — Кавинка — Магадан, 3–4 человека</span><span class="price-row__dots"></span><span class="price-row__sum">50 000 ₽</span></div>
+      <div class="price-row"><span class="price-row__name">Магадан — Кавинка — Магадан, 5–7 человек</span><span class="price-row__dots"></span><span class="price-row__sum">90 000 ₽</span></div>
+      <div class="price-row"><span class="price-row__name">Магадан — Кавинка — Магадан, 8–10 человек</span><span class="price-row__dots"></span><span class="price-row__sum">130 000 ₽</span></div>
     </div>
-    <div class="extras-bar__group">
-      <div class="extras-bar__head"><h3>Фото- и видеосъёмка на рыбалке</h3><span>группа до 4 человек</span></div>
-      <ul class="extras-bar__prices">
-        <li><span>за день</span><b>15 000 ₽</b></li>
-      </ul>
+    <div class="price-group reveal" style="--i:1">
+      <h3>На базе</h3>
+      <div class="price-row"><span class="price-row__name">Баня, 2 часа</span><span class="price-row__dots"></span><span class="price-row__sum">20 000 ₽</span></div>
+      <div class="price-row"><span class="price-row__name">Повар, 3–5 человек</span><span class="price-row__dots"></span><span class="price-row__sum">18 000 ₽ / день</span></div>
+      <div class="price-row"><span class="price-row__name">Повар, 5–10 человек</span><span class="price-row__dots"></span><span class="price-row__sum">30 000 ₽ / день</span></div>
+      <div class="price-row"><span class="price-row__name">Переработка улова — почистить, посолить, завялить, упаковать</span><span class="price-row__dots"></span><span class="price-row__sum">1 000 ₽ / кг</span></div>
+    </div>
+    <div class="price-group reveal" style="--i:2">
+      <h3>На рыбалке</h3>
+      <div class="price-row"><span class="price-row__name">Прокат спиннинга, тест на выбор</span><span class="price-row__dots"></span><span class="price-row__sum">3 000 ₽ / день</span></div>
+      <div class="price-row"><span class="price-row__name">Локальная экскурсия, группа до 4 человек</span><span class="price-row__dots"></span><span class="price-row__sum">30 000 ₽</span></div>
+      <div class="price-row"><span class="price-row__name">Фото- и видеосъёмка на рыбалке, группа до 4 человек</span><span class="price-row__dots"></span><span class="price-row__sum">15 000 ₽ / день</span></div>
     </div>
   </div>
-
-  <p class="infra__note reveal">Рыболовное снаряжение можно выслать заранее через СДЭК или взять на месте напрокат.</p>
+  <p class="extras__note reveal">Рыболовное снаряжение можно выслать заранее через СДЭК или взять на месте напрокат.</p>
 </section>
 
 <!-- ===================== CTA ===================== -->
