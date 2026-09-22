@@ -724,7 +724,15 @@
   .site-footer__art--bearfish{height:300px;width:auto;-webkit-mask-image:linear-gradient(180deg,#000 80%,transparent 100%);mask-image:linear-gradient(180deg,#000 80%,transparent 100%)}
   @media(min-width:901px){ .footer__top{grid-template-columns:1fr .9fr 1.4fr minmax(300px,520px)} }
   @media(min-width:901px) and (max-width:1200px){ .footer__top{grid-template-columns:1fr .9fr 1.5fr minmax(240px,360px)} .site-footer>.site-footer__art{opacity:.55} }
-  @media(max-width:900px){ .site-footer>.site-footer__art{opacity:.4;right:80px!important;top:24px;bottom:auto!important;width:auto!important;height:190px!important} }
+  /* телефон (Босс 22.09): подвал в одну колонку, справа места нет — фигура получает свою сцену:
+     крупно, по центру, стоит на линии над копирайтом, как на десктопе */
+  @media(max-width:900px){
+    .footer__top{padding-bottom:330px}
+    .site-footer>.site-footer__art{opacity:.72;left:50%!important;right:auto!important;top:auto!important;bottom:132px!important;
+      transform:translateX(-50%)!important;height:250px!important;width:auto!important}
+    .site-footer__art--sockeye,.site-footer__art--nerpa{height:auto!important;width:min(360px,90vw)!important}
+    .site-footer__art--eagle{-webkit-mask-image:none;mask-image:none}
+  }
 </style>
 </head>
 <body>
