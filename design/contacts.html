@@ -491,17 +491,18 @@
      чтобы не ложиться на текст «О компании». Артефакты не повторяются: главная — медведь
      с рыбой, «О туре» — орёл, «Размещение» — медведь, «Выбрать тур» — нерка,
      «Программа» — лось, «Контакты» — нерпа. */
-  .site-footer>.site-footer__art{position:absolute;z-index:0;pointer-events:none;
+  /* одна точка для всех (Босс 22.09): центр фигуры на оси right:300px, низ на линии над копирайтом */
+  .site-footer>.site-footer__art{position:absolute;z-index:0;pointer-events:none;right:300px;bottom:88px;transform:translateX(50%);
     mix-blend-mode:screen;opacity:.72} /* крупно, одна высота 300px у всех фигур (Босс 22.09); размер — в правилах по классам ниже */
-  .site-footer__art--eagle{height:300px;width:auto;right:46px;bottom:88px;-webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 80%,transparent 100%);mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 80%,transparent 100%);bottom:calc(86px + -40px)}
-  .site-footer__art--bear{height:300px;width:auto;right:110px;bottom:88px;-webkit-mask-image:radial-gradient(ellipse 60% 58% at 50% 46%,#000 70%,transparent 100%);mask-image:radial-gradient(ellipse 60% 58% at 50% 46%,#000 70%,transparent 100%);bottom:90px}
-  .site-footer__art--sockeye{width:min(640px,44vw);height:auto;right:46px;bottom:88px}
-  .site-footer__art--moose{height:300px;width:auto;right:46px;bottom:88px;-webkit-mask-image:radial-gradient(ellipse 52% 54% at 50% 50%,#000 62%,transparent 100%);mask-image:radial-gradient(ellipse 52% 54% at 50% 50%,#000 62%,transparent 100%);bottom:calc(86px + -20px)}
-  .site-footer__art--nerpa{width:min(640px,44vw);height:auto;right:46px;bottom:88px;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 12%,#000 90%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 12%,#000 90%,transparent 100%)}
-  .site-footer__art--bearfish{height:300px;width:auto;right:80px;bottom:88px;-webkit-mask-image:linear-gradient(180deg,#000 80%,transparent 100%);mask-image:linear-gradient(180deg,#000 80%,transparent 100%)}
+  .site-footer__art--eagle{height:300px;width:auto;-webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 80%,transparent 100%);mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 80%,transparent 100%);bottom:calc(86px + -40px)}
+  .site-footer__art--bear{height:300px;width:auto;-webkit-mask-image:radial-gradient(ellipse 60% 58% at 50% 46%,#000 70%,transparent 100%);mask-image:radial-gradient(ellipse 60% 58% at 50% 46%,#000 70%,transparent 100%);bottom:90px}
+  .site-footer__art--sockeye{width:min(560px,39vw);height:auto;}
+  .site-footer__art--moose{height:300px;width:auto;-webkit-mask-image:radial-gradient(ellipse 52% 54% at 50% 50%,#000 62%,transparent 100%);mask-image:radial-gradient(ellipse 52% 54% at 50% 50%,#000 62%,transparent 100%);bottom:calc(86px + -20px)}
+  .site-footer__art--nerpa{width:min(560px,39vw);height:auto;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 12%,#000 90%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 12%,#000 90%,transparent 100%)}
+  .site-footer__art--bearfish{height:300px;width:auto;-webkit-mask-image:linear-gradient(180deg,#000 80%,transparent 100%);mask-image:linear-gradient(180deg,#000 80%,transparent 100%)}
   @media(min-width:901px){ .footer__top{grid-template-columns:1fr .9fr 1.4fr minmax(300px,520px)} }
   @media(min-width:901px) and (max-width:1200px){ .footer__top{grid-template-columns:1fr .9fr 1.5fr minmax(240px,360px)} .site-footer>.site-footer__art{opacity:.55} }
-  @media(max-width:900px){ .site-footer>.site-footer__art{opacity:.4;right:-16px!important;top:24px;bottom:auto!important;width:auto!important;height:190px!important} }
+  @media(max-width:900px){ .site-footer>.site-footer__art{opacity:.4;right:80px!important;top:24px;bottom:auto!important;width:auto!important;height:190px!important} }
 </style>
 </head>
 <body>
