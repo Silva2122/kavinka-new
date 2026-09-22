@@ -470,6 +470,23 @@
   .fish-stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
     opacity:0;transition:opacity .6s ease}
   .fish-stage video.is-active{opacity:1}
+  /* стрелки — тот же стеклянный круг, что у домиков и лайтбокса; счётчик — Manrope, в правом нижнем углу */
+  .fish-stage__arrow{position:absolute;top:50%;z-index:3;width:48px;height:48px;margin-top:-24px;padding:0;border-radius:50%;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;border:1px solid rgba(240,239,228,.4);background:rgba(26,33,18,.42);color:var(--cream);
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);opacity:.8;transition:opacity .25s,background .25s}
+  .fish-stage:hover .fish-stage__arrow{opacity:1}
+  .fish-stage__arrow:hover{background:rgba(26,33,18,.72)}
+  .fish-stage__arrow:focus{outline:none}.fish-stage__arrow:focus-visible{outline:2px solid var(--sage);outline-offset:3px;opacity:1}
+  .fish-stage__arrow svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .fish-stage__arrow--prev{left:18px}.fish-stage__arrow--next{right:18px}
+  .fish-stage__count{position:absolute;right:18px;bottom:16px;z-index:3;padding:6px 12px;border-radius:100px;
+    background:rgba(26,33,18,.45);border:1px solid rgba(240,239,228,.28);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:var(--body);font-weight:500;font-size:var(--size-small);letter-spacing:.06em;color:rgba(240,239,228,.9);font-variant-numeric:tabular-nums}
+  @media(max-width:640px){
+    .fish-stage__arrow{width:38px;height:38px;margin-top:-19px}
+    .fish-stage__arrow--prev{left:10px}.fish-stage__arrow--next{right:10px}
+    .fish-stage__count{right:10px;bottom:10px}
+  }
 
   @media(max-width:1000px){
     .fish-explorer{grid-template-columns:1fr;gap:36px}
@@ -983,6 +1000,10 @@
       <video data-index="3" src="../public/video/fish-pink-salmon-swim.mp4" autoplay muted loop playsinline></video>
       <video data-index="4" src="../public/video/fish-chum-swim.mp4" autoplay muted loop playsinline></video>
       <video data-index="5" src="../public/video/fish-coho-swim.mp4" autoplay muted loop playsinline></video>
+      <!-- карусель в рамке (Босс 22.09, как в боте): стрелки листают рыб по кругу, счётчик «01 / 06», свайп на телефоне -->
+      <button class="fish-stage__arrow fish-stage__arrow--prev" type="button" data-dir="-1" aria-label="Предыдущая рыба"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <button class="fish-stage__arrow fish-stage__arrow--next" type="button" data-dir="1" aria-label="Следующая рыба"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+      <span class="fish-stage__count" id="fishCount">01 / 06</span>
     </div>
   </div>
 </section>
@@ -1060,10 +1081,20 @@
 
   const fishItems = document.querySelectorAll('#fishList .fish-list__item');
   const fishVideos = document.querySelectorAll('#fishStage video');
+  let fishCur = 0;
   function showFish(i) {
+    i = String(((+i % fishVideos.length) + fishVideos.length) % fishVideos.length); fishCur = +i;
     fishItems.forEach(el => el.classList.toggle('is-active', el.dataset.index === i));
     fishVideos.forEach(el => el.classList.toggle('is-active', el.dataset.index === i));
+    const c = document.getElementById('fishCount');
+    if (c) c.textContent = String(fishCur + 1).padStart(2, '0') + ' / ' + String(fishVideos.length).padStart(2, '0');
   }
+  // стрелки в рамке — по кругу; свайп на телефоне
+  document.querySelectorAll('#fishStage .fish-stage__arrow').forEach(b => b.addEventListener('click', () => showFish(fishCur + Number(b.dataset.dir))));
+  (function(){ const st=document.getElementById('fishStage'); let x0=null;
+    st.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, {passive:true});
+    st.addEventListener('touchend', e => { if (x0===null) return; const dx=e.changedTouches[0].clientX-x0; x0=null; if (Math.abs(dx)>40) showFish(fishCur + (dx<0?1:-1)); }, {passive:true});
+  })();
   fishItems.forEach(item => {
     item.addEventListener('mouseenter', () => showFish(item.dataset.index));
     item.addEventListener('click', () => showFish(item.dataset.index));
