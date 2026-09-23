@@ -451,7 +451,8 @@
     transition-delay:calc(var(--i,0) * 90ms)}
   .fish-list__item.reveal.is-visible{opacity:1;transform:translateY(0)}
   .fish-list__item:hover,.fish-list__item.is-active{padding-left:14px}
-  .fish-list__no{font-family:var(--body);font-weight:600;font-size:var(--size-small);color:var(--muted);flex:none}
+  .fish-list__no{font-family:var(--body);font-weight:600;font-size:var(--size-small);color:var(--muted);flex:none;
+    align-self:start;margin-top:2px} /* номер выше названия, как индекс — не липнет к слову (Босс 23.09) */
   .fish-list__name{font-family:var(--body);font-weight:500;font-size:var(--size-h3);line-height:1.1;
     letter-spacing:-.015em;color:var(--ink);transition:color .3s}
   .fish-list__item:hover .fish-list__name,.fish-list__item.is-active .fish-list__name{color:var(--olive)}
@@ -491,10 +492,18 @@
   @media(max-width:1000px){
     .fish-explorer{grid-template-columns:1fr;gap:36px}
     .fish-list__name{font-size:24px}
+    /* строка списка длиннее колонки распирала грид (min-width:auto у грид-детей),
+       из-за чего видео уезжало вправо мимо центра (Босс 23.09) */
+    .fish-list,.fish-stage{min-width:0}
   }
   @media(max-width:640px){
     .fish-section{padding:var(--section-y) 22px}
-    .fish-list__meta{gap:3px;min-width:150px}
+    /* колонки общие на весь список (subgrid): номер · название · сезон/трофей · стрелка —
+       мета выравнивается по самой широкой строке сама, без фиксированной ширины (Босс 23.09) */
+    .fish-list{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;column-gap:12px}
+    .fish-list__item{display:grid;grid-column:1/-1;grid-template-columns:subgrid;gap:12px} /* зазор строки перекрывает родительский — держим равным */
+    .fish-list__item:hover,.fish-list__item.is-active{padding-left:6px} /* без сдвига: в общей сетке он толкал только номер */
+    .fish-list__meta{gap:3px;min-width:0;margin-left:0}
     .fish-list__season,.fish-list__trophy{font-size:var(--size-small)}
     .fish-list__season svg,.fish-list__trophy svg{width:13px;height:13px}
   }
@@ -731,6 +740,9 @@
       -webkit-mask-image:none!important;mask-image:none!important}
     .site-footer>.site-footer__art--sockeye{transform:rotate(-28deg)!important}
     .site-footer>.site-footer__art--nerpa{transform:rotate(-8deg)!important}
+    /* медведь с рыбой — фигура узкая и очень высокая (636×1672): в общей коробке 260×220
+       она ужималась до ~84px ширины и выглядела вдвое мельче орла. Даём ей свою высоту (Босс 23.09) */
+    .site-footer>.site-footer__art--bearfish{height:320px!important}
   }
 </style>
 </head>
@@ -804,9 +816,9 @@
     </div>
 
     <p class="lede reveal" style="--i:5">
-      Туристическая база «Кавинка» расположена в Кавинской долине на берегу реки Тауй —
+      Туристическая рыболовная база в Кавинской долине на берегу реки Тауй —
       в глухой тайге. Природа здесь остаётся по-настоящему дикой, а человек становится
-      гостем, а не хозяином.
+      гостем.
     </p>
 
     <div class="hero__cta reveal" style="--i:6">
@@ -1029,6 +1041,8 @@
       <div class="footer__label">Контакты</div>
       <p>г. Магадан</p>
       <a href="tel:+79140333555">+7 914 0333 555</a>
+      <p style="margin-top:10px">г. Москва</p>
+      <a href="tel:+79384444688">+7 938 4444 688</a>
     </div>
 
     <div class="footer__col">

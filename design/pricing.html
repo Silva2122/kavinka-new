@@ -312,7 +312,7 @@
     .packages__grid{grid-template-columns:1fr;max-width:520px}
   }
   /* телефон (Босс 22.09): карточки в столбик на всю ширину, фото 16:10, цена и «за человека» в строку,
-     список включённого в две колонки, кнопка во всю ширину */
+     список включённого в одну колонку, кнопка во всю ширину */
   @media(max-width:640px){
     .packages{padding:var(--section-y) 22px}
     .packages__grid{max-width:none;gap:16px}
@@ -322,8 +322,8 @@
     .package-card__price-row{margin:16px 0 4px}
     .package-card__price{font-size:28px}
     .package-card__label{margin:20px 0 10px;padding-top:16px}
-    .package-card__included{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;margin-bottom:22px}
-    .package-card--custom .package-card__included{grid-template-columns:1fr}
+    /* одна колонка (Босс 23.09): две были под старые короткие пункты, длинные из бота в них ломались на 3–4 строки */
+    .package-card__included{gap:8px;margin-bottom:22px}
   }
 
   /* ===================== ФУТЕР — с главной, без изменений ===================== */
@@ -611,13 +611,20 @@
           <span class="package-card__per">за человека</span>
         </div>
         <span class="package-card__duration">5 дней</span>
-        <div class="package-card__label">В тур входит</div>
+        <div class="package-card__label">В стоимость входит</div>
         <ul class="package-card__included">
-          <li>Трансфер</li>
-          <li>Проживание</li>
-          <li>Питание</li>
-          <li>Выезды на рыбалку с гидом</li>
+          <li>Встреча гостей в аэропорту Магадана</li>
+          <li>Помощь в решении организационных вопросов в городе</li>
+          <li>Трансфер Магадан — KAVINKA — Магадан</li>
+          <li>Проживание на базе KAVINKA</li>
+          <li>Питание / Услуги повара</li>
+          <li>Рыбалка по программе тура</li>
+          <li>Рыболовный гид</li>
+          <li>Лодка и перемещения по рыболовным маршрутам</li>
+          <li>Лицензия на вылов на дни рыбалки</li>
           <li>Баня</li>
+          <li>Базовая переработка улова</li>
+          <li>Организация и сопровождение программы на протяжении всей поездки</li>
         </ul>
         <a class="btn" href="https://t.me/KAVINKA_bot"><span>Забронировать</span></a>
       </div>
@@ -636,13 +643,20 @@
           <span class="package-card__per">за человека</span>
         </div>
         <span class="package-card__duration">5 дней</span>
-        <div class="package-card__label">В тур входит</div>
+        <div class="package-card__label">В стоимость входит</div>
         <ul class="package-card__included">
-          <li>Трансфер</li>
-          <li>Проживание</li>
-          <li>Питание</li>
-          <li>Выезды на рыбалку с гидом</li>
+          <li>Встреча гостей в аэропорту Магадана</li>
+          <li>Помощь в решении организационных вопросов в городе</li>
+          <li>Трансфер Магадан — KAVINKA — Магадан</li>
+          <li>Проживание на базе KAVINKA</li>
+          <li>Питание / Услуги повара</li>
+          <li>Рыбалка по программе тура</li>
+          <li>Рыболовный гид</li>
+          <li>Лодка и перемещения по рыболовным маршрутам</li>
+          <li>Лицензия на вылов на дни рыбалки</li>
           <li>Баня</li>
+          <li>Базовая переработка улова</li>
+          <li>Организация и сопровождение программы на протяжении всей поездки</li>
         </ul>
         <a class="btn" href="https://t.me/KAVINKA_bot"><span>Забронировать</span></a>
       </div>
@@ -659,14 +673,26 @@
           <span class="package-card__price">По запросу</span>
         </div>
         <p class="package-card__note">Стоимость будет зависеть от вашей прихоти</p>
-        <div class="package-card__label">В тур входит</div>
+        <div class="package-card__label">В стоимость входит</div>
         <ul class="package-card__included">
-          <li>Индивидуальная программа под Ваши запросы</li>
-          <li>Трансфер на вертолёте</li>
+          <li>Встреча гостей в аэропорту Магадана</li>
+          <li>Сопровождение гостей в Магадане</li>
+          <li>Помощь в решении организационных вопросов в городе</li>
+          <li>Возможность комбинировать наземный/водный и вертолётный трансфер</li>
+          <li>Трансфер Магадан — KAVINKA — Магадан</li>
+          <li>Проживание на базе KAVINKA</li>
+          <li>Питание / Услуги повара</li>
           <li>Индивидуальный гид</li>
-          <li>Проживание</li>
-          <li>Питание</li>
-          <li>Возможность комбинировать Тур с Морской рыбалкой</li>
+          <li>Индивидуальное планирование рыболовных маршрутов</li>
+          <li>Лицензия на вылов на дни рыбалки</li>
+          <li>Баня</li>
+          <li>Переработка и упаковка улова</li>
+          <li>Персональное планирование программы и графика поездки</li>
+          <li>Возможность корректировать программу с учётом пожеланий гостей и условий рыбалки</li>
+          <li>Организация и сопровождение на протяжении всей поездки</li>
+          <li>Комбинированная рыбалка: речная рыбалка на KAVINKA + морская рыбалка в Охотском море</li>
+          <li>Индивидуальные экскурсии и специальные маршруты</li>
+          <li>Фото- и видеосъёмка</li>
         </ul>
         <a class="btn" href="https://t.me/KAVINKA_bot"><span>Забронировать</span></a>
       </div>
@@ -684,6 +710,8 @@
       <div class="footer__label">Контакты</div>
       <p>г. Магадан</p>
       <a href="tel:+79140333555">+7 914 0333 555</a>
+      <p style="margin-top:10px">г. Москва</p>
+      <a href="tel:+79384444688">+7 938 4444 688</a>
     </div>
 
     <div class="footer__col">
