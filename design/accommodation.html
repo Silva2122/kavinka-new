@@ -102,8 +102,8 @@
     backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px) saturate(150%);
     box-shadow:0 14px 34px rgba(10,14,6,.32),inset 0 1px 0 rgba(255,255,255,.20);
     transition:box-shadow .3s,border-color .3s}
-  .btn span{position:relative;z-index:3;font-family:var(--body);font-weight:700;
-    font-size:var(--meta-size);letter-spacing:var(--meta-tracking);text-transform:uppercase;
+  .btn span{position:relative;z-index:3;display:inline-flex;align-items:center;font-family:var(--body);
+    font-weight:700;font-size:var(--meta-size);letter-spacing:var(--meta-tracking);text-transform:uppercase;
     text-shadow:0 1px 4px rgba(0,0,0,.5)}
   .btn::before{content:"";position:absolute;inset:-6px;z-index:0;
     background-image:url("../public/photo/camo.jpg");background-size:210px;background-position:40% 35%;
@@ -484,7 +484,11 @@
   .cta-section__content{position:relative;z-index:2;max-width:820px;margin:0 auto;
     padding:var(--section-y) 46px;text-align:center;display:flex;flex-direction:column;align-items:center}
   .cta-section__title{color:var(--cream);margin-bottom:38px;text-shadow:0 3px 18px rgba(0,0,0,.5)}
-  @media(max-width:640px){ .cta-section{min-height:56svh} .cta-section__content{padding:var(--section-y) 22px} }
+  /* телефон (Босс 27.09): кнопка на одной высоте на всех страницах независимо от числа строк заголовка —
+     контент прижат к низу, заголовок над кнопкой с запасом, чтобы рыба из видео шла между ними */
+  @media(max-width:640px){ .cta-section{min-height:56svh}
+    .cta-section__content{min-height:100%;justify-content:flex-end;padding:var(--section-y) 22px 72px}
+    .cta-section__title{margin-bottom:80px} } /* зазор «с голову рыбы», рыбу можно чуть перекрыть (Босс 27.09) */
 
   /* ===================== ФУТЕР ===================== */
   .site-footer{background:var(--bog);color:rgba(240,239,228,.62);padding:86px 46px 34px}
@@ -724,7 +728,6 @@
   .price-row__name{font-size:var(--size-copy);color:rgba(240,239,228,.78)}
   .price-row__dots{flex:1;border-bottom:1px dotted rgba(240,239,228,.28);transform:translateY(-4px)}
   .price-row__sum{font-family:var(--body);font-weight:500;font-size:16px;color:var(--cream);white-space:nowrap;font-variant-numeric:tabular-nums}
-  .extras__note{max-width:960px;margin:36px auto 0;font-size:var(--size-copy);color:rgba(240,239,228,.5)}
   @media(max-width:640px){
     .extras{padding:var(--section-y) 22px}
       .price-row{flex-wrap:wrap;gap:4px 14px}
@@ -808,7 +811,7 @@
       <div class="stay__head reveal">
         <div class="eyebrow"><span>Где жить</span></div>
         <h2 class="h2">Четыре <em>домика</em></h2>
-        <p>От двоих до тринадцати гостей. Все с кухней, отоплением, Wi-Fi и своей мангальной зоной.</p>
+        <p>От трёх до тринадцати гостей. Все с кухней, отоплением, Wi-Fi и своей мангальной зоной.</p>
       </div>
 
       <div class="stay-list" id="stayList">
@@ -937,7 +940,7 @@
   <div class="section-head reveal">
     <div class="eyebrow"><span>На территории</span></div>
     <h2 class="h2">Инфраструктура <em>базы</em></h2>
-    <p>Всё в пяти минутах от домиков — на берегу, под соснами.</p>
+    <p>Рядом с домиком — на берегу под лиственницами.</p>
   </div>
 
   <div class="infra__grid">
@@ -1027,7 +1030,6 @@
       <div class="price-row"><span class="price-row__name">Фото- и видеосъёмка на рыбалке, группа до 4 человек</span><span class="price-row__dots"></span><span class="price-row__sum">15 000 ₽ / день</span></div>
     </div>
   </div>
-  <p class="extras__note reveal">Рыболовное снаряжение можно выслать заранее через СДЭК или взять на месте напрокат.</p>
 </section>
 
 <!-- ===================== CTA ===================== -->
